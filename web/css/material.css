@@ -1,0 +1,111 @@
+.z1{
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+}
+
+.z2{
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+.z3{
+    box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+}
+
+.z4{
+    box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.z5{
+    box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+}
+
+.card{
+    border-radius: 3px !important;
+    background: #ffffff;
+    padding-bottom: 20px
+}
+
+.m-input, .form-group input, .form-group select{
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid rgb(173, 173, 173) !important;
+    border-right: 0px !important;
+    border-top: 0px !important;
+    border-left: 0px !important;
+    background: none !important;    
+    font-family: Roboto;
+    color: #373737 !important;
+    padding-left: 0px !important;
+}
+
+.m-button{
+    background: none !important;
+    border: none !important;
+}
+
+.m-button-flat{
+    font-family: Roboto;
+    background: none;
+    border: none;
+    color: #337ab7;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.m-button-flat:hover{
+    font-family: Roboto;
+    background: rgb(240, 240, 240);
+    border: none;
+    color: #337ab7;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.m-button-flat:disabled{
+    color: #fff;
+    background: gray !important;
+}
+
+.form-group label{
+    font-size: 12px !important;
+    color: rgb(76, 76, 76) !important;
+    font-family: Roboto;
+    margin-bottom: 0px;
+}
+
+input.form-control.ng-invalid.ng-touched {
+    border-bottom: 1px solid red !important;
+    transition-duration: .5s;
+}
+
+input.form-control.ng-valid.ng-touched {
+    background-color: #78FA89;
+}
+
+.form-group erro{
+    font-family: Roboto;
+    color: red;
+    font-size: 10px;
+}
+
+.modal-title{
+    font-family: Roboto !important;
+}
+
+.modal-content{
+    border: none !important;
+}
+
+.principal-nav{
+    background: rgb(82, 82, 82);
+    color: #fff !important;
+    border: none !important;
+}
+
+.logo{
+    color: #fff !important;
+    width: 221px;
+}
+
+.titulo{
+    color: #fff !important;
+}

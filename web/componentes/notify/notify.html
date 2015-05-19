@@ -1,0 +1,119 @@
+
+<div class="notifies">    
+    <div class="notify-body z1" 
+         ng-repeat="msg in messages"
+         ng-mouseover="mouseOver(msg)"
+         ng-mouseleave="mouseLeave(msg)">
+        {{msg.message}} 
+        <button class="notify-button" 
+                ng-repeat="btn in msg.buttons"
+                ng-click="func(msg, btn)">
+            {{btn.text}}
+        </button>
+    </div>
+</div>
+
+<style>
+    .notify-button{
+        display: inline;
+        margin-left: 20px;
+        color: yellow;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        background: none;
+    }
+
+    .notify-button:hover{
+        font-weight: bold;
+    }
+
+    .notifies{
+        position: fixed;
+        right: 105px;
+        bottom: 29px;
+    }
+
+    .notify-body{
+        background: #323232;
+        padding: 10px;
+        border-radius: 3px;
+        display: inline-block;
+        margin-top: 5px;
+        color: white;
+        margin-left: 5px;
+        transition-duration: 0.2s;
+    }
+
+    .notify-body:hover{
+        box-shadow: 0px 4px 6px #868686;
+    }
+
+    .notify-body.ng-enter{
+        animation: notifyShow linear 0.2s;
+        animation-iteration-count: 1;
+        transform-origin: 50% 50%;
+        -webkit-animation: notifyShow linear 0.2s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-transform-origin: 50% 50%;
+    }
+
+    .notify-body.ng-leave{
+        animation: notifyHide linear 0.2s;
+        animation-iteration-count: 1;
+        transform-origin: 50% 50%;
+        -webkit-animation: notifyHide linear 0.2s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-transform-origin: 50% 50%;
+    }
+
+    .notify-body.ng-move{
+        animation: notifyMove linear 0.2s;
+        animation-iteration-count: 1;
+        transform-origin: 50% 50%;
+        -webkit-animation: notifyMove linear 0.2s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-transform-origin: 50% 50%;
+    }
+
+    .notify-body.ng-enter-stagger {
+        transition-delay: 0.06s !important;
+        -webkit-transition-delay: 0.06s !important;
+        -webkit-animation-delay: 0.06s !important;
+        animation-delay: 0.06s !important;
+    }
+    
+    @-webkit-keyframes notifyMove{
+        0%{
+            background: red;
+        }
+        100%{
+            background: blue;
+        }
+    }
+
+    @-webkit-keyframes notifyShow{
+        0%{
+            opacity: 0;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+
+    @-webkit-keyframes notifyHide{
+        0%{
+            opacity: 1;
+            transform: scale(1);
+        }
+        10%{
+            color: white;
+            box-shadow: none;
+        }
+        100%{
+            opacity: 0;
+            box-shadow: none;
+            transform: scale(0.95);
+        }
+    }
+</style>

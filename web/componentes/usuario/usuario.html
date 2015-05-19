@@ -1,0 +1,149 @@
+<div class="col-lg-12 z1 card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Tipo de Usuario</th>                    
+                <th>Status</th>                    
+                <th width="100px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in itens">
+                <td>{{item.nome}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.tipo_usuario.nome}}</td>
+                <td>{{item.status.nome}}</td>             
+                <td>
+                    <button class="m-button" ng-click="editar(item)">
+                        <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
+                    </button>
+
+                    <button class="m-button" ng-click="excluir(item)">
+                        <i class="glyphicon glyphicon-trash" style="color: red"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{modal.titulo}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form novalidate class="m-form" name="usuarioform">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Nome</label>
+                                        <input ng-model="novo.nome" placeholder="Nome" name="nome" 
+                                               type="text" class="form-control m-input" required>
+
+                                        <erro ng-show="usuarioform.nome.$error.required && usuarioform.nome.$touched">
+                                            Insira um nome
+                                        </erro>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>E-mail</label>
+                                        <input name="email" ng-model="novo.email" required
+                                               placeholder="E-mail"  type="email" class="form-control m-input">
+                                        <erro ng-show="usuarioform.email.$error.required && usuarioform.email.$touched">
+                                            Insira um e-mail
+                                        </erro>
+                                        <erro ng-show="usuarioform.email.$error.email && usuarioform.email.$touched">
+                                            Insira um e-mail válido
+                                        </erro>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Senha</label>
+                                <input name="senha" required ng-model="novo.senha" placeholder="senha" 
+                                       type="password" class="form-control m-input">
+                                <erro ng-show="usuarioform.senha.$error.required && usuarioform.senha.$touched">
+                                    Insira uma Senha
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Pergunta de Segurança</label>
+                                <input name="pergunta" required ng-model="novo.pergunta.pergunta" placeholder="pergunta"  type="text" class="form-control m-input">
+                                <erro ng-show="usuarioform.pergunta.$error.required &&
+                                                        usuarioform.pergunta.$touched">
+                                    Insira uma Pergunta
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Resposta de Segurança</label>
+                                <input name="resposta" required ng-model="novo.resposta" placeholder="resposta"  type="text" class="form-control m-input">
+                                <erro ng-show="usuarioform.resposta.$error.required &&
+                                                        usuarioform.resposta.$touched">
+                                    Insira uma Resposta
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tipo de Usuário</label>
+                                        <input name="tipoNome" required ng-model="novo.tipo_usuario.nome" placeholder="Tipo Usuario"  type="text" class="form-control m-input">
+                                        <erro ng-show="usuarioform.tipoNome.$error.required &&
+                                                                usuarioform.tipoNome.$touched">
+                                            Insira um Tipo de Usuario
+                                        </erro>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <input name="status" required ng-model="novo.status.nome" placeholder="Status"  type="text" class="form-control m-input">
+                                        <erro ng-show="usuarioform.status.$error.required &&
+                                                                usuarioform.status.$touched">
+                                            Insira um status
+                                        </erro>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default m-button-flat"
+                        data-dismiss="modal">Fechar</button>
+                <button type="button"
+                        ng-click="modal.salvarFuncao(modal.item)" 
+                        class="btn btn-primary m-button-flat"
+                        ng-disabled="formularioValido()">
+                    {{modal.salvarNome}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<fab></fab>

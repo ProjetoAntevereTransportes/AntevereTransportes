@@ -1,0 +1,641 @@
+.btn-calendar{
+    background: #0050E2 !important;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    transition-duration: 0.5s;
+}
+
+.btn-calendar-clicked{
+    background: rgb(223, 61, 61) !important;
+    color: white;
+}
+
+.btn-item.ng-hide-remove.ng-hide-remove-active {
+    animation: showButtonItems linear 0.5s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: showButtonItems linear 0.1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: showButtonItems linear 0.5s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: showButtonItems linear 0.5s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: showButtonItems linear 0.5s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;  
+}
+
+@-webkit-keyframes showButtonItems{
+    0% {
+        transform: scale(0);
+    } 
+    100%{
+        transform: scale(1);
+    }
+}
+
+.item-buttons{
+    display: inline-block;
+    height: 17px;
+    overflow: hidden;
+}
+
+.item-buttons.ng-hide-add{
+    animation: hideButtonItemsSpan linear 0.3s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: hideButtonItemsSpan linear 0.3s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+}
+
+.item-buttons.ng-hide-remove{
+    animation: showButtonItemsSpan linear 0.3s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: showButtonItemsSpan linear 0.3s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+}
+
+@-webkit-keyframes showButtonItemsSpan{
+    0% {
+        width: 0px;
+    } 
+    100%{
+        width: 108px;
+    }
+}
+
+@-webkit-keyframes hideButtonItemsSpan{
+    0% {
+        width: 108px;
+    } 
+    100%{
+        width: 0px;
+    }
+}
+
+button:focus {outline:0;}
+
+.calendar.ng-hide-add.ng-hide-add-active    {
+    animation: hideCalendar linear 0.5s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: hideCalendar linear 0.3s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: hideCalendar linear 0.5s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: hideCalendar linear 0.5s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: hideCalendar linear 0.5s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;  
+}
+
+.calendar.ng-hide-add.ng-hide-add-active .tb{
+    opacity: 0;
+    transition-duration: 0.1s;
+}
+
+.calendar.ng-hide-remove.ng-hide-remove-active {
+    animation: showCalendar linear 0.5s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: showCalendar linear 0.3s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: showCalendar linear 0.5s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: showCalendar linear 0.5s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: showCalendar linear 0.5s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;  
+}
+
+.calendar.ng-hide-remove.ng-hide-remove-active .tb{
+    opacity: 0;
+    transition-duration: 0s;
+}
+
+@-webkit-keyframes showCalendar{
+    0% {
+        height: 0px;
+        width: 0px;
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 0px;
+        margin: 0px;
+    }
+    5%{
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    35%{
+        height: 400px;
+        width: 400px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    55%{           
+        height: 600px;
+        width: 600px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    70%{
+        height: 600px;
+        width: 800px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    100%{
+        overflow: hidden;
+        height: 600px;
+        width: 100%;
+    }
+}
+
+@-moz-keyframes showCalendar{
+    0% {
+        height: 0px;
+        width: 0px;
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 0px;
+        margin: 0px;
+    }
+    5%{
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    35%{
+        height: 400px;
+        width: 400px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    55%{           
+        height: 600px;
+        width: 600px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    70%{
+        height: 600px;
+        width: 800px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    100%{
+        overflow: hidden;
+        height: 600px;
+        width: 100%;
+    }
+}
+
+@-webkit-keyframes hideCalendar{
+    100% {
+        height: 0px;
+        width: 0px;
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 0px;
+        margin: 0px;
+    }
+    95%{
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    70%{
+        height: 300px;
+        width: 300px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    45%{           
+        height: 600px;
+        width: 600px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    20%{
+        height: 600px;
+        width: 800px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    0%{
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+@-moz-keyframes hideCalendar{
+    100% {
+        height: 0px;
+        width: 0px;
+        border-radius: 50%;
+        overflow: hidden;
+        padding: 0px;
+        margin: 0px;
+    }
+    95%{
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    70%{
+        height: 300px;
+        width: 300px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    45%{           
+        height: 600px;
+        width: 600px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    20%{
+        height: 600px;
+        width: 800px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    0%{
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.table-td{
+    transition-delay: 0.05s !important;
+    -webkit-transition-delay: 0.05s !important;
+    -webkit-animation-delay: 0.05s !important;
+    animation-delay: 0.05s !important;
+}
+
+.table-td.ng-enter{
+    animation: itemTableAnimation linear 0.2s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: itemTableAnimation linear 0.2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: itemTableAnimation linear 0.2s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: itemTableAnimation linear 0.2s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: itemTableAnimation linear 0.2s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;        
+}
+
+.table-td.ng-enter-stagger {
+    transition-delay: 0.05s !important;
+    -webkit-transition-delay: 0.05s !important;
+    -webkit-animation-delay: 0.05s !important;
+    animation-delay: 0.05s !important;
+}
+
+@-webkit-keyframes itemTableAnimation {
+    0% {
+        opacity:0;
+        -webkit-transform:  scale(0.9);
+        transform: scale(0.9);
+        border: none;
+    }
+    100% {
+        opacity:1;
+        -webkit-transform:  scale(1);
+    }
+}
+
+
+.repeated-item.ng-enter{
+    animation: itemAnimation linear 0.1s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: itemAnimation linear 0.1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: itemAnimation linear 0.1s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: itemAnimation linear 0.1s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: itemAnimation linear 0.1s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;        
+}
+
+.repeated-item.ng-leave{
+    animation: itemLeaveAnimation linear 0.2s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: itemLeaveAnimation linear 0.2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: itemLeaveAnimation linear 0.2s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: itemLeaveAnimation linear 0.2s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: itemLeaveAnimation linear 0.2s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;   display: inline-flex;     
+}
+
+.repeated-item.ng-move{
+    animation: moveAnimation linear 0.2s;
+    animation-iteration-count: 1;
+    transform-origin: 50% 50%;
+    -webkit-animation: moveAnimation linear 0.2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;
+    -moz-animation: moveAnimation linear 0.2s;
+    -moz-animation-iteration-count: 1;
+    -moz-transform-origin: 50% 50%;
+    -o-animation: moveAnimation linear 0.2s;
+    -o-animation-iteration-count: 1;
+    -o-transform-origin: 50% 50%;
+    -ms-animation: moveAnimation linear 0.2s;
+    -ms-animation-iteration-count: 1;
+    -ms-transform-origin: 50% 50%;      
+    overflow: hidden;
+}
+
+.repeated-item.ng-enter-stagger {
+    transition-delay: 0.06s !important;
+    -webkit-transition-delay: 0.06s !important;
+    -webkit-animation-delay: 0.06s !important;
+    animation-delay: 0.06s !important;
+}
+
+.repeated-item:hover:not(.expand){
+    background: #F5F5F5;
+}
+
+.description input{
+    background: none;
+}
+
+.body{
+    display: -moz-grid-line;
+    display: -webkit-box;
+    box-shadow: 0px 3px 5px #D7D7D7;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    margin-bottom: -1px;
+    background-color: #FFF;
+    padding-top: 6px;
+    padding-bottom: 7px;
+}
+
+.day{
+    height: 40px;
+    width: 40px;
+    margin-top: 5px;
+    margin-left: 5px;
+    border-radius: 20px;
+    color: #FFF;
+    background-color: #3376FF;
+    text-align: center;
+    padding-top: 3px;
+    font-size: 18px;
+    position:  relative;
+}
+
+.week{
+    font-size: 9px;
+    position: absolute;
+    bottom: 4px;
+    width: 100%;
+    font-weight: bold;
+}
+
+.title{
+    font-size: 18px;
+    padding-top: 1px;
+    padding-left: 10px;
+    height: 100%;
+    position: relative;
+}
+.tags{
+    font-size: 13px;
+}
+
+.tag{
+    padding-left: 3px;
+    border-radius: 3px;
+    background-color: #E2E2E2;
+    display: inline;
+    padding-right: 3px;
+    margin-right: 5px !important;
+    font-size: 12px;
+}
+
+.month{
+    color: #8D8D8D;
+    margin-right: 12px;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+.description{
+    font-size: 13px;
+    color: gray;
+    display: inline;
+}
+
+.expand{
+    height: 150px !important;
+    margin-top: 5px;
+    margin-bottom: 10px;        
+    border-radius: 4px;
+    /* box-shadow: 0px 2px 2px #C2C2C2; */
+}
+
+.head{
+    display: flex;
+    padding-left: 1px;
+    border-bottom: 1px solid rgb(236, 236, 236);
+    margin-bottom: 5px;
+    padding-bottom: 6px;
+}
+
+.item-color{
+    background: #fff;
+    border-bottom: 1px solid rgb(236, 236, 236);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    transition-duration: 0.2s;
+    height: 57px;
+    overflow: hidden;
+}
+
+.more-info{
+    margin-top: 8px;
+}
+
+.right-content{
+    position: absolute;
+    right: 18px;
+    top: 12px;       
+}
+
+.value{
+    margin-right: 20px;
+}
+
+.right-content i {
+    margin-left: 10px;
+}
+
+.buttons i{
+    cursor: pointer;
+}
+
+.tb{
+    width: 100%;
+    height: 100%;
+    transition-duration: .5s;
+}
+
+.tb tr{
+
+}
+
+.tb td{
+    width: 100px;
+    height: 100px;
+    background: rgb(247, 247, 247);
+    border: 3px solid #FFFFFF;
+    position: relative;
+    padding-top: 20px;
+    padding-bottom: 2px;
+}
+
+.tb td:hover{
+    background:rgb(229, 229, 229) !important;
+}
+
+.tb th{
+    font-family: Roboto Regular;
+    padding-left: 10px;
+    text-transform: lowercase;
+    padding-bottom: 4px;
+}
+
+.table-day-content{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    display: flex;
+}
+
+.table-day{
+    font-family: Roboto;
+    color: #494949;
+    margin-top: 2px;
+    text-align: center;
+    margin-left: 5px;
+    margin-bottom: 2px;
+    font-size: 12px;
+}
+
+.table-description{
+    text-align: -webkit-auto;
+    font-family: roboto;
+    position: absolute;
+    right: 4px;
+}
+
+.table-item{
+    font-size: 12px;
+    font-family: roboto;
+    margin-left: 5px;
+    background: rgb(255, 83, 83);
+    color: #fff;
+    margin-right: 4px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    padding-left: 3px;
+    position: relative;
+}
+
+.item-title{
+
+}
+
+.item-value{
+    position: absolute;
+    right: 2px;
+    font-weight: bold;
+    box-shadow: -4px 0px 2px rgb(255, 83, 83);
+    font-size: 11px;
+    top: 1px;
+    background: rgb(255, 83, 83);
+    padding-left: 1px;
+    height: 16px;
+}
+
+.month-buttons button{
+    border: none;
+    margin-left: 8px;
+    background: none;
+}
+
+.opaco{
+    opacity: 0.5;
+}
+
+.calendar{
+    margin-bottom: 12px;
+    background: #fff;
+    padding-bottom: 16px;
+    border-radius: 2px;
+    /* box-shadow: 0px 2px 2px #C2C2C2; */
+    padding-top: 10px;
+    overflow: hidden;
+}
+
+.right-button{
+    transform: rotate(180deg);
+}
+
+.show-more-buttons{
+    transition-duration: 0.3s;                
+    color: gray;
+}
+
+.right-button-hide{
+    transition-duration: 0s !important;    
+}

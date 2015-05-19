@@ -1,0 +1,174 @@
+<div class="col-lg-12 z1 card">
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Telefone</th>
+                <th>Rua</th>
+                <th>Bairro</th>
+                <th>Cidade</th>                    
+                <th width="100px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in itens">
+                <td>{{item.nome}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.telefone}}</td>
+                <td>{{item.endereco.rua}}</td>
+                <td>{{item.endereco.bairro}}</td>
+                <td>{{item.endereco.cidade}}</td>
+                <td>
+                    <button class="m-button" ng-click="editar(item)">
+                        <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
+                    </button>
+
+                    <button class="m-button" ng-click="excluir(item)">
+                        <i class="glyphicon glyphicon-trash" style="color: red"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{modal.titulo}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form novalidate class="m-form" name="fornecedorform">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input ng-model="novo.nome" placeholder="Nome" name="nome" 
+                                       type="text" class="form-control m-input" required>
+
+                                <erro ng-show="fornecedorform.nome.$error.required && fornecedorform.nome.$touched">
+                                    Insira um nome
+                                </erro>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <input name="email" ng-model="novo.email" required
+                                       placeholder="E-mail"  type="email" class="form-control m-input">
+                                <erro ng-show="fornecedorform.email.$error.required && fornecedorform.email.$touched">
+                                    Insira um e-mail
+                                </erro>
+                                <erro ng-show="fornecedorform.email.$error.email && fornecedorform.email.$touched">
+                                    Insira um e-mail válido
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input name="telefone" required ng-model="novo.telefone" placeholder="Telefone" 
+                                       type="number" class="form-control m-input">
+                                <erro ng-show="fornecedorform.telefone.$error.required && fornecedorform.telefone.$touched">
+                                    Insira um telefone
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Rua</label>
+                                <input name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text" class="form-control m-input">
+                                <erro ng-show="fornecedorform.rua.$error.required &&
+                                                        fornecedorform.rua.$touched">
+                                    Insira uma rua
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Cidade</label>
+                                        <input name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade"  type="text" class="form-control m-input">
+                                        <erro ng-show="fornecedorform.cidade.$error.required &&
+                                                                fornecedorform.cidade.$touched">
+                                            Insira uma cidade
+                                        </erro>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Bairro</label>
+                                        <input name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro"  type="text" class="form-control m-input">
+                                        <erro ng-show="fornecedorform.bairro.$error.required &&
+                                                                fornecedorform.bairro.$touched">
+                                            Insira um bairro
+                                        </erro>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Número</label>
+                                        <input name="number" required ng-model="novo.endereco.numero" placeholder="Número"  type="text" class="form-control m-input">
+                                        <erro ng-show="fornecedorform.numero.$error.required &&
+                                                                fornecedorform.numero.$touched">
+                                            Insira um numero
+                                        </erro>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Estado</label>
+                                        <input name="estado" required ng-model="novo.endereco.estado" placeholder="Estado"  type="text" class="form-control m-input">
+                                        <erro ng-show="fornecedorform.estado.$error.required &&
+                                                                fornecedorform.estado.$touched">
+                                            Insira um estado
+                                        </erro>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>País</label>
+                                        <input name="pais" required ng-model="novo.endereco.pais" placeholder="País"  type="text" class="form-control m-input">
+                                        <erro ng-show="fornecedorform.pais.$error.required &&
+                                                                fornecedorform.pais.$touched">
+                                            Insira um pais
+                                        </erro>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default m-button-flat"
+                        data-dismiss="modal">Fechar</button>
+                <button type="button"
+                        ng-click="modal.salvarFuncao(modal.item)" 
+                        class="btn btn-primary m-button-flat"
+                        ng-disabled="formularioValido()">
+                    {{modal.salvarNome}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<fab></fab>

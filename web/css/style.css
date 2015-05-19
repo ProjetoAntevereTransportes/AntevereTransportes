@@ -1,0 +1,13 @@
+body{
+    background-color: #F6F6F6;
+    padding-bottom: 100px; 
+    font-family: Roboto;
+}
+
+#page-wrapper{
+    background: none !important;
+}
+
+.side-nav{
+    height: 100% !important;
+}

@@ -1,0 +1,438 @@
+<div class="alert alert-warning" ng-show="mensagem">
+    {{mensagem}}
+</div> 
+
+<div class="col-lg-12 month">
+    Este mês 
+
+    <div class="pull-right">            
+        {{itens.length}} contas totalizando {{pegarTotal() | currency : "R$ " : 2}}   
+
+        <div class="pull-right month-buttons">
+            <button class="btn-calendar z1" 
+                    ng-click="alterarStatusCalendario()"
+                    ng-class="{'btn-calendar-clicked': mostrarCalendario}">
+                <i class="glyphicon glyphicon-calendar" ng-hide="mostrarCalendario"></i>
+                <i class="glyphicon glyphicon-remove" ng-show="mostrarCalendario"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 calendar z2 pull-right" ng-show="mostrarCalendario">
+    <table class="tb">
+
+        <thead>
+            <tr>
+                <th>Dom</th>
+                <th>Seg</th>
+                <th>Ter</th>
+                <th>Qua</th>
+                <th>Qui</th>
+                <th>Sex</th>
+                <th>Sáb</th>
+            </tr>
+        </thead>
+
+        <tr ng-repeat="semana in semanas">
+            <td ng-repeat="dia in semana.dias" class="table-td" ng-class="{opaco : dia.OutroMes}">            
+                <div class="table-day-content">
+                    <div class="table-day">
+                        {{dia.data| date: "dd MMM yy"}}
+                    </div>
+                    <div class="table-description">
+
+                    </div>
+                </div>
+                <div class="table-item" ng-repeat="p in dia.pagamentos" ng-click="clicarPagamentoCalendario(p)">
+                    <div class="item-title">
+                        {{p.nome}}
+                    </div> 
+                    <div class="item-value">
+                        {{p.valor| currency : 'R$ ' : 2}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="col-lg-12 repeated-item z1 item-color" ng-repeat="item in itens" ng-class="{
+            'expand z2': item.expandir == true
+        }" id="{{item.ID}}"
+     ng-mouseover="mouseOverItem(item)"
+     ng-mouseleave="mouseLeaveItem(item)">
+    <div class='head col-lg-12'>
+        <div class="day">
+            {{item.vencimento| date: "dd"}}
+            <div class="week">
+                {{item.vencimento| date: "EEE" | uppercase}}
+            </div>
+        </div>
+        <div class="title">
+            {{item.nome}} <div class="description">
+                <input style="border: none;" ng-model="item.descricao" placeholder="Inserir descrição">
+
+            </div>   
+
+            <div class="tags">
+                <div class="tag">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                    {{item.numero}}/{{item.total}}
+                </div>                
+                <div class="tag">
+                    <i class="glyphicon glyphicon-user"></i>
+                    {{item.fornecedor.nome}}
+                </div>                    
+                <div class="tag">
+                    <i class="glyphicon glyphicon-stats"></i>
+                    {{pegarPorcentagem(item) | number : 2}}%
+                </div>   
+                <div class="tag">
+                    <i class="glyphicon glyphicon-paperclip"></i>
+                    Sem comprovantes
+                </div> 
+                <div class="tag">
+                    <i class="glyphicon glyphicon-file"></i>
+                    Sem boleto
+                </div> 
+            </div>
+        </div>
+        <div class='right-content buttons'>
+            <span class='value'>
+                {{item.valor| currency : 'R$ ' : 2}} 
+            </span>
+
+            <div ng-show="item.mostrarBotoes" class="item-buttons">
+                <i class="glyphicon glyphicon-stats btn-item" style="color: rgb(255, 184, 0);" 
+                   ng-click="excluir(item)" ng-show="!item.expandir"></i>
+                <i class="glyphicon glyphicon-user btn-item" style="color: blue;" ng-show="!item.expandir"></i>
+                <i class="glyphicon glyphicon-trash btn-item" style="color: red;" 
+                   ng-click="excluir(item)" ng-show="!item.expandir"></i>
+                <i class="glyphicon glyphicon-remove btn-item" style="color: red;" 
+                   ng-click="cancelarPagamento(item)" ng-show="item.expandir"></i>
+                <i class="glyphicon glyphicon-usd btn-item" style="color: rgb(0, 173, 0);" 
+                   ng-click="mais(item)"
+                   data-toggle="tooltip" title="Pagar" ng-show="!item.expandir"></i>
+                <i class="glyphicon glyphicon-ok btn-item" style="color: rgb(0, 173, 0);" 
+                   ng-click="pagar(item)"
+                   data-toggle="tooltip" title="Confirmar" ng-show="item.expandir"></i>
+            </div>
+            <i class="glyphicon glyphicon-menu-left show-more-buttons"
+               ng-click="mostrarAcaoBotao(item)"
+               ng-show="!item.expandir"
+               ng-class="{'right-button': item.mostrarBotoes,
+                          'right-button-hide': item.expandir}"></i>            
+        </div>
+    </div>
+    <div class='more-info col-lg-12' ng-show='item.expandir'>
+        <div class='col-lg-3'>
+            <div class='form-group'>
+                <label>Comprovante</label>
+                <input class='form-control  m-input' type='file' ng-model="item.comprovante">
+            </div>
+        </div>
+        <div class='col-lg-3'>
+            <div class='form-group'>
+                <label>Banco</label>
+                <select class='form-control m-input' placeholder="Banco" ng-model="item.banco">
+                    <option selected>Selecione</option>
+                </select>
+            </div>
+        </div>
+        <div class='col-lg-3'>
+            <div class='form-group'>
+                <label>Descontos</label>
+                <input class="form-control m-input" required type="number" placeholder="Descontos" ng-model="item.descontos">
+            </div>
+        </div>
+        <div class='col-lg-3'>
+            <div class='form-group'>
+                <label>Juros</label>
+                <input class="form-control m-input" placeholder="Juros" required type="number" ng-model="item.juros">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div ng-hide="itens.length">
+    <center>Não há contas</center>
+</div>
+
+
+<div class="modal fade" id="editar">
+    <div class="modal-dialog  modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Adição em Massa {{itemEditar.descricao}}</h4>
+            </div>
+
+            <form novalidate>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Data Inicial</label>
+                                <input class="form-control" type="date" ng-change="gerarParcelas()"
+                                       required ng-model="itemNovoMassa.inicial">
+                            </div>
+                        </div>            
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Data Final</label>
+                                <input class="form-control" type="date" ng-change="gerarParcelas()" required ng-model="itemNovoMassa.final">
+                            </div>
+                        </div>                                        
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input class="form-control" ng-change="gerarParcelas()" required ng-model="itemNovoMassa.valor">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input class="form-control" ng-change="gerarParcelas()" required ng-model="itemNovoMassa.nome">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Fornecedor</label>
+                                <select class="form-control" ng-change="gerarParcelas()" ng-model="itemNovoMassa.fornecedorID">
+                                    <option ng-repeat="f in fornecedores" required value="{{f.ID}}">{{f.nome}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div ng-show="itemNovoMassa.parcelas.length > 0">
+                        <hr>
+                        <h4>Parcelas</h4>
+                        <div class="row" ng-repeat="item in itemNovoMassa.parcelas">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Vencimento</label>
+                                    <input class="form-control" type="date" required ng-model="item.vencimento">
+                                </div>
+                            </div>            
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Descrição</label>
+                                    <input class="form-control" type="text" required ng-model="item.descricao">
+                                </div>
+                            </div>                
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Valor</label>
+                                    <input class="form-control" required ng-model="item.valor">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Boleto</label>
+                                    <input class="form-control" type="file" required ng-model="item.comprovante">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" ng-click="salvarMassa(itemNovoMassa)">
+                    Salvar alterações
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="unico">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Inserção única</h4>
+            </div>
+
+            <form novalidate>
+                <div class="modal-body">                    
+                    <div class="row">          
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Vencimento</label>
+                                <input class="form-control" type="date" 
+                                       required ng-model="unico.parcelas[0].vencimento">
+                            </div>
+                        </div>            
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input class="form-control" required ng-model="unico.nome">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Descrição</label>
+                                <input class="form-control" type="text"
+                                       required ng-model="unico.parcelas[0].descricao">
+                            </div>
+                        </div>  
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Fornecedor</label>
+                                <select class="form-control" ng-model="unico.fornecedorID">
+                                    <option ng-repeat="f in fornecedores" required value="{{f.ID}}">
+                                        {{f.nome}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input class="form-control" required
+                                       ng-model="unico.parcelas[0].valor">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Boleto</label>
+                                <input class="form-control" type="file"
+                                       required ng-model="unico.parcelas[0].boleto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" ng-click="salvarMassa(unico)">
+                    Salvar alterações
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="debito">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Débito Automático</h4>
+            </div>
+
+            <form novalidate>
+                <div class="modal-body">                    
+                    <div class="row">          
+                        <div class="col-lg-4">
+                            <div class="form-group">                                
+                                <label>
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    Dia de Débito</label>
+                                <input class="form-control" required ng-model="unico.nome">
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    Data Final</label>
+                                <input class="form-control" type="date" 
+                                       required ng-model="unico.parcelas[0].vencimento">
+                            </div>
+                        </div>            
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                    Data Inícial</label>
+                                <input class="form-control" type="date" 
+                                       required ng-model="unico.parcelas[0].vencimento">
+                            </div>
+                        </div>            
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    Nome
+                                </label>
+                                <input class="form-control" type="text"
+                                       required ng-model="unico.parcelas[0].descricao">
+                            </div>
+                        </div>  
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-align-justify"></i>
+                                    Descrição</label>
+                                <input class="form-control" type="text"
+                                       required ng-model="unico.parcelas[0].descricao">
+                            </div>
+                        </div>  
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    Fornecedor</label>
+                                <select class="form-control" ng-model="unico.fornecedorID">
+                                    <option ng-repeat="f in fornecedores" required value="{{f.ID}}">
+                                        {{f.nome}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-piggy-bank"></i>
+                                    Conta Bancária
+                                </label>
+                                <select class="form-control" ng-model="unico.fornecedorID">
+                                    <option ng-repeat="f in fornecedores" required value="{{f.ID}}">
+                                        {{f.nome}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-usd"></i>
+                                    Valor
+                                </label>
+                                <input class="form-control" required
+                                       ng-model="unico.parcelas[0].valor">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>
+                                    <i class="glyphicon glyphicon-file"></i>
+                                    Boleto
+                                </label>
+                                <input class="form-control" type="file"
+                                       required ng-model="unico.parcelas[0].boleto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" ng-click="salvarMassa(unico)">
+                    Salvar alterações
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<fab></fab>
