@@ -13,11 +13,11 @@
                 nome: "",
                 email: "",
                 senha: "",
-                perguntaId: "",
+                perguntaID: "",
                 resposta: "",
-                tipo_usuario_id: "",
-                status_id: "",
-                chave_senha_perdida: ""
+                tipoUsuarioID: "",
+                statusID: "",
+                chave: ""
             };
 
             $scope.formularioValido = function () {
