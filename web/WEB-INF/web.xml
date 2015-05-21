@@ -12,6 +12,26 @@
         <servlet-name>FileUpload</servlet-name>
         <servlet-class>servlets.FileUpload</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Pergunta</servlet-name>
+        <servlet-class>servlets.Pergunta</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Usuario</servlet-name>
+        <servlet-class>servlets.Usuario</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TipoUsuario</servlet-name>
+        <servlet-class>servlets.TipoUsuario</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Status</servlet-name>
+        <servlet-class>servlets.StatusUsuario</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StatusUsuario</servlet-name>
+        <servlet-class>servlets.StatusUsuario</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -47,6 +67,26 @@
     <servlet-mapping>
         <servlet-name>FileUpload</servlet-name>
         <url-pattern>/FileUpload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Pergunta</servlet-name>
+        <url-pattern>/Pergunta</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Usuario</servlet-name>
+        <url-pattern>/Usuario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TipoUsuario</servlet-name>
+        <url-pattern>/TipoUsuario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Status</servlet-name>
+        <url-pattern>/Status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatusUsuario</servlet-name>
+        <url-pattern>/StatusUsuario</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

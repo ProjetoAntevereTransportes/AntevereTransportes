@@ -5,9 +5,13 @@
  */
 package database;
 
+import static database.Pergunta.con;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,7 +19,12 @@ import java.sql.Statement;
  */
 public class TipoUsuario {
     public static Connection con;
-    public static int insere(String nome, String descricao){
+    
+    public void abrir(){
+        con = Conexao.abrirConexao();
+    }
+    
+    public int insere(String nome, String descricao){
         try {
 
             // prepara o statement para execução de um novo comaando
@@ -44,6 +53,37 @@ public class TipoUsuario {
             } else {
                 return 0;
             }
+        }finally{
+            Conexao.fecharConexao(con);
         }
     }
+    
+     public List<contratos.TipoUsuario> listar() {
+        try {
+            abrir();
+            String sql = "SELECT * FROM tipo_usuario;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rsF = ps.executeQuery();
+
+            List<contratos.TipoUsuario> fs = new ArrayList<>();
+
+            while (rsF.next()) {
+                contratos.TipoUsuario f = new contratos.TipoUsuario();
+                f.setNome(rsF.getString("nome"));
+                f.setId(rsF.getInt("id"));
+                f.setDescricao(rsF.getString("descricao"));
+                fs.add(f);
+            }
+
+            return fs;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+    
 }

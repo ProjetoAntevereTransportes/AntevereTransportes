@@ -15,7 +15,6 @@ public class Usuario {
     private String senha;
     private String email;
     private int perguntaID;
-    private contratos.Pergunta pergunta;
     private String resposta;
     private int tipoUsuarioID;
     private contratos.TipoUsuario tipoUsuario;
@@ -96,17 +95,7 @@ public class Usuario {
     /**
      * @return the pergunta
      */
-    public contratos.Pergunta getPergunta() {
-        return pergunta;
-    }
-
-    /**
-     * @param pergunta the pergunta to set
-     */
-    public void setPergunta(contratos.Pergunta pergunta) {
-        this.pergunta = pergunta;
-    }
-
+  
     /**
      * @return the resposta
      */

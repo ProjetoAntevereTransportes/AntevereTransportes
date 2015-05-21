@@ -8,6 +8,8 @@ package database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -86,6 +88,46 @@ public class Usuario {
             }
         }
     }
+        public boolean Inserir(contratos.Usuario f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "INSERT INTO usuario(nome, email, senha, pergunta_id,resposta,tipo_usuario_id ,status_id)"
+                    + "VALUES (?, ?, ?, ? , ? , ? , ? );";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getEmail());
+            ps.setString(3, f.getSenha());
+            ps.setInt(4,f.getPerguntaID());
+            ps.setString(5,f.getResposta());
+            ps.setInt(6,f.getTipoUsuarioID());
+            ps.setInt(7, f.getStatusID());
+            
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+
+    }
+    
 
     public contratos.Usuario get(String login, String senha) {
         try {

@@ -7,7 +7,10 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,8 +18,13 @@ import java.sql.Statement;
  */
 public class Pergunta {
     public static Connection con;
-    public static int insere(String pergunta){
+    
+    public void abrir(){
+        con = Conexao.abrirConexao();
+    }
+    public int insere(String pergunta){
         try {
+            abrir();
 
             // prepara o statement para execução de um novo comaando
             Statement st = con.createStatement();
@@ -43,7 +51,40 @@ public class Pergunta {
             } else {
                 return 0;
             }
+        } finally{
+            Conexao.fecharConexao(con);
         }
         
     }
+    
+        public List<contratos.Pergunta> listar() {
+        try {
+            abrir();
+            String sql = "SELECT * FROM pergunta;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rsF = ps.executeQuery();
+
+            List<contratos.Pergunta> fs = new ArrayList<>();
+
+            while (rsF.next()) {
+                contratos.Pergunta f = new contratos.Pergunta();
+                f.setPergunta(rsF.getString("pergunta"));
+                f.setId(rsF.getInt("id"));
+                fs.add(f);
+            }
+
+            return fs;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+    
+    
+    
+    
 }

@@ -5,9 +5,13 @@
  */
 package database;
 
+import static database.Pergunta.con;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -15,9 +19,15 @@ import java.sql.Statement;
  */
 public class StatusUsuario {
     public static Connection con;
-    public static int insere(String nome){
+    
+    public void abrir(){
+        con = Conexao.abrirConexao();
+    
+    }
+    
+    public int insere(String nome){
         try {
-
+            abrir();
             // prepara o statement para execução de um novo comaando
             Statement st = con.createStatement();
             // cria o comando SQL para ser executado
@@ -43,7 +53,36 @@ public class StatusUsuario {
             } else {
                 return 0;
             }
+        }finally{
+            Conexao.fecharConexao(con);
         }
     }
+    public List<contratos.StatusUsuario> listar() {
+        try {
+            abrir();
+            String sql = "SELECT * FROM status_usuario;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rsF = ps.executeQuery();
+
+            List<contratos.StatusUsuario> fs = new ArrayList<>();
+
+            while (rsF.next()) {
+                contratos.StatusUsuario f = new contratos.StatusUsuario();
+                f.setNome(rsF.getString("nome"));
+                f.setId(rsF.getInt("id"));
+                fs.add(f);
+            }
+
+            return fs;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+    
             
 }
