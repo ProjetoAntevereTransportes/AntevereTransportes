@@ -53,12 +53,34 @@ public class Pagamento extends HttpServlet {
                 case SALVARVARIOS: {
                     resposta = salvarVarios(receiveJson);
                     break;
-                }
+                } case SALVARDEBITO:{
+                    resposta = salvarDebito(receiveJson);
+                    break;
+                }                    
             }
 
             out.print(resposta);
         }
     }
+    
+    public String salvarDebito(String receiveJson){
+        database.Pagamento pg = new database.Pagamento();
+
+        JsonReceiver<contratos.DebitoAutomatico> pagamentos = new JsonReceiver<>(contratos.DebitoAutomatico.class);
+        pagamentos.Desserealizar(receiveJson);
+        
+        JsonResult<Boolean> json = new JsonResult<Boolean>();
+        
+        try {
+            json.resultado = pg.salvarDebito(pagamentos.getData());
+            json.sucesso = true;
+        } catch (Exception ex) {
+            json.sucesso = false;
+            json.mensagem = "Não foi possível carregar os pagamentos. " + ex.toString();
+        }
+
+        return json.Serializar();
+    }    
 
     public String salvarVarios(String receiveJson) {
         database.Pagamento pg = new database.Pagamento();

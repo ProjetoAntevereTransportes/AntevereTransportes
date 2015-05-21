@@ -15,7 +15,101 @@ public class Pagamento {
     private void abrir() {
         con = Conexao.abrirConexao();
     }
+    /*
+    id INT PRIMARY KEY AUTO_INCREMENT,
+	conta_bancaria_id INT NOT NULL,
+	FOREIGN KEY (conta_bancaria_id) REFERENCES conta_bancaria(id),
+	data_inicio DATE,
+	data_fim DATE,
+	dia_mensal INT,
+	nome VARCHAR(40) NOT NULL,
+	descricao VARCHAR(60),
+	fornecedor_id INT NOT NULL,
+	FOREIGN KEY (fornecedor_id) REFERENCES fornecedor(id),
+	valor DECIMAL(10,2) NOT NULL,
+	e_valido boolean not null
+    */
+    
+    public boolean salvarDebito(contratos.DebitoAutomatico debito){
+        try {
+            abrir();
+            con.setAutoCommit(false);
+            Statement st = con.createStatement();
+            String sql = "INSERT INTO debito_automatico (conta_bancaria_id, data_inicio, data_fim, dia_mensal, "
+                    + "nome, descricao, fornecedor_id, valor) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+            PreparedStatement ps = con.prepareStatement(sql);
 
+            ps.setInt(1, debito.getContaBancariaID());
+            
+            java.sql.Date sqlDataInicio = new java.sql.Date(debito.getDataInicio().getTime());
+            java.sql.Date sqlDataFim = new java.sql.Date(debito.getDataFim().getTime());
+            
+            ps.setDate(2, sqlDataInicio);
+            ps.setDate(3, sqlDataFim);
+            ps.setInt(4, debito.getDia());
+            ps.setString(5, debito.getNome());
+            ps.setString(6, debito.getDescricao());
+            ps.setInt(7, debito.getFornecedorID());
+            ps.setDouble(8, debito.getValor());
+
+            int sucesso = ps.executeUpdate();
+
+            if (sucesso != 1) {
+                con.rollback();
+                return false;
+            }else{
+                con.commit();
+                return true;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Pagamento.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+    
+    public List<contratos.DebitoAutomatico> listarDebitos(){
+        try {            
+            Statement st = con.createStatement();
+            String sql = "select * from debito_automatico;";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                List<contratos.DebitoAutomatico> lista = new ArrayList<>();
+                while(rs.next()){
+                    contratos.DebitoAutomatico d = new DebitoAutomatico();
+                    d.setContaBancariaID(rs.getInt("conta_bancaria_id"));
+                    d.setDataFim(rs.getDate("data_fim"));
+                    d.setDataInicio(rs.getDate("data_inicio"));
+                    d.setDescricao(rs.getString("descricao"));
+                    d.setDia(rs.getInt("dia_mensal"));
+                    d.setFornecedorID(rs.getInt("fornecedor_id"));
+                    d.setID(rs.getInt("id"));
+                    d.setNome(rs.getString("nome"));
+                    d.setValor(rs.getDouble("valor"));
+                    //d.seteValido(rs.getBoolean("e_valido"));
+                }
+                
+                return lista;
+            }else{
+                return null;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+    
     public boolean salvarVarios(contratos.Pagamento pagamento) {
         try {
             abrir();
@@ -173,6 +267,30 @@ public class Pagamento {
         } finally {
             Conexao.fecharConexao(con);
         }
+    }
+    
+    public List<contratos.PagamentoView> listarPagamentosView(){
+        List<contratos.PagamentoView> lista = new ArrayList<PagamentoView>();
+        
+        List<contratos.Pagamento> boletos = listar();
+        List<contratos.DebitoAutomatico> debitos = listarDebitos();
+        
+        for(contratos.DebitoAutomatico d : debitos){
+            if(d.geteValido() && d.getDataFim() == null && d.getDataInicio() == null){
+                contratos.Pagamento p = new contratos.Pagamento();
+                p.setNome(d.getNome());
+                p.setFornecedorID(d.getFornecedorID());
+                //p.setFornecedor(null);
+                
+                contratos.ParcelaPagamento par = new ParcelaPagamento();
+                par.setContaBancariaID(d.getContaBancariaID());
+                //par.set
+                
+                p.setParcelas(null);
+            }                
+        }
+        
+        return lista;
     }
 
     public List<Semana> GetMonthPayments() {

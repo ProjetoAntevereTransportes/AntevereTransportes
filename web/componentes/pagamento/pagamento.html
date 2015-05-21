@@ -335,54 +335,49 @@
                         <div class="col-lg-4">
                             <div class="form-group">                                
                                 <label>
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                    Dia de Débito</label>
-                                <input class="form-control" required ng-model="unico.nome">
+                                    Dia de Débito
+                                </label>
+                                <input class="form-control" required ng-model="debito.dia">
                             </div>
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-calendar"></i>
                                     Data Final</label>
                                 <input class="form-control" type="date" 
-                                       required ng-model="unico.parcelas[0].vencimento">
+                                       required ng-model="debito.dataInicio">
                             </div>
                         </div>            
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-calendar"></i>
                                     Data Inícial</label>
                                 <input class="form-control" type="date" 
-                                       required ng-model="unico.parcelas[0].vencimento">
+                                       required ng-model="debito.dataFim">
                             </div>
                         </div>            
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-user"></i>
                                     Nome
                                 </label>
                                 <input class="form-control" type="text"
-                                       required ng-model="unico.parcelas[0].descricao">
+                                       required ng-model="debito.nome">
                             </div>
                         </div>  
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-align-justify"></i>
                                     Descrição</label>
                                 <input class="form-control" type="text"
-                                       required ng-model="unico.parcelas[0].descricao">
+                                       required ng-model="debito.descricao">
                             </div>
                         </div>  
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-user"></i>
                                     Fornecedor</label>
-                                <select class="form-control" ng-model="unico.fornecedorID">
+                                <select class="form-control" ng-model="debito.fornecedorID">
                                     <option ng-repeat="f in fornecedores" required value="{{f.ID}}">
                                         {{f.nome}}
                                     </option>
@@ -392,12 +387,14 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-piggy-bank"></i>
                                     Conta Bancária
                                 </label>
-                                <select class="form-control" ng-model="unico.fornecedorID">
-                                    <option ng-repeat="f in fornecedores" required value="{{f.ID}}">
+                                <select class="form-control" ng-model="debito.contaBancariaID">
+                                    <option ng-repeat="f in contasBancarias" required value="{{f.ID}}">
                                         {{f.nome}}
+                                    </option>
+                                    <option value="1">
+                                        Arrumar Input!
                                     </option>
                                 </select>
                             </div>
@@ -405,21 +402,10 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>
-                                    <i class="glyphicon glyphicon-usd"></i>
                                     Valor
                                 </label>
                                 <input class="form-control" required
-                                       ng-model="unico.parcelas[0].valor">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label>
-                                    <i class="glyphicon glyphicon-file"></i>
-                                    Boleto
-                                </label>
-                                <input class="form-control" type="file"
-                                       required ng-model="unico.parcelas[0].boleto">
+                                       ng-model="debito.valor">
                             </div>
                         </div>
                     </div>
@@ -427,7 +413,7 @@
             </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" ng-click="salvarMassa(unico)">
+                <button type="button" class="btn btn-primary" ng-click="salvarDebito(debito)">
                     Salvar alterações
                 </button>
             </div>

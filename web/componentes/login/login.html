@@ -1,18 +1,37 @@
-<div class="row">
+<div class="row" id="login-fundo">
     <div class="alert alert-danger" ng-hide="mensagemErro === ''">
         {{mensagemErro}}
     </div>
-    <div class="col-lg-4 col-lg-offset-4">
-        <div class="form-group">
-            <label>Usuário</label>
-            <input type="text" ng-model="loginData.userName" placeholder="Usuário" class="m-input form-control">
+    <form name="loginForm">
+        <div class="col-lg-4 col-lg-offset-4 card z1" id="login-content">
+            <center>
+                <h2>Antevere Transportes</h2>
+                Informe seu usuário e senha
+            </center>
+            <br />
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" name="usuario" required ng-model="loginData.userName" placeholder="Usuário" class="m-input form-control">
+                <erro ng-show="loginForm.usuario.$error.required && loginForm.usuario.$touched">
+                    A usuário é obrigatório.
+                </erro>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" required placeholder="Senha" name="senha" ng-model="loginData.password" class="form-control">
+                <erro ng-show="loginForm.senha.$error.required && loginForm.senha.$touched">
+                    A senha é obrigatória.
+                </erro>
+            </div>
+            <span class="pull-left" id="esqueci-senha">
+                <a href="#/EsqueciASenha">
+                    Esqueceu a senha?
+                </a>
+            </span>
+            <button class="btn btn-success pull-right" ng-click="login()">
+                <i class="glyphicon glyphicon-share-alt"></i>
+                Entrar
+            </button>
         </div>
-        <div class="form-group">
-            <label>Senha</label>
-            <input type="password" ng-model="loginData.password" class="form-control">
-        </div>
-        <button class="btn btn-success" ng-click="login()">
-            Entrar
-        </button>
-    </div>
+    </form>
 </div>

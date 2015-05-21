@@ -454,7 +454,6 @@ button:focus {outline:0;}
 .tag{
     padding-left: 3px;
     border-radius: 3px;
-    background-color: #E2E2E2;
     display: inline;
     padding-right: 3px;
     margin-right: 5px !important;

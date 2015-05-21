@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS conta_bancaria(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(20) NOT NULL,
 	numero VARCHAR(20) NOT NULL,
+	agencia VARCHAR(10) NOT NULL,
 	pessoa_id INT NOT NULL,
 	FOREIGN KEY (pessoa_id) REFERENCES pessoa(id),
 	banco_id INT NOT NULL,

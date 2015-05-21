@@ -204,6 +204,12 @@
                 }, null);
             };
 
+            $scope.salvarDebito = function(debito){
+                $pgService.salvarDebito(function(){
+                    
+                },function(){}, null, debito);
+            };
+
             $scope.fab = {
                 principalClick: function () {
                     $("#unico").modal("show");
@@ -218,7 +224,19 @@
                         color: "green",
                         alt: "Automáticos",
                         click: function () {
+                            $scope.debito = {
+                                nome: "",
+                                descricao: "",
+                                fornecedorID: "",
+                                contaBancariaID: "",
+                                dataInicio: "",
+                                dataFim: "",
+                                dia: "",
+                                valor: 0
+                            };
+                            
                             $("#debito").modal("show");
+                            $scope.carregarFornecedores();
                         },
                         id: 2
                     }, {
