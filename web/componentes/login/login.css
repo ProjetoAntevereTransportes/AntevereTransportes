@@ -1,0 +1,17 @@
+#login-fundo{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 2000;
+    background-color: #F6F6F6;
+}
+
+#login-content{
+    margin-top: 100px;
+}
+
+#esqueci-senha{
+    font-size: 12px;
+}
