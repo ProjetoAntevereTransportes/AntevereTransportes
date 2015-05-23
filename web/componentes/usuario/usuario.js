@@ -13,11 +13,14 @@
                 nome: "",
                 email: "",
                 senha: "",
-                perguntaID: "",
+                perguntaId: "",
                 resposta: "",
                 tipoUsuarioID: "",
+                tipoUsuarioNome:"",
+                statusNome:"",
                 statusID: "",
                 chave: ""
+
             };
 
             $scope.formularioValido = function () {
@@ -64,8 +67,9 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-
+                    $('#usuarioForm')[0].reset();
                     $("#add").modal().modal("show");
+                     
                     $scope.listarPergunta();
                     $scope.listarTipos();
                     $scope.listarStatus();
@@ -84,6 +88,10 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
+                $scope.listarStatus();
+                $scope.listarPergunta();
+                $scope.listarTipos();
+                
                 $scope.novo = item;
             };
 
@@ -185,9 +193,9 @@
                 });
 
                 var server = "/AntevereTransportes";
-
-                $http.get(server + "/Usuario")
-                        .success(function (resultado) {
+                $http.post(server + "/Usuario", this.formatar("LERVARIOS", null), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                        .success(function (resultado){
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
@@ -196,14 +204,8 @@
                                 erro(resultado.mensagem);
                             }
                         }).error(function () {
-                    notifyService.remove(id);
-                    notifyService.add({
-                        seconds: 5,
-                        message: "Não foi possível carregar os usuarios."
-                    });
-                    erro("Não foi possível carregar os usuario.");
+                    erro("Não foi possível carregar os usuarios.");
                 });
-
                 if (sempre)
                     sempre();
             };
@@ -216,12 +218,11 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.delete(server + "/Usuario", {params: {"data": usuarioID}},
-                {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                 $http.post(server + "/Usuario", this.formatar("REMOVER", usuarioID),
+                        {
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
-                })
-                        .success(function (resultado) {
+                        }).success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);

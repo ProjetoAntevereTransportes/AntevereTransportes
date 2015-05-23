@@ -13,8 +13,8 @@
             <tr ng-repeat="item in itens">
                 <td>{{item.nome}}</td>
                 <td>{{item.email}}</td>
-                <td>{{item.tipo_usuario.nome}}</td>
-                <td>{{item.status.nome}}</td>             
+                <td>{{item.tipoUsuarioNome}}</td>
+                <td>{{item.statusNome}}</td>             
                 <td>
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
@@ -42,7 +42,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <form novalidate class="m-form" name="usuarioform">
+                    <form novalidate class="m-form" name="usuarioform" id="usuarioForm">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="col-lg-6">

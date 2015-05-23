@@ -13,10 +13,6 @@
         <servlet-class>servlets.Pergunta</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Usuario</servlet-name>
-        <servlet-class>servlets.Usuario</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>TipoUsuario</servlet-name>
         <servlet-class>servlets.TipoUsuario</servlet-class>
     </servlet>
@@ -31,6 +27,10 @@
     <servlet>
         <servlet-name>Fornecedor</servlet-name>
         <servlet-class>servlets.Fornecedor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Usuario</servlet-name>
+        <servlet-class>servlets.Usuario</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
@@ -69,10 +69,6 @@
         <url-pattern>/Pergunta</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Usuario</servlet-name>
-        <url-pattern>/Usuario</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>TipoUsuario</servlet-name>
         <url-pattern>/TipoUsuario</url-pattern>
     </servlet-mapping>
@@ -87,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>Fornecedor</servlet-name>
         <url-pattern>/Fornecedor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Usuario</servlet-name>
+        <url-pattern>/Usuario</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

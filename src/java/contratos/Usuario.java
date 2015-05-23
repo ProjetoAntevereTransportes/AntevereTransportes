@@ -7,7 +7,7 @@ package contratos;
 
 /**
  *
- * @author felipe
+ * @author Felipe_Botelho
  */
 public class Usuario {
     private int id;
@@ -17,8 +17,11 @@ public class Usuario {
     private int perguntaID;
     private String resposta;
     private int tipoUsuarioID;
+    private String tipoUsuarioNome;
     private contratos.TipoUsuario tipoUsuario;
     private int statusID;
+    private String statusNome;
+
     private contratos.StatusUsuario status;
     private String chave;
 
@@ -93,10 +96,6 @@ public class Usuario {
     }
 
     /**
-     * @return the pergunta
-     */
-  
-    /**
      * @return the resposta
      */
     public String getResposta() {
@@ -122,6 +121,20 @@ public class Usuario {
      */
     public void setTipoUsuarioID(int tipoUsuarioID) {
         this.tipoUsuarioID = tipoUsuarioID;
+    }
+
+    /**
+     * @return the tipoUsuarioNome
+     */
+    public String getTipoUsuarioNome() {
+        return tipoUsuarioNome;
+    }
+
+    /**
+     * @param tipoUsuarioNome the tipoUsuarioNome to set
+     */
+    public void setTipoUsuarioNome(String tipoUsuarioNome) {
+        this.tipoUsuarioNome = tipoUsuarioNome;
     }
 
     /**
@@ -153,6 +166,20 @@ public class Usuario {
     }
 
     /**
+     * @return the statusNome
+     */
+    public String getStatusNome() {
+        return statusNome;
+    }
+
+    /**
+     * @param statusNome the statusNome to set
+     */
+    public void setStatusNome(String statusNome) {
+        this.statusNome = statusNome;
+    }
+
+    /**
      * @return the status
      */
     public contratos.StatusUsuario getStatus() {
@@ -179,6 +206,4 @@ public class Usuario {
     public void setChave(String chave) {
         this.chave = chave;
     }
-
-
 }

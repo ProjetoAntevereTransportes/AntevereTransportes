@@ -53,9 +53,11 @@ public class Usuario extends HttpServlet {
                     break;
                 }
                 case REMOVER: {
+                    resposta = remover(receiveJson);
                     break;
                 }
                 case EDITAR: {
+                    resposta = Editar(receiveJson);
                     break;
                 }
                 case LER: {
@@ -76,6 +78,47 @@ public class Usuario extends HttpServlet {
         }
     }
 
+    private String remover(String receiveJson) {
+        JsonResult<Boolean> json = new JsonResult<>();
+        JsonReceiver<Integer> re = new JsonReceiver<Integer>(Integer.class);
+        re.Desserealizar(receiveJson);
+
+        database.Usuario f = new database.Usuario();
+        boolean resultado = f.Excluir(re.getData().intValue());
+        if (resultado) {
+            json.sucesso = true;
+            json.resultado = true;
+        } else {
+            json.sucesso = true;
+            json.resultado = false;
+            json.mensagem = "Não foi possível excluir o usuario.";
+        }
+
+        return json.Serializar();
+    }
+    
+    private String Editar(String json) {
+        contratos.JsonReceiver<contratos.Usuario> f = new JsonReceiver<>(contratos.Usuario.class);
+        f.Desserealizar(json);
+
+        contratos.Usuario usuario = f.getData();
+        Boolean resultado = new database.Usuario().editar(usuario);
+
+        JsonResult<Boolean> result = new JsonResult<>();
+        if (resultado) {
+            result.resultado = true;
+            result.sucesso = true;
+        } else {
+            result.resultado = false;
+            result.sucesso = false;
+            result.mensagem = "Não foi possível editar o usuario.";
+
+        }
+
+        return result.Serializar();
+    }
+
+    
 //    public String salvarVarios(String receiveJson) {
 //        database.Pagamento pg = new database.Pagamento();
 //
@@ -102,7 +145,7 @@ public class Usuario extends HttpServlet {
         List<contratos.Usuario> usuarios = data.listar();
 
         if (usuarios == null) {
-            json.mensagem = "Houve um erro ao carregar as perguntas.";
+            json.mensagem = "Houve um erro ao carregar os usuarios.";
             json.sucesso = false;
         } else {
             json.resultado = usuarios;

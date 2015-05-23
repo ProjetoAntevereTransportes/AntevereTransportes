@@ -1,7 +1,7 @@
 (function () {
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
-        "login", "authService", "fabElement", "notifyElement", "fornecedor", "fileUploadModule", "cargo", "funcionario"]);
+        "login", "authService", "fabElement", "notifyElement", "fornecedor", "fileUploadModule","cargo","funcionario"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
@@ -47,10 +47,10 @@
         }).when("/Fornecedor", {
             templateUrl: "componentes/fornecedor/fornecedor.html",
             controller: "fornecedorController"
-        }).when("/cargo", {
+        }).when("/Cargo", {
             templateUrl: "componentes/cargo/cargo.html",
             controller: "cargoController"
-        }).when("/funcionario", {
+        }).when("/Funcionario", {
             templateUrl: "componentes/funcionario/funcionario.html",
             controller: "funcionarioController"            
         });

@@ -5,7 +5,11 @@
  */
 package database;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -13,11 +17,10 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author felipe
+ * @author Felipe_Botelho
  */
 public class Usuario {
-
-    public Connection con;
+      public Connection con;
 
     public void abrir(){
         con = Conexao.abrirConexao();
@@ -25,13 +28,11 @@ public class Usuario {
  public List<contratos.Usuario> listar() {
         try {
             abrir();
-            String sql = "SELECT * FROM usuario;";
+            String sql = "select usuario.nome, usuario.email, tipo_usuario.nome as tipo, status_usuario.nome as statusu from usuario "
+                    + "inner join tipo_usuario on (usuario.tipo_usuario_id = tipo_usuario.id) "
+                    + "inner join status_usuario on (usuario.status_id = status_usuario.id);";
 
             PreparedStatement ps = con.prepareStatement(sql);
-
-            database.Pergunta pergunta = new Pergunta();
-            database.TipoUsuario tipoUsuario = new TipoUsuario();
-            database.StatusUsuario status = new StatusUsuario();
 
             ResultSet rsF = ps.executeQuery();
 
@@ -41,9 +42,8 @@ public class Usuario {
                 contratos.Usuario u = new contratos.Usuario();
                 u.setNome(rsF.getString("nome"));
                 u.setEmail(rsF.getString("email"));
-                u.setTipoUsuarioID(rsF.getInt("tipo_usuario_id"));
-                u.setId(rsF.getInt("id"));
-                u.setStatusID(rsF.getInt("status_id"));
+                u.setTipoUsuarioNome(rsF.getString("tipo"));
+                u.setStatusNome(rsF.getString("statusu"));
                 fs.add(u);
             }
 
@@ -55,51 +55,55 @@ public class Usuario {
             Conexao.fecharConexao(con);
         }
     }
-    public int insere(String login, String senha) {
-
-        // TENTA EXECUTAR OS COMANDOS NO BD
+ 
+ public boolean Excluir(int id) {
         try {
             abrir();
-            // prepara o statement para execução de um novo comaando
-            Statement st = con.createStatement();
-            // cria o comando SQL para ser executado
-            String sql = "insert into usuario(login,senha) values(?,?)";
-            // prepara o comando para execução, indicando que haverá "?" a substituir
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM usuario WHERE id = " + id + ";";
+
             PreparedStatement ps = con.prepareStatement(sql);
-            // substitui os "?" pelos respectivos valores
-            ps.setString(1, login);
-            ps.setString(2, senha);
-            // executa o comando sql armazenando o resultado. 0 = erro. 1 = sucesso
-            int status = ps.executeUpdate(); // pois adiciona ou altera
-            // verifica se houve erro
-            if (status == 0) {
-                return 0;
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
             } else {
-                return 1;
+                return false;
             }
-        } // CASO HAJA UMA EXCEÇÃO, MOSTRA ERRO NA TELA
-        catch (Exception e) {
-            // grava a mensagem de erro em um log no servidor
-            e.printStackTrace(System.out);
-            if (e.toString().contains("Duplicate")) {
-                return 2;
-            } else {
-                return 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex1);
             }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
         }
     }
+   
+    
         public boolean Inserir(contratos.Usuario f) {
         try {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "INSERT INTO usuario(nome, email, senha, pergunta_id,resposta,tipo_usuario_id ,status_id)"
+            String sql = "INSERT INTO usuario(nome, email, senha, pergunta_id,resposta,tipo_usuario_id,status_id)"
                     + "VALUES (?, ?, ?, ? , ? , ? , ? );";
 
             PreparedStatement ps = con.prepareStatement(sql);
+            String senha  = f.getSenha();
+            authentication.MD5 md5 = new authentication.MD5();
+            senha = md5.gerar(senha);
+            
             ps.setString(1, f.getNome());
             ps.setString(2, f.getEmail());
-            ps.setString(3, f.getSenha());
+            ps.setString(3, senha);
             ps.setInt(4,f.getPerguntaID());
             ps.setString(5,f.getResposta());
             ps.setInt(6,f.getTipoUsuarioID());
@@ -126,6 +130,42 @@ public class Usuario {
             Conexao.fecharConexao(con);
         }
 
+    }
+        
+        public boolean editar(contratos.Usuario f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "UPDATE usuario set nome = ?, email = ?, senha = ? WHERE id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getEmail());
+            ps.setString(3, f.getSenha());
+            ps.setInt(4, f.getId());
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+            
     }
     
 
