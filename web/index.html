@@ -22,14 +22,12 @@
         <link href="css/animation/itemList.css" rel="stylesheet" type="text/css"/>
         <link href="css/material.css" rel="stylesheet" type="text/css"/>
         <link href="css/style.css" rel="stylesheet" type="text/css"/>
-        <link href="componentes/login/login.css" rel="stylesheet" type="text/css"/>
-        <link href="css/animation/card.css" rel="stylesheet" type="text/css"/>
+        <link href="css/style.min.css" rel="stylesheet" type="text/css"/>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
         <!-- Morris Charts CSS -->
-
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300italic,300,100italic,100,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
         <!-- Custom Fonts -->
         <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -40,58 +38,15 @@
     </head>
 
     <body ng-controller="appCtrl">
-
-        <div id="wrapper">
-
+        <div class="navbar-inverse" style="height: 45px;  height: 45px;position: fixed; width: 100%; z-index: 300;"><span class="text-center" style="color: white"><h3 style="padding: 0; margin: 0">Antevere Transportes</h3></span>></div>
+        <div id="wrapper" class="wrapper" style="padding-left: 0">
+            <header class="header">
+                <div class="container">
+                    <h1 class="header__title"></h1>
+                </div>
+            </header>
             <!-- Navigation -->
-            <nav class="navbar navbar-inverse navbar-fixed-top principal-nav" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand logo" href="#/">
-                        Antevere Transportes
-                    </a>
-                    <a class="navbar-brand titulo" href="#/">
-                        {{title}}
-                    </a>
-                </div>
-                <!-- Top Menu Items -->
 
-                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav side-nav">
-                        <li ng-class="{active: selectedItem == '/inicio'}">
-                            <a href="#/inicio"><i class="fa fa-fw fa-dashboard"></i> Inicio</a>
-                        </li>
-                        <li ng-class="{active: selectedItem == '/configuracao'}">
-                            <a href="#/configuracao"><i class="fa fa-fw fa-dashboard"></i> Configurações</a>
-                        </li>
-                        <li ng-class="{active: selectedItem == '/usuario'}">
-                            <a href="#/usuario"><i class="fa fa-fw fa-dashboard"></i> Usuário</a>
-                        </li>
-                        <li ng-class="{active: selectedItem == '/Pagamentos'}">
-                            <a href="#/Pagamentos"><i class="fa fa-fw fa-dashboard"></i> Pagamento</a>
-                        </li>
-                        <li ng-class="{active: selectedItem == '/Fornecedor'}">
-                            <a href="#/Fornecedor"><i class="fa fa-fw fa-dashboard"></i> Fornecedores</a>
-                        </li>
-                        <li ng-class="{active: selectedItem == '/sair'}">
-                            <a href="#/sair"><i class="fa fa-fw fa-dashboard"></i> Sair</a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </nav>
 
             <div id="page-wrapper">
 
@@ -101,6 +56,55 @@
             <!-- /#page-wrapper -->
 
         </div>
+
+        <button id="mm-menu-toggle" class="mm-menu-toggle" style="z-index: 300">Toggle Menu</button>
+        <nav id="mm-menu" class="mm-menu">
+            <div class="mm-menu__header">
+                <h2 class="mm-menu__title">Antevere Transportes</h2>
+            </div>
+            <ul class="mm-menu__items">
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/inicio'}">
+                    <a class="mm-menu__link" href="#/inicio">
+                        <span class="mm-menu__link-text"><i class="md md-home"></i> Inicio</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/usuario'}">
+                    <a class="mm-menu__link" href="#/usuario">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Usuário</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/configuracao'}">
+                    <a class="mm-menu__link" href="#/configuracao">
+                        <span class="mm-menu__link-text"><i class="md md-settings"></i> Configuração</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Pagamentos'}">
+                    <a class="mm-menu__link" href="#/Pagamentos">
+                        <span class="mm-menu__link-text"><i class="md md-dashboard"></i> Pagamento</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Fornecedor'}">
+                    <a class="mm-menu__link" href="#/Fornecedor">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Fornecedor</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Cargo'}">
+                    <a class="mm-menu__link" href="#/Cargo">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Cargo</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Funcionario'}">
+                    <a class="mm-menu__link" href="#/Funcionario">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Funcionario</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Clientes'}">
+                    <a class="mm-menu__link" href="#/Clientes">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Clientes</span>
+                    </a>
+                </li>
+            </ul>
+        </nav><!-- /nav -->
         <script src="js/jquery-2.1.3.js" type="text/javascript"></script>
         <script src="js/bootstrap.js" type="text/javascript"></script>
         <script src="js/angular.min.js" type="text/javascript"></script>
@@ -120,7 +124,21 @@
         <script src="componentes/usuario/usuario.js" type="text/javascript"></script>
         <script src="componentes/fornecedor/fornecedor.js" type="text/javascript"></script>
         <script src="services/fileUpload.js" type="text/javascript"></script>
-        <script src="js/Chart.min.js" type="text/javascript"></script>
+        <script src="componentes/funcionario/funcionario.js" type="text/javascript"></script>
+        <script src="componentes/cargo/cargo.js" type="text/javascript"></script>
+        <script src="componentes/clientes/cliente.js" type="text/javascript"></script>
+        <script src="js/production/materialMenu.min.js"></script>
+        <script>
+                            var menu = new Menu;
+                            $(".mm-menu__item").click(function () {
+                                setTimeout(function () {
+                                     $("#mm-menu-toggle").click();
+                                }, 300);
+                               
+                            });
+        </script>
+
+
         <!-- Morris Charts JavaScript -->
 
     <notify></notify>

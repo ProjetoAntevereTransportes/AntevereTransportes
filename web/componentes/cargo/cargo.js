@@ -1,82 +1,55 @@
 (function () {
-    var app = angular.module("usuario", []);
+    var app = angular.module("cargo", []);
 
-    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService",
-        function (usuarioService, $scope, notifyService) {
-            $scope.titulo = "Gerenciamento de Usuario";
+    app.controller("cargoController", ["cargoService", "$scope", "notifyService",
+        function (cargoService, $scope, notifyService) {
+            $scope.titulo = "Título";
             $scope.itens = [];
 
-            $scope.perguntas = [];
-            $scope.tipos = [];
-            $scope.lstatus = []; // list status
             $scope.novo = {
                 nome: "",
-                email: "",
-                senha: "",
-                perguntaId: "",
-                resposta: "",
-                tipoUsuarioID: "",
-                tipoUsuarioNome: "",
-                statusNome: "",
-                statusID: "",
-                chave: ""
-
+                descricao: "",
             };
 
             $scope.formularioValido = function () {
-                var inputs = $("[name='usuarioform']").find("input");
+                var inputs = $("[name='cargoform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
 
-
-            $scope.carregarPerguntas = function () {
-                usuarioService.listar(function (resultado) {
-                    $scope.perguntas = resultado;
-                }, function () {
-                }, null);
-            };
-
-
             $scope.inserir = function (novo) {
-                usuarioService.inserir(function () {
+                cargoService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarUsuarios();
+                    $scope.carregarCargos();
                 }, function () {
 
                 }, null, novo);
             };
 
-            $scope.carregarUsuarios = function () {
-                usuarioService.listar(function (resultado) {
+            $scope.carregarCargos = function () {
+                cargoService.listar(function (resultado) {
                     $scope.itens = resultado;
                 }, function () {
 
                 }, null);
             };
 
-            $scope.carregarUsuarios();
+            $scope.carregarCargos();
 
             $scope.fab = {
                 principalClick: function () {
                     $scope.modal = {
                         salvarNome: "Salvar",
-                        titulo: "Novo usuario",
+                        titulo: "Novo Cargo",
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-                    $('#usuarioForm')[0].reset();
                     $("#add").modal().modal("show");
-
-                    $scope.listarPergunta();
-                    $scope.listarTipos();
-                    $scope.listarStatus();
-
                 },
                 principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-plus",
+                secondIcon: "glyphicon glyphicon-user",
                 principalAlt: "Único"
             };
 
@@ -88,37 +61,15 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.listarStatus();
-                $scope.listarPergunta();
-                $scope.listarTipos();
-
                 $scope.novo = item;
             };
 
             $scope.editarSalvar = function (item) {
-                usuarioService.editar(function () {
+                cargoService.editar(function () {
                     $("#add").modal().modal("hide");
 
                 }, function () {
                 }, null, item);
-            };
-            $scope.listarPergunta = function () {
-                usuarioService.listarPergunta(function (resultado) {
-                    $scope.perguntas = resultado;
-                }, function () {
-                }, null);
-            };
-            $scope.listarTipos = function () {
-                usuarioService.listarTipos(function (resultado) {
-                    $scope.tipos = resultado;
-                }, function () {
-                }, null);
-            };
-            $scope.listarStatus = function () {
-                usuarioService.listarStatus(function (resultado) {
-                    $scope.lstatus = resultado;
-                }, function () {
-                }, null);
             };
 
             $scope.excluir = function (item) {
@@ -129,7 +80,7 @@
                         buttons: [{
                                 text: "Sim",
                                 f: function (i) {
-                                    usuarioService.excluir(function () {
+                                    cargoService.excluir(function () {
                                     }, function () {
                                     }, null, item.ID);
                                     i.excluirID = null;
@@ -149,16 +100,16 @@
 
         }]);
 
-    app.service("usuarioService", ["$http", "notifyService", function ($http, notifyService) {
+    app.service("cargoService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Adicionando usuario..."
+                    message: "Adicionando cargo..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Usuario", this.formatar("INSERIR", data),
+                $http.post(server + "/cargo", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -168,7 +119,7 @@
                                 sucesso(resultado.resultado);
                                 notifyService.add({
                                     seconds: 5,
-                                    message: "Usuario adicionado"
+                                    message: "Cargo adicionado"
                                 });
                             }
                             else {
@@ -179,7 +130,7 @@
                             }
                         }).error(function () {
                     notifyService.remove(id);
-                    erro("Não foi possível cadastrar o usuario.");
+                    erro("Não foi possível cadastrar o cargo.");
                 });
 
                 if (sempre)
@@ -189,12 +140,15 @@
             this.listar = function (sucesso, erro, sempre) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Carregando usuarios..."
+                    message: "Carregando cargos..."
                 });
 
                 var server = "/AntevereTransportes";
-                $http.post(server + "/Usuario", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+
+                $http.post(server + "/cargo", this.formatar("LERVARIOS", null), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+
+                })
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -204,21 +158,27 @@
                                 erro(resultado.mensagem);
                             }
                         }).error(function () {
-                    erro("Não foi possível carregar os usuarios.");
+                    notifyService.remove(id);
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível carregar os cargos."
+                    });
+                    erro("Não foi possível carregar os cargos.");
                 });
+
                 if (sempre)
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, usuarioID) {
+            this.excluir = function (sucesso, erro, sempre, fornecedorID) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Excluindo usuario..."
+                    message: "Excluindo cargo..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Usuario", this.formatar("REMOVER", usuarioID),
+                $http.post(server + "/cargo", this.formatar("REMOVER", fornecedorID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -235,9 +195,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível excluir o usuario."
+                        message: "Não foi possível excluir o cargo."
                     });
-                    erro("Não foi possível excluir o usuario.");
+                    erro("Não foi possível excluir o cargo.");
                 });
 
                 if (sempre)
@@ -246,76 +206,17 @@
 
             this.formatar = function (operacao, dado) {
                 return "data=" + JSON.stringify({operacao: operacao, json: JSON.stringify(dado)});
-            }
-            this.listarPergunta = function (sucesso, erro, sempre) {
-                var server = "/AntevereTransportes";
-                $http.post(server + "/Pergunta", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-                        .success(function (resultado) {
-                            if (resultado.sucesso) {
-                                sucesso(resultado.resultado);
-                            }
-                            else {
-                                erro(resultado.mensagem);
-                            }
-                        }).error(function () {
-                    erro("Não foi possível carregar as perguntas.");
-                });
-
-                if (sempre)
-                    sempre();
             };
-
-            this.listarTipos = function (sucesso, erro, sempre) {
-                var server = "/AntevereTransportes";
-                $http.post(server + "/TipoUsuario", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-                        .success(function (resultado) {
-                            if (resultado.sucesso) {
-                                sucesso(resultado.resultado);
-                            }
-                            else {
-                                erro(resultado.mensagem);
-                            }
-                        }).error(function () {
-                    erro("Não foi possível carregar os tipos de usuarios.");
-                });
-
-                if (sempre)
-                    sempre();
-
-            };
-
-            this.listarStatus = function (sucesso, erro, sempre) {
-                var server = "/AntevereTransportes";
-                $http.post(server + "/StatusUsuario", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-                        .success(function (resultado) {
-                            if (resultado.sucesso) {
-                                sucesso(resultado.resultado);
-                            }
-                            else {
-                                erro(resultado.mensagem);
-                            }
-                        }).error(function () {
-                    erro("Não foi possível carregar os status de usuarios.");
-                });
-
-                if (sempre)
-                    sempre();
-
-            };
-
 
             this.editar = function (sucesso, erro, sempre, item) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Editar usuario..."
+                    message: "Editar cargo..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Usuario", this.formatar("EDITAR", item),
+                $http.post(server + "/cargo", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {
@@ -324,7 +225,7 @@
                         sucesso(resultado.resultado);
                         notifyService.add({
                             seconds: 5,
-                            message: "Usuario editado."
+                            message: "Cargo editado."
                         });
                     }
                     else {
@@ -338,14 +239,13 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível editar o usuario."
+                        message: "Não foi possível editar o cargo."
                     });
-                    erro("Não foi possível editar o usuario.");
+                    erro("Não foi possível editar o cargo.");
                 });
 
                 if (sempre)
                     sempre();
             };
         }]);
-
 })();
