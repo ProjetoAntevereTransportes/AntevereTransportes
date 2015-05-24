@@ -1,77 +1,60 @@
 (function () {
-    var app = angular.module("usuario", []);
+    var app = angular.module("cliente", []);
 
-    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService",
-        function (usuarioService, $scope, notifyService) {
-            $scope.titulo = "Gerenciamento de Usuario";
+    app.controller("clienteController", ["clienteService", "$scope", "notifyService",
+        function (clienteService, $scope, notifyService) {
+            $scope.titulo = "Gerenciamento de Clientes";
             $scope.itens = [];
-
-            $scope.perguntas = [];
-            $scope.tipos = [];
             $scope.lstatus = []; // list status
             $scope.novo = {
                 nome: "",
                 email: "",
-                senha: "",
-                perguntaId: "",
-                resposta: "",
-                tipoUsuarioID: "",
-                tipoUsuarioNome: "",
-                statusNome: "",
+                telefone: "",
+                cnpj: "",
+                observacao: "",
                 statusID: "",
-                chave: ""
-
+                statusNome: ""
             };
 
             $scope.formularioValido = function () {
-                var inputs = $("[name='usuarioform']").find("input");
+                var inputs = $("[name='clienteform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
 
 
-            $scope.carregarPerguntas = function () {
-                usuarioService.listar(function (resultado) {
-                    $scope.perguntas = resultado;
-                }, function () {
-                }, null);
-            };
-
-
             $scope.inserir = function (novo) {
-                usuarioService.inserir(function () {
+                clienteService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarUsuarios();
+                    $scope.carregarClientes();
                 }, function () {
 
                 }, null, novo);
             };
 
-            $scope.carregarUsuarios = function () {
-                usuarioService.listar(function (resultado) {
+            $scope.carregarClientes = function () {
+                clienteService.listar(function (resultado) {
                     $scope.itens = resultado;
                 }, function () {
 
                 }, null);
             };
 
-            $scope.carregarUsuarios();
+            $scope.carregarClientes();
 
             $scope.fab = {
                 principalClick: function () {
                     $scope.modal = {
                         salvarNome: "Salvar",
-                        titulo: "Novo usuario",
+                        titulo: "Novo Cliente",
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-                    $('#usuarioForm')[0].reset();
+                    
                     $("#add").modal().modal("show");
 
-                    $scope.listarPergunta();
-                    $scope.listarTipos();
                     $scope.listarStatus();
 
                 },
@@ -88,34 +71,22 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.listarStatus();
-                $scope.listarPergunta();
+
                 $scope.listarTipos();
 
                 $scope.novo = item;
             };
 
             $scope.editarSalvar = function (item) {
-                usuarioService.editar(function () {
+                clienteService.editar(function () {
                     $("#add").modal().modal("hide");
 
                 }, function () {
                 }, null, item);
             };
-            $scope.listarPergunta = function () {
-                usuarioService.listarPergunta(function (resultado) {
-                    $scope.perguntas = resultado;
-                }, function () {
-                }, null);
-            };
-            $scope.listarTipos = function () {
-                usuarioService.listarTipos(function (resultado) {
-                    $scope.tipos = resultado;
-                }, function () {
-                }, null);
-            };
+
             $scope.listarStatus = function () {
-                usuarioService.listarStatus(function (resultado) {
+                clienteService.listarStatus(function (resultado) {
                     $scope.lstatus = resultado;
                 }, function () {
                 }, null);
@@ -129,7 +100,7 @@
                         buttons: [{
                                 text: "Sim",
                                 f: function (i) {
-                                    usuarioService.excluir(function () {
+                                    clienteService.excluir(function () {
                                     }, function () {
                                     }, null, item.ID);
                                     i.excluirID = null;
@@ -149,16 +120,16 @@
 
         }]);
 
-    app.service("usuarioService", ["$http", "notifyService", function ($http, notifyService) {
+    app.service("clienteService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Adicionando usuario..."
+                    message: "Adicionando cliente..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Usuario", this.formatar("INSERIR", data),
+                $http.post(server + "/Cliente", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -168,7 +139,7 @@
                                 sucesso(resultado.resultado);
                                 notifyService.add({
                                     seconds: 5,
-                                    message: "Usuario adicionado"
+                                    message: "Cliente adicionado"
                                 });
                             }
                             else {
@@ -179,7 +150,7 @@
                             }
                         }).error(function () {
                     notifyService.remove(id);
-                    erro("Não foi possível cadastrar o usuario.");
+                    erro("Não foi possível cadastrar o cliente.");
                 });
 
                 if (sempre)
@@ -189,11 +160,11 @@
             this.listar = function (sucesso, erro, sempre) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Carregando usuarios..."
+                    message: "Carregando clientes..."
                 });
 
                 var server = "/AntevereTransportes";
-                $http.post(server + "/Usuario", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/Cliente", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
                         .success(function (resultado) {
                             notifyService.remove(id);
@@ -204,7 +175,7 @@
                                 erro(resultado.mensagem);
                             }
                         }).error(function () {
-                    erro("Não foi possível carregar os usuarios.");
+                    erro("Não foi possível carregar os clientes.");
                 });
                 if (sempre)
                     sempre();
@@ -213,12 +184,12 @@
             this.excluir = function (sucesso, erro, sempre, usuarioID) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Excluindo usuario..."
+                    message: "Excluindo Cliente..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Usuario", this.formatar("REMOVER", usuarioID),
+                $http.post(server + "/Cliente", this.formatar("REMOVER", usuarioID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -235,9 +206,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível excluir o usuario."
+                        message: "Não foi possível excluir o cliente."
                     });
-                    erro("Não foi possível excluir o usuario.");
+                    erro("Não foi possível excluir o cliente.");
                 });
 
                 if (sempre)
@@ -246,49 +217,12 @@
 
             this.formatar = function (operacao, dado) {
                 return "data=" + JSON.stringify({operacao: operacao, json: JSON.stringify(dado)});
-            }
-            this.listarPergunta = function (sucesso, erro, sempre) {
-                var server = "/AntevereTransportes";
-                $http.post(server + "/Pergunta", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-                        .success(function (resultado) {
-                            if (resultado.sucesso) {
-                                sucesso(resultado.resultado);
-                            }
-                            else {
-                                erro(resultado.mensagem);
-                            }
-                        }).error(function () {
-                    erro("Não foi possível carregar as perguntas.");
-                });
-
-                if (sempre)
-                    sempre();
             };
 
-            this.listarTipos = function (sucesso, erro, sempre) {
-                var server = "/AntevereTransportes";
-                $http.post(server + "/TipoUsuario", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-                        .success(function (resultado) {
-                            if (resultado.sucesso) {
-                                sucesso(resultado.resultado);
-                            }
-                            else {
-                                erro(resultado.mensagem);
-                            }
-                        }).error(function () {
-                    erro("Não foi possível carregar os tipos de usuarios.");
-                });
-
-                if (sempre)
-                    sempre();
-
-            };
 
             this.listarStatus = function (sucesso, erro, sempre) {
                 var server = "/AntevereTransportes";
-                $http.post(server + "/StatusUsuario", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/StatusCliente", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
                         .success(function (resultado) {
                             if (resultado.sucesso) {
@@ -298,7 +232,7 @@
                                 erro(resultado.mensagem);
                             }
                         }).error(function () {
-                    erro("Não foi possível carregar os status de usuarios.");
+                    erro("Não foi possível carregar os status de clientes.");
                 });
 
                 if (sempre)
@@ -310,12 +244,12 @@
             this.editar = function (sucesso, erro, sempre, item) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Editar usuario..."
+                    message: "Editar cliente..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Usuario", this.formatar("EDITAR", item),
+                $http.post(server + "/Cliente", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {
@@ -324,7 +258,7 @@
                         sucesso(resultado.resultado);
                         notifyService.add({
                             seconds: 5,
-                            message: "Usuario editado."
+                            message: "Cliente editado."
                         });
                     }
                     else {
@@ -338,9 +272,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível editar o usuario."
+                        message: "Não foi possível editar o cliente."
                     });
-                    erro("Não foi possível editar o usuario.");
+                    erro("Não foi possível editar o cliente.");
                 });
 
                 if (sempre)

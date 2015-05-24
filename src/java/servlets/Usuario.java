@@ -96,6 +96,7 @@ public class Usuario extends HttpServlet {
 
         return json.Serializar();
     }
+
     
     private String Editar(String json) {
         contratos.JsonReceiver<contratos.Usuario> f = new JsonReceiver<>(contratos.Usuario.class);
@@ -186,4 +187,9 @@ public class Usuario extends HttpServlet {
             throws ServletException, IOException, IllegalStateException {
         processRequest(request, response);
     }
+    
+     @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 }

@@ -56,7 +56,7 @@ public class Usuario {
         }
     }
  
- public boolean Excluir(int id) {
+     public boolean Excluir(int id) {
         try {
             abrir();
             con.setAutoCommit(false);

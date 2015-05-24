@@ -32,6 +32,10 @@
         <servlet-name>Usuario</servlet-name>
         <servlet-class>servlets.Usuario</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Cliente</servlet-name>
+        <servlet-class>servlets.Cliente</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>Usuario</servlet-name>
         <url-pattern>/Usuario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cliente</servlet-name>
+        <url-pattern>/Cliente</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
