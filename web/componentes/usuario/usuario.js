@@ -3,7 +3,7 @@
 
     app.controller("usuarioController", ["usuarioService", "$scope", "notifyService",
         function (usuarioService, $scope, notifyService) {
-            $scope.titulo = "Título";
+            $scope.titulo = "Gerenciamento de Usuario";
             $scope.itens = [];
 
             $scope.perguntas = [];
