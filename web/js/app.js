@@ -1,30 +1,88 @@
 (function () {
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
-        "login", "authService", "fabElement", "notifyElement", "fornecedor", "fileUploadModule","cargo","funcionario","cliente"]);
+        "login", "authService", "fabElement", "notifyElement", "fornecedor", "fileUploadModule", "cargo", "funcionario", "cliente"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
         }]);
 
     app.controller('appCtrl', function ($scope, $location) {
-        $scope.title = "Pagamentos > Pendentes";
-        $scope.selectedItem = "/";
+        $scope.$on('$routeChangeStart', function (next, current) {
+            $scope.mudarTitulo($location.path());
+        });
 
         $scope.mudarTitulo = function (path) {
-            alert(path);
             switch (path) {
-                case "/":
+                case "/inicio":
                 {
                     $scope.title = "Início";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/configuracao":
+                {
+                    $scope.title = "Configurações";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/usuario":
+                {
+                    $scope.title = "Usuários";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Pagamentos":
+                {
+                    $scope.title = "Pagamentos";
+                    $scope.barColor = "#F44242";
+                    $scope.searchColor = 'rgb(250, 116, 116)';
+                    break;
+                }
+                case "/Login":
+                {
+                    $scope.title = "Login";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Fornecedor":
+                {
+                    $scope.title = "Fornecedores";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Cargo":
+                {
+                    $scope.title = "Cargos";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Funcionario":
+                {
+                    $scope.title = "Funcionários";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Clientes":
+                {
+                    $scope.title = "Clientes";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
                     break;
                 }
             }
         };
 
-        $scope.click = function () {
+        $scope.click = function (url) {
             $scope.selectedItem = $location.path();
-            $scope.mudarTitulo($scope.selectedItem);
+            $scope.mudarTitulo(url);
         };
     });
 
@@ -52,10 +110,10 @@
             controller: "cargoController"
         }).when("/Funcionario", {
             templateUrl: "componentes/funcionario/funcionario.html",
-            controller: "funcionarioController"            
+            controller: "funcionarioController"
         }).when("/Clientes", {
             templateUrl: "componentes/clientes/cliente.html",
-            controller: "clienteController"            
+            controller: "clienteController"
         });
         $routeProvider.otherwise({
             redirectTo: '/inicio'
