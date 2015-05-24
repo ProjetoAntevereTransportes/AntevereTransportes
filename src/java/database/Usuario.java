@@ -28,7 +28,7 @@ public class Usuario {
  public List<contratos.Usuario> listar() {
         try {
             abrir();
-            String sql = "select usuario.nome, usuario.email, tipo_usuario.nome as tipo, status_usuario.nome as statusu from usuario "
+            String sql = "select usuario.id, usuario.nome, usuario.email, tipo_usuario.nome as tipo, status_usuario.nome as statusu from usuario "
                     + "inner join tipo_usuario on (usuario.tipo_usuario_id = tipo_usuario.id) "
                     + "inner join status_usuario on (usuario.status_id = status_usuario.id);";
 
@@ -40,6 +40,7 @@ public class Usuario {
 
             while (rsF.next()) {
                 contratos.Usuario u = new contratos.Usuario();
+                u.setId(rsF.getInt("id"));
                 u.setNome(rsF.getString("nome"));
                 u.setEmail(rsF.getString("email"));
                 u.setTipoUsuarioNome(rsF.getString("tipo"));

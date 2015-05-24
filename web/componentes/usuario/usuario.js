@@ -121,7 +121,7 @@
                 }, null);
             };
 
-            $scope.excluir = function (item) {
+            $scope.excluir = function (item) {                
                 if (!item.excluirID)
                     item.excluirID = notifyService.add({
                         fixed: true,
@@ -131,7 +131,7 @@
                                 f: function (i) {
                                     usuarioService.excluir(function () {
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
                                 },
                                 parameter: item
