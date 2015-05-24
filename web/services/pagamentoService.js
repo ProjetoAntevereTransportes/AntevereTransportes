@@ -6,13 +6,13 @@
                 return "data=" + JSON.stringify({operacao: operacao, json: JSON.stringify(dado)});
             };
 
-            this.listar = function (sucesso, erro, sempre) {
+            this.listar = function (sucesso, erro, sempre, data) {
                 var resultado;
                 var id = notifyService.add({
                     fixed: true,
                     message: "Carregando contas à pagar..."
                 });
-                $http.post("/AntevereTransportes/Pagamento", this.formatar("LERVARIOS", null), {
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("LERVARIOS", data), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                 }).success(function (data) {
                     notifyService.remove(id);

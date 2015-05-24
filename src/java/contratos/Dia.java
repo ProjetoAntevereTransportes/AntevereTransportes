@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class Dia {
     
-    public List<contratos.PagamentoView> pagamentos;
+    public List<contratos.Pagamento2> pagamentos;
     public java.util.Date data;
 
     public Dia() {

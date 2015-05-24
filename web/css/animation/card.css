@@ -1,0 +1,22 @@
+.a-card.ng-hide-add.ng-hide-add-active{
+    -webkit-animation: showCard linear 0.1s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;    
+}
+
+.a-card.ng-hide-remove.ng-hide-remove-active{
+    -webkit-animation: showCard linear 0.2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-transform-origin: 50% 50%;    
+}
+
+@-webkit-keyframes showCard{
+    0%{
+        opacity: 0;
+        transform: translate(0px, 30px);        
+    }
+    100%{
+        opacity: 1;
+        transform: translate(0px,0px);
+    }
+}

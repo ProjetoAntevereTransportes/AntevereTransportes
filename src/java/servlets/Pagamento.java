@@ -102,12 +102,16 @@ public class Pagamento extends HttpServlet {
     }
 
     public String lervarios(String receiveJson) {
+        
+        JsonReceiver<java.util.Date> r = new JsonReceiver<java.util.Date>(java.util.Date.class);
+        r.Desserealizar(receiveJson);
+        
         database.Pagamento pg = new database.Pagamento();
 
         JsonResult<List<contratos.Semana>> json = new JsonResult<>();
 
         try {
-            json.resultado = pg.GetMonthPayments();
+            json.resultado = pg.GetMonthPayments(r.getData());
             json.sucesso = true;
         } catch (Exception ex) {
             json.sucesso = false;

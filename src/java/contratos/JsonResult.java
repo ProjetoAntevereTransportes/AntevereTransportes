@@ -19,7 +19,7 @@ public class JsonResult<T> {
     public T resultado;
     
     public String Serializar() {
-        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+        Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
         return g.toJson(this);
     }
     

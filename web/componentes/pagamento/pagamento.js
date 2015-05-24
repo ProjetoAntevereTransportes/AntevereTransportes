@@ -2,8 +2,9 @@
     var app = angular.module("pagamento", []);
 
     app.controller("PagamentoController", ["$scope", "$http", "$pgService", "notifyService",
-        "fornecedorService", "fileUpload",
-        function ($scope, $http, $pgService, notifyService, fornecedorService, fileUpload) {
+        "fornecedorService", "fileUpload", "$window", "$document",
+        function ($scope, $http, $pgService, notifyService, fornecedorService, fileUpload, $window, $document) {
+            $scope.dataLoad = new Date();
             $scope.itens = [];
             $scope.mensagem = "";
             $scope.mostrarCalendario = false;
@@ -17,15 +18,15 @@
                 nome: "",
                 valor: 0
             };
-            
+
             $scope.unico = {
                 parcelas: [{
-                    vencimento: "",
-                    descricao: "",
-                    valor: 0,
-                    boleto: ""
-                }],
-                fornecedorID: "",                
+                        vencimento: "",
+                        descricao: "",
+                        valor: 0,
+                        boleto: ""
+                    }],
+                fornecedorID: "",
                 nome: ""
             };
 
@@ -39,7 +40,7 @@
                     var anoFinal = $scope.itemNovoMassa.final.getFullYear();
                     var mesFinal = $scope.itemNovoMassa.final.getMonth();
 
-                    for (var ano = anoInicial; ano <= anoFinal; ano++) {                        
+                    for (var ano = anoInicial; ano <= anoFinal; ano++) {
                         for (var mes = mesInicial; mes <= mesFinal; mes++) {
                             $scope.itemNovoMassa.parcelas.push({
                                 descricao: "descriocao!",
@@ -54,7 +55,7 @@
 
             $scope.salvarMassa = function (contas) {
                 $pgService.salvarMassa(function () {
-                    $scope.carregarPagamentos();
+                    $scope.carregarPagamentos($scope.dataLoad);
                     $("#editar").modal("hide");
                     $("#unico").modal("hide");
                 }, function () {
@@ -85,13 +86,25 @@
                 }
             };
 
-            $scope.carregarPagamentos = function () {
+            $scope.carregarPagamentos = function (data) {
+                if (data == null) {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "O mês e ano não podem ser nulos."
+                    });
+                    return;
+                }
+
                 $pgService.listar(function (result) {
                     $scope.semanas = result;
                     $scope.itens = [];
                     $(result).each(function (i, w) {
                         $(w.dias).each(function (j, d) {
                             $(d.pagamentos).each(function (k, p) {
+                                if (p.debitoIlimitado)
+                                    p.numeroVezes = p.numero;
+                                else
+                                    p.numeroVezes = p.numero + "/" + p.quantidade;
                                 $scope.itens.push(p);
                             });
                         });
@@ -103,10 +116,10 @@
                             else
                                 $scope.mensagem = "Nao foi possivel comunicar com o servidor.";
                         },
-                        null);
+                        null, data);
             };
 
-            $scope.carregarPagamentos();
+            $scope.carregarPagamentos($scope.dataLoad);
 
             $scope.itemEditar = {};
 
@@ -193,6 +206,8 @@
             };
 
             $scope.clicarPagamentoCalendario = function (item) {
+                if (!item.mostrarBotoes)
+                    $scope.mostrarAcaoBotao(item);
                 item.expandir = true;
                 window.scrollBy(0, $("#" + item.ID).offset().top - 100);
             };
@@ -204,10 +219,11 @@
                 }, null);
             };
 
-            $scope.salvarDebito = function(debito){
-                $pgService.salvarDebito(function(){
-                    
-                },function(){}, null, debito);
+            $scope.salvarDebito = function (debito) {
+                $pgService.salvarDebito(function () {
+
+                }, function () {
+                }, null, debito);
             };
 
             $scope.fab = {
@@ -234,7 +250,7 @@
                                 dia: "",
                                 valor: 0
                             };
-                            
+
                             $("#debito").modal("show");
                             $scope.carregarFornecedores();
                         },
@@ -249,6 +265,13 @@
                         },
                         id: 1
                     }]
+            };
+
+            $scope.mostrarEstatisticasMensais = function () {
+                if ($scope.mostrarEstatisticas)
+                    $scope.mostrarEstatisticas = false;
+                else
+                    $scope.mostrarEstatisticas = true;
             };
         }]);
 })();
