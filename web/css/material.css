@@ -34,7 +34,33 @@
     background: none !important;    
     font-family: Roboto;
     color: #373737 !important;
-    padding-left: 0px !important;
+    padding-left: 3px !important;
+}
+
+.form-group input:focus, select:focus{
+    border-bottom: 2px solid rgb(173, 173, 173) !important;
+    background-color: whitesmoke !important;
+    font-weight: 400;
+}
+
+input:focus.form-control.ng-invalid.ng-touched {
+    border-bottom: 2px solid red !important;
+    background-color: rgb(255, 236, 236) !important;
+    transition-duration: .5s;
+    font-weight: 400;
+}
+
+input:focus.form-control.ng-valid.ng-touched {
+    background-color: #78FA89;
+}
+
+input.form-control.ng-invalid.ng-touched {
+    border-bottom: 1px solid red !important;
+    transition-duration: .5s;
+}
+
+input.form-control.ng-valid.ng-touched {
+    background-color: #78FA89;
 }
 
 .m-button{
@@ -72,19 +98,14 @@
     margin-bottom: 0px;
 }
 
-input.form-control.ng-invalid.ng-touched {
-    border-bottom: 1px solid red !important;
-    transition-duration: .5s;
-}
 
-input.form-control.ng-valid.ng-touched {
-    background-color: #78FA89;
-}
 
 .form-group erro{
     font-family: Roboto;
     color: red;
-    font-size: 10px;
+    font-size: 11px;
+    font-weight: 400;
+    float: right;
 }
 
 .modal-title{

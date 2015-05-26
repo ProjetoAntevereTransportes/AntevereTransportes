@@ -13,14 +13,17 @@ import contratos.*;
 import java.sql.*;
 import java.util.*;
 import authentication.ValidadeUser;
+import static java.net.Proxy.Type.HTTP;
 
 public class Pagamento extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
+            
             contratos.JsonReceiver2 j = new JsonReceiver2();
 
             JsonReceiver<JsonReceiver2> json = new JsonReceiver<JsonReceiver2>(JsonReceiver2.class);
@@ -30,6 +33,10 @@ public class Pagamento extends HttpServlet {
                 json.Desserealizar(request.getParameter("data"));
                 receiveJson = json.getData().getJson();
             }
+            
+            String value = new String(receiveJson.getBytes("UTF-8"), "UTF-8");
+            
+            
             String resposta = "";
 
             switch (json.getData().getOperacao()) {
@@ -68,7 +75,7 @@ public class Pagamento extends HttpServlet {
 
         JsonReceiver<contratos.DebitoAutomatico> pagamentos = new JsonReceiver<>(contratos.DebitoAutomatico.class);
         pagamentos.Desserealizar(receiveJson);
-        
+               
         JsonResult<Boolean> json = new JsonResult<Boolean>();
         
         try {

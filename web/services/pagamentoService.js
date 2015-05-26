@@ -12,21 +12,20 @@
                     fixed: true,
                     message: "Carregando contas à pagar..."
                 });
-                $http.post("/AntevereTransportes/Pagamento", this.formatar("LERVARIOS", data), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).success(function (data) {
-                    notifyService.remove(id);
-                    resultado = data;
-                    if (data.sucesso)
-                        sucesso(data.resultado);
-                    else {
-                        erro(data.mensagem);
-                        notifyService.add({
-                            fixed: 5,
-                            message: data.mensagem
-                        });
-                    }
-                }).error(function () {
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("LERVARIOS", data))
+                        .success(function (data) {
+                            notifyService.remove(id);
+                            resultado = data;
+                            if (data.sucesso)
+                                sucesso(data.resultado);
+                            else {
+                                erro(data.mensagem);
+                                notifyService.add({
+                                    fixed: 5,
+                                    message: data.mensagem
+                                });
+                            }
+                        }).error(function () {
                     erro(resultado.mensagem);
                     notifyService.add({
                         fixed: 5,
@@ -49,9 +48,8 @@
                 });
 
                 var resultado;
-                $http.post("/AntevereTransportes/Pagamento", this.formatar("SALVARVARIOS", contas), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).success(function (data) {
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("SALVARVARIOS", contas)
+                        ).success(function (data) {
                     notifyService.remove(id);
                     resultado = data;
                     if (data.sucesso) {
@@ -87,9 +85,8 @@
                 });
 
                 var resultado;
-                $http.post("/AntevereTransportes/Pagamento", this.formatar("SALVARDEBITO", debito), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).success(function (data) {
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("SALVARDEBITO", debito)
+                        ).success(function (data) {
                     notifyService.remove(id);
                     resultado = data;
                     if (data.sucesso) {

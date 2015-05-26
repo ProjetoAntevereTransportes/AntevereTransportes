@@ -2,8 +2,9 @@
     var app = angular.module("pagamento", []);
 
     app.controller("PagamentoController", ["$scope", "$http", "$pgService", "notifyService",
-        "fornecedorService", "fileUpload", "$window", "$document",
-        function ($scope, $http, $pgService, notifyService, fornecedorService, fileUpload, $window, $document) {
+        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService",
+        function ($scope, $http, $pgService, notifyService, fornecedorService,
+        fileUpload, $window, $document, pesquisaService) {
             $scope.dataLoad = new Date();
             $scope.itens = [];
             $scope.mensagem = "";
@@ -19,6 +20,10 @@
                 valor: 0
             };
 
+            pesquisaService.setFunction(function(search){
+                $scope.search = search;
+            });
+
             $scope.unico = {
                 parcelas: [{
                         vencimento: "",
@@ -29,7 +34,7 @@
                 fornecedorID: "",
                 nome: ""
             };
-
+            
             $scope.gerarParcelas = function () {
                 if ($scope.itemNovoMassa.inicial && $scope.itemNovoMassa.final) {
                     $scope.itemNovoMassa.parcelas = [];

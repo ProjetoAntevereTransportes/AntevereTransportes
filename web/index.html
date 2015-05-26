@@ -54,20 +54,11 @@
         .animation-bar{
             transition-duration: .5s;
         }
-
-        .search{
-            border: none;
-            border-radius: 4px;
-            height: 30px;
-            margin-right: 10px;
-            margin-top: 7px;
-            padding-left: 10px;
-        }
     </style>
 
     <body ng-controller="appCtrl">
         <div class="navbar-inverse z3 animation-bar" style="background: {{barColor}} !important;height: 45px;  height: 45px;position: fixed; width: 100%; z-index: 300;"><span class="text-center" style="color: white">
-                <input style="background-color: {{searchColor}}" type="text" class="search pull-right" placeholder="Pesquisar" value="Pesquisar">
+                <pesquisa></pesquisa>
                 <div class="title-bar">   
                     {{title}}
                 </div>                    
@@ -96,8 +87,9 @@
         <nav id="mm-menu" class="mm-menu">
             <div class="mm-menu__header">
                 <h2 class="mm-menu__title">
-                    Antevere Transportes                    
+                    Luis Fernando dos Santos
                 </h2>
+                Teste
             </div>
             <ul class="mm-menu__items">
                 <li ng-click="click('/inicio')" class="mm-menu__item" ng-class="{active: selectedItem == '/inicio'}">
@@ -165,6 +157,9 @@
         <script src="componentes/cargo/cargo.js" type="text/javascript"></script>
         <script src="componentes/clientes/cliente.js" type="text/javascript"></script>
         <script src="js/production/materialMenu.min.js"></script>
+        <script src="js/ui-utils-0.2.3/ui-utils.min.js" type="text/javascript"></script>
+        <script src="js/ui-utils-0.2.3/ui-utils-ieshiv.min.js" type="text/javascript"></script>
+        <script src="componentes/pesquisa/pesquisa.js" type="text/javascript"></script>
         <script>
                             var menu = new Menu;
                             $(".mm-menu__item").click(function () {

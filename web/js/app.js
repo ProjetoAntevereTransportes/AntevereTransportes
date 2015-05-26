@@ -1,7 +1,9 @@
 (function () {
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
-        "login", "authService", "fabElement", "notifyElement", "fornecedor", "fileUploadModule", "cargo", "funcionario", "cliente"]);
+        "login", "authService", "fabElement", "notifyElement",
+        "fornecedor", "fileUploadModule", "cargo", 
+        "funcionario", "cliente", "ui.utils", "pesquisaElement"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');

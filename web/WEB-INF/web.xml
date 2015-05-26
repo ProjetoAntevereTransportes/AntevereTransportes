@@ -62,7 +62,7 @@
     </filter>
     <filter-mapping>
         <filter-name>AutenticaUsuario</filter-name>
-        <url-pattern>/Pagamento</url-pattern>
+        <url-pattern>/PagamentoTESTE</url-pattern>
     </filter-mapping>
     <servlet-mapping>
         <servlet-name>FileUpload</servlet-name>
