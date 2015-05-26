@@ -7,49 +7,161 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author felipe
  */
 public class Cliente {
-    public static Connection con;
-    public static int insere(String nome, String email, String telefone, String cnpj, String observacao, int status_id){
-        try {
+   private Connection con;
 
-            // prepara o statement para execução de um novo comaando
-            Statement st = con.createStatement();
-            // cria o comando SQL para ser executado
-            String sql = "insert into cliente(nome,email,telefone,cnpj,observacao,status_id) values(?,?,?,?,?,?)";
-            // prepara o comando para execução, indicando que haverá "?" a substituir
+    private void abrir() {
+        con = Conexao.abrirConexao();
+    }
+    public List<contratos.Cliente> listar() {
+        try {
+            abrir();
+            String sql = "select cliente.id , cliente.nome, cliente.email, cliente.telefone, cliente.cnpj, cliente.observacao,"
+                       + " status_cliente.id as statusID, status_cliente.nome as statusNome from cliente inner join status_cliente on (cliente.status_id = status_cliente.ID)";
+
             PreparedStatement ps = con.prepareStatement(sql);
-            // substitui os "?" pelos respectivos valores
-            ps.setString(1, nome);
-            ps.setString(2, email);
-            ps.setString(3, telefone);
-            ps.setString(4, cnpj);
-            ps.setString(5, observacao);
-            ps.setInt(6, status_id);
-            // executa o comando sql armazenando o resultado. 0 = erro. 1 = sucesso
-            int status = ps.executeUpdate(); // pois adiciona ou altera
-            // verifica se houve erro
-            if (status == 0) {
-                return 0;
-            } else {
-                return 1;
+
+            ResultSet rsF = ps.executeQuery();
+
+            List<contratos.Cliente> fs = new ArrayList<>();
+
+            while (rsF.next()) {
+                contratos.Cliente f = new contratos.Cliente();
+                f.setNome(rsF.getString("nome"));
+                f.setEmail(rsF.getString("email"));
+                f.setTelefone(rsF.getString("telefone"));
+                f.setCnpj(rsF.getString("cnpj"));
+                f.setObservacao(rsF.getString("observacao"));
+                f.setId(rsF.getInt("id"));
+                f.setStatusID(rsF.getInt("statusID"));
+                f.setStatusNome(rsF.getString("statusNome"));
+                fs.add(f);
             }
-        } // CASO HAJA UMA EXCEÇÃO, MOSTRA ERRO NA TELA
-        catch (Exception e) {
-            // grava a mensagem de erro em um log no servidor
-            e.printStackTrace(System.out);
-            if (e.toString().contains("Duplicate")) {
-                return 2;
-            } else {
-                return 0;
-            }
+
+            return fs;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
         }
     }
-    
-    
+
+    public boolean Inserir(contratos.Cliente f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "INSERT INTO cliente(nome, email, telefone, cnpj, observacao, status_id)"
+                    + "VALUES (?, ?, ?, ?, ?, ?);";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getEmail());
+            ps.setString(3, f.getTelefone());
+            ps.setString(4, f.getCnpj());
+            ps.setString(5, f.getObservacao());
+            ps.setInt(6, f.getStatusID());
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+
+    }
+
+    public boolean excluir(int id) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM cliente WHERE id = " + id + ";";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public boolean editar(contratos.Cliente f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "UPDATE cliente set nome = ?, email = ?, telefone = ?, cnpj = ?, observacao = ?, status_id = ?  WHERE id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getEmail());
+            ps.setString(3, f.getTelefone());
+            ps.setString(4, f.getCnpj());
+            ps.setString(5, f.getObservacao());
+            ps.setInt(6, f.getStatusID());
+                    
+            ps.setInt(7, f.getId());
+            int status = ps.executeUpdate();
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
 }

@@ -46,7 +46,7 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-                    $("#add").modal().modal("show");
+                    $("#add").modal("show");
                 },
                 principalIcon: "glyphicon glyphicon-plus",
                 secondIcon: "glyphicon glyphicon-user",
@@ -67,7 +67,7 @@
             $scope.editarSalvar = function (item) {
                 cargoService.editar(function () {
                     $("#add").modal().modal("hide");
-
+                    $scope.carregarCargos();
                 }, function () {
                 }, null, item);
             };
@@ -84,6 +84,7 @@
                                     }, function () {
                                     }, null, item.ID);
                                     i.excluirID = null;
+                                    $scope.carregarCargos();
                                 },
                                 parameter: item
                             },
@@ -109,7 +110,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/cargo", this.formatar("INSERIR", data),
+                $http.post(server + "/Cargo", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -145,7 +146,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/cargo", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/Cargo", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
                 })
@@ -178,7 +179,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/cargo", this.formatar("REMOVER", fornecedorID),
+                $http.post(server + "/Cargo", this.formatar("REMOVER", fornecedorID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -216,7 +217,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/cargo", this.formatar("EDITAR", item),
+                $http.post(server + "/Cargo", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {

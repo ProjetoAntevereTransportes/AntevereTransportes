@@ -1,5 +1,5 @@
+<h3 class="text-center">Gerenciamento de Cargos</h3>
 <div class="col-lg-12 z1 card">
-
 
     <table class="table">
         <thead>
@@ -40,41 +40,54 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+
                     <form novalidate class="m-form" name="cargoform">
+                        <!-- Nome -->
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input ng-model="novo.nome" placeholder="Nome" name="nome" 
-                                       type="text" class="form-control m-input" required>
+                                <input tabindex=1 name="nome" type="text" ng-model="novo.nome" placeholder="Nome" required
+                                       ng-minlength="5" ng-maxlength="30" maxlength="30" class="form-control m-input" >
 
                                 <erro ng-show="cargoform.nome.$error.required && cargoform.nome.$touched">
                                     Insira um nome
                                 </erro>
+                                <erro ng-show="cargoform.nome.$error.minlength || cargoform.nome.$error.maxlength">
+                                    Verifique se o nome respeita o padrão de no mínimo 5 caracteres e no máximo 30 caracteres
+                                </erro>
 
                             </div>
                         </div>
+
+                        <!-- Descrição -->
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Descrição</label>
-                                <input name="descricao" ng-model="novo.descricao" required
-                                       placeholder="Descrição"  type="text" class="form-control m-input">
-                                
+                                <input tabindex=2 name="descricao" type="text" ng-model="novo.descricao" required
+                                       ng-minlength="5" ng-maxlength="150" maxlength="150" placeholder="Descrição" class="form-control m-input">
+
                                 <erro ng-show="cargoform.descricao.$error.required && cargoform.descricao.$touched">
                                     Insira uma descrição
                                 </erro>
+                                <erro ng-show="cargoform.descricao.$error.minlength || cargoform.descricao.$error.maxlength">
+                                    Verifique se a descrição respeita o padrão de no mínimo 5 caracteres e no máximo 150 caracteres
+                                </erro>                                
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
             <div class="modal-footer">
+                <!-- Fechar -->
                 <button type="button"
                         class="btn btn-default m-button-flat"
-                        data-dismiss="modal">Fechar</button>
+                        data-dismiss="modal" tabindex=4>Fechar</button>
+                <!-- Fechar -->
                 <button type="button"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="formularioValido()" tabindex=3>
                     {{modal.salvarNome}}
                 </button>
             </div>

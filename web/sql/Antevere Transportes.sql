@@ -42,13 +42,15 @@ CREATE TABLE IF NOT EXISTS status_cliente(
 
 CREATE TABLE IF NOT EXISTS cliente(
 	id 	INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(30) NOT NULL,
+	nome VARCHAR(90) NOT NULL,
 	email VARCHAR(60) NOT NULL,
 	telefone VARCHAR(15) NOT NULL,
 	cnpj VARCHAR(18) UNIQUE NOT NULL, 
 	observacao VARCHAR(150),
 	status_id INT NOT NULL,
-	FOREIGN KEY (status_id) REFERENCES status_cliente(id)
+	FOREIGN KEY (status_id) REFERENCES status_cliente(id),
+	endereco_id INT NOT NULL,
+	FOREIGN KEY (endereco_id) REFERENCES endereco(id)
 );
 
 CREATE TABLE IF NOT EXISTS cargo(
@@ -66,7 +68,9 @@ CREATE TABLE IF NOT EXISTS funcionario(
 	cargo_id INT NOT NULL,
 	FOREIGN KEY (cargo_id) REFERENCES cargo(id),
 	cpf VARCHAR(15) NOT NULL UNIQUE,
-	rg VARCHAR(12) NOT NULL UNIQUE 
+	rg VARCHAR(12) NOT NULL UNIQUE,
+	endereco_id INT NOT NULL,
+	FOREIGN KEY (endereco_id) REFERENCES endereco(id) 
 );
 CREATE TABLE IF NOT EXISTS endereco(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -126,7 +130,10 @@ CREATE TABLE IF NOT EXISTS viagem(
 	adiantamento DECIMAL(10,2) NOT NULL,
 	status_viagem_id INT NOT NULL,
 	FOREIGN KEY (status_viagem_id) REFERENCES status_viagem(id),
-	motivo_cancelamento VARCHAR(60)
+	motivo_cancelamento VARCHAR(60),
+        caminhao_id INT NOT NULL,
+        FOREIGN KEY (caminhao_id) REFERENCES caminhao(id)
+
 );
 
 CREATE TABLE IF NOT EXISTS banco(
@@ -158,7 +165,8 @@ CREATE TABLE IF NOT EXISTS fornecedor(
 	endereco_id INT NOT NULL,
 	FOREIGN KEY (endereco_id) REFERENCES endereco(id),
 	email VARCHAR(50),
-	telefone VARCHAR(20)
+	telefone VARCHAR(20),
+        contato varchar(90)
 );
 
 CREATE TABLE IF NOT EXISTS debito_automatico(

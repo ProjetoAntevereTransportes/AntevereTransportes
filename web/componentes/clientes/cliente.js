@@ -54,7 +54,7 @@
                     };
                     
                     $("#add").modal().modal("show");
-
+                    $('#clienteForm')[0].reset();
                     $scope.listarStatus();
 
                 },
@@ -102,7 +102,7 @@
                                 f: function (i) {
                                     clienteService.excluir(function () {
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
                                 },
                                 parameter: item
@@ -181,7 +181,7 @@
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, usuarioID) {
+            this.excluir = function (sucesso, erro, sempre, clienteID) {
                 var id = notifyService.add({
                     fixed: true,
                     message: "Excluindo Cliente..."
@@ -189,7 +189,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("REMOVER", usuarioID),
+                $http.post(server + "/Cliente", this.formatar("REMOVER", clienteID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 

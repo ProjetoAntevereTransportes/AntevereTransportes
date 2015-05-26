@@ -51,10 +51,14 @@
                             <div class="form-group">
                                 <label>Nome</label>
                                 <input ng-model="novo.nome" placeholder="Nome" name="nome" 
-                                       type="text" class="form-control m-input" required>
+                                       type="text" ng-minlength="7" ng-maxlength="60" maxlength="60" class="form-control m-input" required>
 
                                 <erro ng-show="fornecedorform.nome.$error.required && fornecedorform.nome.$touched">
                                     Insira um nome
+                                </erro>
+
+                                <erro ng-show="fornecedorform.nome.$error.minlength || fornecedorform.nome.$error.maxlength">
+                                    Verifique se o nome respeita o padrão de no minimo 7 caracteres e no maximo 60 caracteres)
                                 </erro>
                                 
                             </div>
@@ -62,7 +66,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>E-mail</label>
-                                <input name="email" ng-model="novo.email" required
+                                <input name="email" ng-model="novo.email"  ng-minlength="7" ng-maxlength="60" maxlength="60" required
                                        placeholder="E-mail"  type="email" class="form-control m-input">
                                 <erro ng-show="fornecedorform.email.$error.required && fornecedorform.email.$touched">
                                     Insira um e-mail
@@ -70,25 +74,40 @@
                                 <erro ng-show="fornecedorform.email.$error.email && fornecedorform.email.$touched">
                                     Insira um e-mail válido
                                 </erro>
+
+                                <erro ng-show="fornecedorform.email.$error.minlength || fornecedorform.email.$error.maxlength">
+                                    Verifique se o email respeita o padrão de no minimo 7 caracteres e no maximo 60 caracteres
+                                </erro>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Telefone</label>
-                                <input name="telefone" required ng-model="novo.telefone" placeholder="Telefone" 
+                                <input name="telefone" required ng-model="novo.telefone" ng-minlength="7" ng-maxlength="20" maxlength="20"  placeholder="Telefone" 
                                        type="number" class="form-control m-input">
                                 <erro ng-show="fornecedorform.telefone.$error.required && fornecedorform.telefone.$touched">
                                     Insira um telefone
+                                </erro>
+
+                                <erro ng-show="fornecedorform.telefone.$error.minlength || fornecedorform.telefone.$error.maxlength">
+                                    Verifique se o telefone respeita o padrão de no minimo 7 caracteres e no maximo 20 caracteres
+                                </erro>
+                                <erro ng-show="fornecedorform.telefone.$error.number">
+                                    Informe um número válido
                                 </erro>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Rua</label>
-                                <input name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text" class="form-control m-input">
+                                <input name="rua" required ng-model="novo.endereco.rua" placeholder="Rua" ng-minlength="5" ng-maxlength="30" maxlength="30"  type="text" class="form-control m-input">
                                 <erro ng-show="fornecedorform.rua.$error.required &&
                                                         fornecedorform.rua.$touched">
                                     Insira uma rua
+                                </erro>
+
+                                <erro ng-show="fornecedorform.rua.$error.minlength || fornecedorform.rua.$error.maxlength">
+                                    Verifique se a rua respeita o padrão de no minimo 5 caracteres e no maximo 30 caracteres
                                 </erro>
                             </div>
                         </div>
@@ -97,20 +116,28 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Cidade</label>
-                                        <input name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade"  type="text" class="form-control m-input">
+                                        <input name="cidade" required ng-model="novo.endereco.cidade" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="Cidade"  type="text" class="form-control m-input">
                                         <erro ng-show="fornecedorform.cidade.$error.required &&
                                                                 fornecedorform.cidade.$touched">
                                             Insira uma cidade
+                                        </erro>
+
+                                        <erro ng-show="fornecedorform.cidade.$error.minlength || fornecedorform.cidade.$error.maxlength">
+                                            Verifique se a cidade respeita o padrão de no minimo 3 caracteres e no maximo 30 caracteres
                                         </erro>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Bairro</label>
-                                        <input name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro"  type="text" class="form-control m-input">
+                                        <input name="bairro" required ng-model="novo.endereco.bairro" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="Bairro"  type="text" class="form-control m-input">
                                         <erro ng-show="fornecedorform.bairro.$error.required &&
                                                                 fornecedorform.bairro.$touched">
                                             Insira um bairro
+                                        </erro>
+
+                                        <erro ng-show="fornecedorform.bairro.$error.minlength || fornecedorform.bairro.$error.maxlength">
+                                            Verifique se o bairro respeita o padrão de no minimo 3 caracteres e no maximo 30 caracteres
                                         </erro>
                                     </div>
                                 </div>
@@ -121,36 +148,51 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Número</label>
-                                        <input name="number" required ng-model="novo.endereco.numero" placeholder="Número"  type="text" class="form-control m-input">
-                                        <erro ng-show="fornecedorform.numero.$error.required &&
-                                                                fornecedorform.numero.$touched">
+                                        <input name="number" required ng-model="novo.endereco.numero" ng-minlength="2" ng-maxnumber="10" max="10"  placeholder="Número"  type="number" class="form-control m-input">
+                                        <erro ng-show="fornecedorform.number.$error.required &&
+                                                                fornecedorform.number.$touched">
                                             Insira um numero
+                                        </erro>
+
+                                        <erro ng-show="fornecedorform.number.$error.minlength || fornecedorform.number.$error.maxlength">
+                                            Verifique se o numero respeita o padrão de no minimo 2 caracteres e no maximo 10 caracteres
+                                        </erro>
+                                         <erro ng-show="fornecedorform.number.$error.number">
+                                            Insira um numero válido
                                         </erro>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Estado</label>
-                                        <input name="estado" required ng-model="novo.endereco.estado" placeholder="Estado"  type="text" class="form-control m-input">
+                                        <input name="estado" required ng-model="novo.endereco.estado" ng-minlength="2" ng-maxlength="30" maxlength="30"  placeholder="Estado"  type="text" class="form-control m-input">
                                         <erro ng-show="fornecedorform.estado.$error.required &&
                                                                 fornecedorform.estado.$touched">
                                             Insira um estado
+                                        </erro>
+
+                                        <erro ng-show="fornecedorform.estado.$error.minlength || fornecedorform.estado.$error.maxlength">
+                                            Verifique se o estado respeita o padrão de no minimo 2 caracteres e no maximo 30 caracteres
                                         </erro>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>País</label>
-                                        <input name="pais" required ng-model="novo.endereco.pais" placeholder="País"  type="text" class="form-control m-input">
+                                        <input name="pais" required ng-model="novo.endereco.pais" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="País"  type="text" class="form-control m-input">
                                         <erro ng-show="fornecedorform.pais.$error.required &&
                                                                 fornecedorform.pais.$touched">
                                             Insira um pais
+                                        </erro>
+
+                                        <erro ng-show="fornecedorform.pais.$error.minlength || fornecedorform.pais.$error.maxlength">
+                                            Verifique se o pais respeita o padrão de no minimo 3 caracteres e no maximo 30 caracteres
                                         </erro>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        <!--inserir contato-->
                     </form>
                 </div>
             </div>

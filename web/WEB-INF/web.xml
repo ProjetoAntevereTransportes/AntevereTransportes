@@ -36,6 +36,14 @@
         <servlet-name>Cliente</servlet-name>
         <servlet-class>servlets.Cliente</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StatusCliente</servlet-name>
+        <servlet-class>servlets.StatusCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Cargo</servlet-name>
+        <servlet-class>servlets.Cargo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -95,6 +103,14 @@
     <servlet-mapping>
         <servlet-name>Cliente</servlet-name>
         <url-pattern>/Cliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StatusCliente</servlet-name>
+        <url-pattern>/StatusCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cargo</servlet-name>
+        <url-pattern>/Cargo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
