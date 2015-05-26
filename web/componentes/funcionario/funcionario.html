@@ -1,5 +1,5 @@
+<h3 class="text-center">Gerenciamento de Funcionários</h3>
 <div class="col-lg-12 z1 card">
-
 
     <table class="table">
         <thead>
@@ -51,10 +51,11 @@
             <div class="modal-body">
                 <div class="row">
                     <form novalidate class="m-form" name="funcionarioform">
+                        <!-- Nome -->
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input ng-model="novo.nome" placeholder="Nome" name="nome" 
+                                <input tabindex=1 ng-model="novo.nome" placeholder="Nome" name="nome" 
                                        type="text" class="form-control m-input" required>
 
                                 <erro ng-show="funcionarioform.nome.$error.required && funcionarioform.nome.$touched">
@@ -64,10 +65,11 @@
                             </div>
                         </div>
 
+                        <!-- Sobrenome -->
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Sobrenome</label>
-                                <input ng-model="novo.sobrenome" placeholder="Sobrenome" name="sobrenome"
+                                <input tabindex=2 ng-model="novo.sobrenome" placeholder="Sobrenome" name="sobrenome"
                                        type="text" class="form-control m-input" required>
 
                                 <erro ng-show="funcionarioform.sobrenome.$error.required && funcionarioform.sobrenome.$touched">
@@ -75,130 +77,190 @@
                                 </erro>
 
                             </div>
-                        </div>                        
+                        </div>
 
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label>Telefone</label>
-                                <input name="telefone" required ng-model="novo.telefone" placeholder="Telefone" 
-                                       type="number" class="form-control m-input">
-                                <erro ng-show="funcionarioform.telefone.$error.required && funcionarioform.telefone.$touched">
-                                    Insira um telefone
-                                </erro>
+                        <!-- Telefone e E-mail -->
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <!-- Telefone -->
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Telefone</label>
+                                        <input tabindex=3 name="telefone" required ng-model="novo.telefone" placeholder="Telefone" 
+                                               type="number" class="form-control m-input">
+                                        <erro ng-show="funcionarioform.telefone.$error.required && funcionarioform.telefone.$touched">
+                                            Insira um telefone
+                                        </erro>
+                                    </div>
+                                </div>
+
+                                <!-- E-mail -->
+                                <div class="col-lg-8">
+                                    <div class="form-group">
+                                        <label>E-mail</label>
+                                        <input tabindex=4 name="email" ng-model="novo.email" required
+                                               placeholder="E-mail"  type="email" class="form-control m-input">
+                                        <erro ng-show="funcionarioform.email.$error.required && funcionarioform.email.$touched">
+                                            Insira um e-mail
+                                        </erro>
+                                        <erro ng-show="funcionarioform.email.$error.email && funcionarioform.email.$touched">
+                                            Insira um e-mail válido
+                                        </erro>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label>E-mail</label>
-                                <input name="email" ng-model="novo.email" required
-                                       placeholder="E-mail"  type="email" class="form-control m-input">
-                                <erro ng-show="funcionarioform.email.$error.required && funcionarioform.email.$touched">
-                                    Insira um e-mail
-                                </erro>
-                                <erro ng-show="funcionarioform.email.$error.email && funcionarioform.email.$touched">
-                                    Insira um e-mail válido
-                                </erro>
-                            </div>
-                        </div>
-
+                        <!-- Cargo -->
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Cargo</label>
-                                <input name="cargo" required ng-model="novo.cargo" placeholder="Cargo"  type="text" class="form-control m-input">
-                                <erro ng-show="funcionarioform.rua.$error.required &&
-                                                funcionarioform.rua.$touched">
+                                <input tabindex=5 name="cargo" required ng-model="novo.cargo.nome" placeholder="Cargo"  type="text" class="form-control m-input">
+                                <erro ng-show="funcionarioform.cargo.$error.required && funcionarioform.cargo.$touched">
                                     Insira um cargo
                                 </erro>
                             </div>
                         </div>                        
 
+                        <!-- Rua -->
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Rua</label>
-                                <input name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text" class="form-control m-input">
+                                <input tabindex=6 name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text" class="form-control m-input">
                                 <erro ng-show="funcionarioform.rua.$error.required &&
-                                                funcionarioform.rua.$touched">
+                                                        funcionarioform.rua.$touched">
                                     Insira uma rua
                                 </erro>
                             </div>
                         </div>
+
+                        <!-- Cidade e Bairro -->
                         <div class="row">
                             <div class="col-lg-12">
+                                <!-- Cidade -->
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Cidade</label>
-                                        <input name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade"  type="text" class="form-control m-input">
+                                        <input tabindex=7 name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade"  type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.cidade.$error.required &&
-                                                        funcionarioform.cidade.$touched">
+                                                                funcionarioform.cidade.$touched">
                                             Insira uma cidade
                                         </erro>
                                     </div>
                                 </div>
+
+                                <!-- Bairro -->
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Bairro</label>
-                                        <input name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro"  type="text" class="form-control m-input">
+                                        <input tabindex=8 name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro"  type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.bairro.$error.required &&
-                                                        funcionarioform.bairro.$touched">
+                                                                funcionarioform.bairro.$touched">
                                             Insira um bairro
                                         </erro>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Número, Estado e Pais -->
                         <div class="row">
                             <div class="col-lg-12">
+                                <!-- Número -->
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Número</label>
-                                        <input name="number" required ng-model="novo.endereco.numero" placeholder="Número"  type="text" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.numero.$error.required &&
-                                                        funcionarioform.numero.$touched">
-                                            Insira um numero
+                                        <input tabindex=9 name="numero" required ng-model="novo.endereco.numero" placeholder="Numero"  type="text" class="form-control m-input">
+                                        <erro ng-show="funcionarioform.numero.$error.required && funcionarioform.numero.$touched">
+                                            Insira um número
                                         </erro>
                                     </div>
                                 </div>
+
+                                <!-- Estado -->
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Estado</label>
+                                        <label>Estado</label>                                        
+                                        <select tabindex=10 name="estado" required ng-model="novo.endereco.estado" placeholder="Estado" type="text" class="form-control m-input">
+                                            <option value=""></option>
+                                            <option value="AC">Acre</option>
+                                            <option value="AC">Alagoas</option>
+                                            <option value="AC">Amapá</option>
+                                            <option value="AC">Amazonas</option>
+                                            <option value="AC">Bahia</option>
+                                            <option value="AC">Ceará</option>
+                                            <option value="AC">Distrito Federal</option>
+                                            <option value="AC">Espírito Santo</option>
+                                            <option value="AC">Goiás</option>
+                                            <option value="AC">Maranhão</option>
+                                            <option value="AC">Mato Grosso</option>
+                                            <option value="AC">Mato Grosso do Sul</option>
+                                            <option value="AC">Minas Gerais</option>
+                                            <option value="AC">Pará</option>
+                                            <option value="AC">Paraíba</option>
+                                            <option value="AC">Paraná</option>
+                                            <option value="AC">Pernambuco</option>
+                                            <option value="AC">Piauí</option>
+                                            <option value="AC">Rio de Janeiro</option>
+                                            <option value="AC">Rio Grande do Norte</option>
+                                            <option value="AC">Rio Grande do Sul</option>
+                                            <option value="AC">Rondônia</option>
+                                            <option value="AC">Santa Catarina</option>
+                                            <option value="AC">São Paulo</option>
+                                            <option value="AC">Sergipe</option>
+                                            <option value="AC">Tocantins</option>
+                                        </select>
+                                        <!--
                                         <input name="estado" required ng-model="novo.endereco.estado" placeholder="Estado"  type="text" class="form-control m-input">
+                                        -->
                                         <erro ng-show="funcionarioform.estado.$error.required &&
-                                                        funcionarioform.estado.$touched">
+                                                                funcionarioform.estado.$touched">
                                             Insira um estado
                                         </erro>
                                     </div>
                                 </div>
+
+                                <!-- País -->
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>País</label>
-                                        <input name="pais" required ng-model="novo.endereco.pais" placeholder="País"  type="text" class="form-control m-input">
+                                        <input tabindex=11 name="pais" required ng-model="novo.endereco.pais" placeholder="País"  type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.pais.$error.required &&
-                                                        funcionarioform.pais.$touched">
+                                                                funcionarioform.pais.$touched">
                                             Insira um pais
                                         </erro>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-- RG e CPF -->
                         <div class="row">
                             <div class="col-lg-12">
+                                <!-- RG -->
                                 <div class="col-lg-6">
-                                    <label>RG</label>
-                                    <input name="rg" required ng-model="novo.rg" placeholder="RG"  type="text" class="form-control m-input">
-                                    <erro ng-show="funcionarioform.rg.$error.required &&
-                                                    funcionarioform.rgpais.$touched">
-                                        Insira um RG
-                                    </erro>
+                                    <div class="form-group">
+                                        <label>RG</label>
+                                        <input tabindex=12 ng-model="novo.rg" placeholder="RG" name="rg" type="text" class="form-control m-input" required>
+                                        <erro ng-show="funcionarioform.rg.$error.required && funcionarioform.rg.$touched">
+                                            Insira um RG
+                                        </erro>
+                                    </div>
                                 </div>
+
+                                <!-- CPF -->
                                 <div class="col-lg-6">
-                                    <label>CPF</label>
-                                    <input name="cpf" required ng-model="novo.cpf" placeholder="CPF"  type="text" class="form-control m-input">
-                                    <erro ng-show="funcionarioform.cpf.$error.required &&
-                                                    funcionarioform.cpf.$touched">
-                                        Insira um CPF
-                                    </erro>
-                                </div>                                
+                                    <div class="form-group">
+                                        <label>CPF</label>
+                                        <input tabindex=13 name="cpf" required ng-model="novo.cpf" placeholder="CPF"  type="text" class="form-control m-input">
+                                        <erro ng-show="funcionarioform.cpf.$error.required && funcionarioform.cpf.$touched">
+                                            Insira um CPF
+                                        </erro>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
@@ -208,11 +270,11 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-default m-button-flat"
-                        data-dismiss="modal">Fechar</button>
+                        data-dismiss="modal" tabindex=15>Fechar</button>
                 <button type="button"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="formularioValido()" tabindex=14>
                     {{modal.salvarNome}}
                 </button>
             </div>

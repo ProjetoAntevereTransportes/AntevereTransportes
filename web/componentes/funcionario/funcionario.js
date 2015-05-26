@@ -13,10 +13,6 @@
                 email: "",
                 rg: "",
                 cpf: "",
-                cargo: {
-                    nome: "",
-                    descricao: ""
-                },
                 endereco: {
                     rua: "",
                     bairro: "",
@@ -24,6 +20,10 @@
                     estado: "",
                     pais: "",
                     cidade: ""
+                },
+                cargo: {
+                    nome: "",
+                    descricao: ""
                 }
             };
 
