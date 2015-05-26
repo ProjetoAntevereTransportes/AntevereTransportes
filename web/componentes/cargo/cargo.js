@@ -47,7 +47,6 @@
                         item: $scope.novo
                     };
                     $("#add").modal("show");
-                    //$scope.novo = null;
                 },
                 principalIcon: "glyphicon glyphicon-plus",
                 secondIcon: "glyphicon glyphicon-user",

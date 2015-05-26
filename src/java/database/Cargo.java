@@ -190,6 +190,7 @@ public class Cargo {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, c.getNome());
             ps.setString(2, c.getDescricao());
+            ps.setInt(3, c.getID());
 
             int status = ps.executeUpdate();
 
