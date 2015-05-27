@@ -28,9 +28,11 @@ public class Usuario {
  public List<contratos.Usuario> listar() {
         try {
             abrir();
-            String sql = "select usuario.id, usuario.nome, usuario.email, tipo_usuario.nome as tipo, status_usuario.nome as statusu from usuario "
-                    + "inner join tipo_usuario on (usuario.tipo_usuario_id = tipo_usuario.id) "
-                    + "inner join status_usuario on (usuario.status_id = status_usuario.id);";
+            String sql = "select usuario.id, usuario.nome, usuario.email, usuario.resposta, pergunta.id as perguntaID, pergunta.pergunta as pergunta, tipo_usuario.id as tipoID,"
+                    + " tipo_usuario.nome as tipoNome, status_usuario.id as statusID, status_usuario.nome as statusu from usuario"
+                    + " inner join tipo_usuario on (usuario.tipo_usuario_id = tipo_usuario.id) "
+                    + "inner join status_usuario on (usuario.status_id = status_usuario.id) "
+                    + "inner join pergunta on(usuario.pergunta_id = pergunta.id)";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -43,8 +45,13 @@ public class Usuario {
                 u.setId(rsF.getInt("id"));
                 u.setNome(rsF.getString("nome"));
                 u.setEmail(rsF.getString("email"));
-                u.setTipoUsuarioNome(rsF.getString("tipo"));
+                u.setResposta(rsF.getString("resposta"));
+                u.setTipoUsuarioID(rsF.getInt("tipoID"));
+                u.setTipoUsuarioNome(rsF.getString("tipoNome"));
+                u.setStatusID(rsF.getInt("statusID"));
                 u.setStatusNome(rsF.getString("statusu"));
+                u.setPerguntaID(rsF.getInt("perguntaID"));
+                u.setPerguntaNome(rsF.getString("pergunta"));
                 fs.add(u);
             }
 

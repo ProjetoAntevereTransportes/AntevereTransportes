@@ -50,7 +50,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Nome</label>
-                                        <input ng-model="novo.nome" placeholder="Nome" name="nome" 
+                                        <input ng-model="modal.item.nome" placeholder="Nome" name="nome" 
                                                type="text" class="form-control m-input" required>
 
                                         <erro ng-show="usuarioform.nome.$error.required && usuarioform.nome.$touched">
@@ -62,7 +62,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>E-mail</label>
-                                        <input name="email" ng-model="novo.email" required
+                                        <input name="email" ng-model="modal.item.email" required
                                                placeholder="E-mail"  type="email" class="form-control m-input">
                                         <erro ng-show="usuarioform.email.$error.required && usuarioform.email.$touched">
                                             Insira um e-mail
@@ -77,7 +77,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Senha</label>
-                                <input name="senha" required ng-model="novo.senha" placeholder="senha" 
+                                <input name="senha" required ng-model="modal.item.senha" placeholder="senha" 
                                        type="password" class="form-control m-input">
                                 <erro ng-show="usuarioform.senha.$error.required && usuarioform.senha.$touched">
                                     Insira uma Senha
@@ -87,7 +87,7 @@
                         <div class="col-lg-12">
                             <div class='form-group'>
                                 <label>Pergunta de Segurança</label>
-                                <select class='form-control m-input' placeholder="Pergunta" ng-model="novo.perguntaID">
+                                <select class='form-control m-input' placeholder="Pergunta" ng-model="modal.item.perguntaID">
                                     <option ng-repeat="f in perguntas" required value="{{f.id}}">{{f.pergunta}}</option>
                                 </select>
                                 <erro ng-show="usuarioform.pergunta.$error.required &&
@@ -99,7 +99,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Resposta de Segurança</label>
-                                <input name="resposta" required ng-model="novo.resposta" placeholder="resposta"  type="text" class="form-control m-input">
+                                <input name="resposta" required ng-model="modal.item.resposta" placeholder="resposta"  type="text" class="form-control m-input">
                                 <erro ng-show="usuarioform.resposta.$error.required &&
                                                         usuarioform.resposta.$touched">
                                     Insira uma Resposta
@@ -111,7 +111,7 @@
                                 <div class="col-lg-6">
                                     <div class='form-group'>
                                         <label>Tipo de Usuário</label>
-                                        <select name="tipoNome" class='form-control m-input' placeholder="Tipo de Usuário" ng-model="novo.tipoUsuarioID">
+                                        <select name="tipoNome" class='form-control m-input' placeholder="Tipo de Usuário" ng-model="modal.item.tipoUsuarioID">
                                             <option ng-repeat="f in tipos" required value="{{f.id}}">{{f.nome}}</option>
                                         </select>
                                        <erro ng-show="usuarioform.tipoNome.$error.required &&
@@ -124,7 +124,7 @@
                                 <div class="col-lg-6">
                                     <div class='form-group'>
                                         <label>Status</label>
-                                        <select name="status" class='form-control m-input' placeholder="Status" ng-model="novo.statusID">
+                                        <select name="status" class='form-control m-input' placeholder="Status" ng-model="modal.item.statusID">
                                             <option ng-repeat="f in lstatus" required value="{{f.id}}">{{f.nome}}</option>
                                         </select>
                                        <erro ng-show="usuarioform.status.$error.required &&

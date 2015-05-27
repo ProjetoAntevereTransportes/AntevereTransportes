@@ -13,7 +13,8 @@
                 nome: "",
                 email: "",
                 senha: "",
-                perguntaId: "",
+                perguntaID: "",
+                perguntaNome:"",
                 resposta: "",
                 tipoUsuarioID: "",
                 tipoUsuarioNome: "",
@@ -92,7 +93,7 @@
                 $scope.listarPergunta();
                 $scope.listarTipos();
 
-                $scope.novo = item;
+               
             };
 
             $scope.editarSalvar = function (item) {
@@ -130,6 +131,7 @@
                                 text: "Sim",
                                 f: function (i) {
                                     usuarioService.excluir(function () {
+                                        $scope.carregarUsuarios();
                                     }, function () {
                                     }, null, item.id);
                                     i.excluirID = null;
