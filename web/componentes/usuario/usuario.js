@@ -1,8 +1,8 @@
 (function () {
     var app = angular.module("usuario", []);
 
-    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService",
-        function (usuarioService, $scope, notifyService) {
+    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService","pesquisaService",
+        function (usuarioService, $scope, notifyService,pesquisaService) {
             $scope.titulo = "Gerenciamento de Usuario";
             $scope.itens = [];
 
@@ -14,7 +14,7 @@
                 email: "",
                 senha: "",
                 perguntaID: "",
-                perguntaNome:"",
+                perguntaNome: "",
                 resposta: "",
                 tipoUsuarioID: "",
                 tipoUsuarioNome: "",
@@ -23,6 +23,7 @@
                 chave: ""
 
             };
+
 
             $scope.formularioValido = function () {
                 var inputs = $("[name='usuarioform']").find("input");
@@ -93,7 +94,7 @@
                 $scope.listarPergunta();
                 $scope.listarTipos();
 
-               
+
             };
 
             $scope.editarSalvar = function (item) {
@@ -121,8 +122,11 @@
                 }, function () {
                 }, null);
             };
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
-            $scope.excluir = function (item) {                
+            $scope.excluir = function (item) {
                 if (!item.excluirID)
                     item.excluirID = notifyService.add({
                         fixed: true,
@@ -150,6 +154,8 @@
             };
 
         }]);
+
+
 
     app.service("usuarioService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {

@@ -1,58 +1,50 @@
-(function () {
-    var app = angular.module("fornecedor", []);
+    (function () {
+    var app = angular.module("Conta_Bancaria", []);
 
-    app.controller("fornecedorController", ["fornecedorService", "$scope", "notifyService",
-        function (fornecedorService, $scope, notifyService) {
+    app.controller("conta_bancariaController", ["conta_bancariaService", "$scope", "notifyService",
+        function (conta_bancariaService, $scope, notifyService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                nome: "",
-                email: "",
-                telefone: "",
-                endereco: {
-                    rua: "",
-                    bairro: "",
-                    numero: "",
-                    estado: "",
-                    pais: "",
-                    cidade: "",
-                    contato:"",
-                }
+                nome : "" ,
+                numero : "",
+                pessoa_ID : "",
+                banco_ID : ""
             };
 
             $scope.formularioValido = function () {
-                var inputs = $("[name='fornecedorform']").find("input");
+                var inputs = $("[name='conta_bancariaform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
 
             $scope.inserir = function (novo) {
-                fornecedorService.inserir(function () {
+                conta_bancariaService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarFornecedores();
+                    $scope.carregarconta_bancaria();
                 }, function () {
 
                 }, null, novo);
             };
 
-            $scope.carregarFornecedores = function () {
-                fornecedorService.listar(function (resultado) {
+            $scope.carregarConta_Bancaria = function () {
+                conta_bancariaService.listar(function (resultado) {
                     $scope.itens = resultado;
                 }, function () {
 
                 }, null);
             };
 
-            $scope.carregarFornecedores();
+            $scope.carregarConta_Bancaria();
 
             $scope.fab = {
                 principalClick: function () {
                     $scope.modal = {
                         salvarNome: "Salvar",
-                        titulo: "Novo fornecedor",
+                        titulo: "Nova Conta Bancaria",
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
@@ -75,7 +67,7 @@
             };
 
             $scope.editarSalvar = function (item) {
-                fornecedorService.editar(function () {
+                conta_bancariaService.editar(function () {
                     $("#add").modal().modal("hide");
 
                 }, function () {
@@ -90,7 +82,7 @@
                         buttons: [{
                                 text: "Sim",
                                 f: function (i) {
-                                    fornecedorService.excluir(function () {
+                                    conta_bancariaService.excluir(function () {
                                     }, function () {
                                     }, null, item.ID);
                                     i.excluirID = null;
@@ -110,16 +102,16 @@
 
         }]);
 
-    app.service("fornecedorService", ["$http", "notifyService", function ($http, notifyService) {
+    app.service("conta_bancariaService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Adicionando fornecedor..."
+                    message: "Adicionando Conta Bancaria..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("INSERIR", data),
+                $http.post(server + "/Conta_Bancaria", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -129,7 +121,7 @@
                                 sucesso(resultado.resultado);
                                 notifyService.add({
                                     seconds: 5,
-                                    message: "Fornecedor adicionado"
+                                    message: "Conta Bancaria adicionado"
                                 });
                             }
                             else {
@@ -140,7 +132,7 @@
                             }
                         }).error(function () {
                     notifyService.remove(id);
-                    erro("Não foi possível cadastrar o fornecedor.");
+                    erro("Não foi possível cadastrar a Conta Bancaria.");
                 });
 
                 if (sempre)
@@ -150,12 +142,12 @@
             this.listar = function (sucesso, erro, sempre) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Carregando fornecedores..."
+                    message: "Carregando conta bancaria..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/Conta_Bancaria", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
                 })
@@ -171,24 +163,24 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível carregar os fornecedores."
+                        message: "Não foi possível carregar as Contas Bancarias."
                     });
-                    erro("Não foi possível carregar os fornecedores.");
+                    erro("Não foi possível carregar as Contas Bancarias.");
                 });
 
                 if (sempre)
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, fornecedorID) {
+            this.excluir = function (sucesso, erro, sempre, conta_bancariaID) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Excluindo fornecedor..."
+                    message: "Excluindo Conata Bancaria..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("REMOVER", fornecedorID),
+                $http.post(server + "/Conta_Bancaria", this.formatar("REMOVER", conta_bancariaID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -205,9 +197,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível excluir o fornecedor."
+                        message: "Não foi possível excluir a conta bancaria."
                     });
-                    erro("Não foi possível excluir o fornecedor.");
+                    erro("Não foi possível excluir a conta bancaria.");
                 });
 
                 if (sempre)
@@ -221,12 +213,12 @@
             this.editar = function (sucesso, erro, sempre, item) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Editar fornecedor..."
+                    message: "Editar conta bancaria..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("EDITAR", item),
+                $http.post(server + "/Conta_Bancaria", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {
@@ -235,7 +227,7 @@
                         sucesso(resultado.resultado);
                         notifyService.add({
                             seconds: 5,
-                            message: "Fornecedor editado."
+                            message: "Conta Bancaria editada."
                         });
                     }
                     else {
@@ -249,9 +241,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível editar o fornecedor."
+                        message: "Não foi possível editar a conta bancaria."
                     });
-                    erro("Não foi possível editar o fornecedor.");
+                    erro("Não foi possível editar a conta bancaria.");
                 });
 
                 if (sempre)

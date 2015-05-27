@@ -1,58 +1,48 @@
-(function () {
-    var app = angular.module("fornecedor", []);
+    (function () {
+    var app = angular.module("Banco", []);
 
-    app.controller("fornecedorController", ["fornecedorService", "$scope", "notifyService",
-        function (fornecedorService, $scope, notifyService) {
+    app.controller("bancoController", ["bancoService", "$scope", "notifyService",
+        function (bancoService, $scope, notifyService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                nome: "",
-                email: "",
-                telefone: "",
-                endereco: {
-                    rua: "",
-                    bairro: "",
-                    numero: "",
-                    estado: "",
-                    pais: "",
-                    cidade: "",
-                    contato:"",
-                }
+                nome : "" ,
+                numero : ""
             };
 
             $scope.formularioValido = function () {
-                var inputs = $("[name='fornecedorform']").find("input");
+                var inputs = $("[name='bancoform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
 
             $scope.inserir = function (novo) {
-                fornecedorService.inserir(function () {
+                bancoService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarFornecedores();
+                    $scope.carregarbanco();
                 }, function () {
 
                 }, null, novo);
             };
 
-            $scope.carregarFornecedores = function () {
-                fornecedorService.listar(function (resultado) {
+            $scope.carregarBanco = function () {
+                bancoService.listar(function (resultado) {
                     $scope.itens = resultado;
                 }, function () {
 
                 }, null);
             };
 
-            $scope.carregarFornecedores();
+            $scope.carregarBanco();
 
             $scope.fab = {
                 principalClick: function () {
                     $scope.modal = {
                         salvarNome: "Salvar",
-                        titulo: "Novo fornecedor",
+                        titulo: "Novo Banco",
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
@@ -75,7 +65,7 @@
             };
 
             $scope.editarSalvar = function (item) {
-                fornecedorService.editar(function () {
+                bancoService.editar(function () {
                     $("#add").modal().modal("hide");
 
                 }, function () {
@@ -90,7 +80,7 @@
                         buttons: [{
                                 text: "Sim",
                                 f: function (i) {
-                                    fornecedorService.excluir(function () {
+                                    bancoService.excluir(function () {
                                     }, function () {
                                     }, null, item.ID);
                                     i.excluirID = null;
@@ -110,16 +100,16 @@
 
         }]);
 
-    app.service("fornecedorService", ["$http", "notifyService", function ($http, notifyService) {
+    app.service("bancoService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Adicionando fornecedor..."
+                    message: "Adicionando Banco..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("INSERIR", data),
+                $http.post(server + "/Banco", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -129,7 +119,7 @@
                                 sucesso(resultado.resultado);
                                 notifyService.add({
                                     seconds: 5,
-                                    message: "Fornecedor adicionado"
+                                    message: "Banco adicionado"
                                 });
                             }
                             else {
@@ -140,7 +130,7 @@
                             }
                         }).error(function () {
                     notifyService.remove(id);
-                    erro("Não foi possível cadastrar o fornecedor.");
+                    erro("Não foi possível cadastrar o banco.");
                 });
 
                 if (sempre)
@@ -150,12 +140,12 @@
             this.listar = function (sucesso, erro, sempre) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Carregando fornecedores..."
+                    message: "Carregando banco..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/Banco", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
                 })
@@ -171,24 +161,24 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível carregar os fornecedores."
+                        message: "Não foi possível carregar os banco."
                     });
-                    erro("Não foi possível carregar os fornecedores.");
+                    erro("Não foi possível carregar os banco.");
                 });
 
                 if (sempre)
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, fornecedorID) {
+            this.excluir = function (sucesso, erro, sempre, bancoID) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Excluindo fornecedor..."
+                    message: "Excluindo banco..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("REMOVER", fornecedorID),
+                $http.post(server + "/Banco", this.formatar("REMOVER", bancoID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -205,9 +195,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível excluir o fornecedor."
+                        message: "Não foi possível excluir o banco."
                     });
-                    erro("Não foi possível excluir o fornecedor.");
+                    erro("Não foi possível excluir o banco.");
                 });
 
                 if (sempre)
@@ -221,12 +211,12 @@
             this.editar = function (sucesso, erro, sempre, item) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Editar fornecedor..."
+                    message: "Editar banco..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Fornecedor", this.formatar("EDITAR", item),
+                $http.post(server + "/Banco", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {
@@ -235,7 +225,7 @@
                         sucesso(resultado.resultado);
                         notifyService.add({
                             seconds: 5,
-                            message: "Fornecedor editado."
+                            message: "Banco editado."
                         });
                     }
                     else {
@@ -249,9 +239,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível editar o fornecedor."
+                        message: "Não foi possível editar o banco."
                     });
-                    erro("Não foi possível editar o fornecedor.");
+                    erro("Não foi possível editar o banco.");
                 });
 
                 if (sempre)

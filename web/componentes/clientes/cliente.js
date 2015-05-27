@@ -13,7 +13,16 @@
                 cnpj: "",
                 observacao: "",
                 statusID: "",
-                statusNome: ""
+                statusNome: "",
+                endereco: {
+                    rua: "",
+                    bairro: "",
+                    numero: "",
+                    estado: "",
+                    pais: "",
+                    cidade: "",
+                    contato:"",
+                }
             };
 
             $scope.formularioValido = function () {

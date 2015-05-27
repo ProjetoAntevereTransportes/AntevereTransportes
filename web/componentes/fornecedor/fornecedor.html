@@ -82,9 +82,26 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
+                                <label>Contato</label>
+                                <input name="contato" ng-model="novo.contato"  ng-minlength="7" ng-maxlength="90" maxlength="90" required
+                                       placeholder="contato"  type="text" class="form-control m-input">
+                                <erro ng-show="fornecedorform.contato.$error.required && fornecedorform.contato.$touched">
+                                    Insira um contato
+                                </erro>
+                               
+
+                                <erro ng-show="fornecedorform.contato.$error.minlength || fornecedorform.contato.$error.maxlength">
+                                    Verifique se o contato respeita o padrão de no minimo 7 caracteres e no maximo 60 caracteres
+                                </erro>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="col-lg-12">
+                            <div class="form-group">
                                 <label>Telefone</label>
                                 <input name="telefone" required ng-model="novo.telefone" ng-minlength="7" ng-maxlength="20" maxlength="20"  placeholder="Telefone" 
-                                       type="number" class="form-control m-input">
+                                       type="text" class="form-control m-input">
                                 <erro ng-show="fornecedorform.telefone.$error.required && fornecedorform.telefone.$touched">
                                     Insira um telefone
                                 </erro>
@@ -148,14 +165,14 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Número</label>
-                                        <input name="number" required ng-model="novo.endereco.numero" ng-minlength="2" ng-maxnumber="10" max="10"  placeholder="Número"  type="number" class="form-control m-input">
+                                        <input name="number" required ng-model="novo.endereco.numero" ng-minlength="1" ng-maxnumber="10" max="10"  placeholder="Número"  type="text" class="form-control m-input">
                                         <erro ng-show="fornecedorform.number.$error.required &&
                                                                 fornecedorform.number.$touched">
                                             Insira um numero
                                         </erro>
 
                                         <erro ng-show="fornecedorform.number.$error.minlength || fornecedorform.number.$error.maxlength">
-                                            Verifique se o numero respeita o padrão de no minimo 2 caracteres e no maximo 10 caracteres
+                                            Verifique se o numero respeita o padrão de no minimo 1 caracteres e no maximo 10 caracteres
                                         </erro>
                                          <erro ng-show="fornecedorform.number.$error.number">
                                             Insira um numero válido

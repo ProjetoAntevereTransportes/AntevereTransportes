@@ -1,0 +1,79 @@
+<div class="col-lg-12 z1 card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-lg-2">Numero</th>                
+                <th class="col-lg-10">Nome</th>
+                <th width="100px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in itens">
+                <td>{{item.nome}}</td>
+                <td>{{item.numero}}</td>
+                <td>
+                    <button class="m-button" ng-click="editar(item)">
+                        <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
+                    </button>
+
+                    <button class="m-button" ng-click="excluir(item)">
+                        <i class="glyphicon glyphicon-trash" style="color: red"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{modal.titulo}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form novalidate class="m-form" name="bancoform">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Número</label>
+                                <input name="numero" required ng-model="novo.numero" placeholder="Número"  type="number" class="form-control m-input">
+                                <erro ng-show="bancoform.numero.$error.required && bancoform.numero.$touched">
+                                    Insira o Número
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input ng-model="novo.nome" placeholder="Nome" name="nome" 
+                                       type="text" class="form-control m-input" required>
+                                <erro ng-show="bancoform.nome.$error.required && bancoform.nome.$touched">
+                                    Insira o Nome
+                                </erro>
+                            </div>
+                        </div>                        
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default m-button-flat"
+                        data-dismiss="modal">Fechar</button>
+                <button type="button"
+                        ng-click="modal.salvarFuncao(modal.item)" 
+                        class="btn btn-primary m-button-flat"
+                        ng-disabled="formularioValido()">
+                    {{modal.salvarNome}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<fab></fab>

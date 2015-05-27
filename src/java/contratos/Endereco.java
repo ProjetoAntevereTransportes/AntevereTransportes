@@ -13,7 +13,7 @@ public class Endereco {
     private int id;
     private String rua;
     private String bairro;
-    private int numero;
+    private String numero;
     private String estado;
     private String pais;
     private String cidade;
@@ -60,20 +60,7 @@ public class Endereco {
         this.bairro = bairro;
     }
 
-    /**
-     * @return the numero
-     */
-    public int getNumero() {
-        return numero;
-    }
-
-    /**
-     * @param numero the numero to set
-     */
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
+  
     /**
      * @return the estado
      */
@@ -114,5 +101,19 @@ public class Endereco {
      */
     public void setCidade(String cidade) {
         this.cidade = cidade;
+    }
+
+    /**
+     * @return the numero
+     */
+    public String getNumero() {
+        return numero;
+    }
+
+    /**
+     * @param numero the numero to set
+     */
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 }
