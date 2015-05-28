@@ -45,6 +45,7 @@ public class Fornecedor {
             f.setID(rsF.getInt("id"));
             f.setNome(rsF.getString("nome"));
             f.setTelefone(rsF.getString("telefone"));
+            f.setContato(rsF.getString("contato"));
 
             f.setEndereco(endereco.get(f.getEnderecoID()));
 
@@ -77,6 +78,7 @@ public class Fornecedor {
                 f.setID(rsF.getInt("id"));
                 f.setNome(rsF.getString("nome"));
                 f.setTelefone(rsF.getString("telefone"));
+                f.setContato(rsF.getString("contato"));
 
                 f.setEndereco(endereco.get(f.getEnderecoID()));
                 fs.add(f);
@@ -96,8 +98,8 @@ public class Fornecedor {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "INSERT INTO fornecedor(nome, endereco_id, email, telefone)"
-                    + "VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO fornecedor(nome, endereco_id, email, telefone, contato)"
+                    + "VALUES (?, ?, ?, ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, f.getNome());
@@ -108,15 +110,16 @@ public class Fornecedor {
             ps.setInt(2, enderecoID);
             ps.setString(3, f.getEmail());
             ps.setString(4, f.getTelefone());
+            ps.setString(5, f.getContato());
 
             int status = ps.executeUpdate();
 
-            con.commit();
-
-            if (status == 1) {
-                return true;
-            } else {
+            if (status != 1) {
+                con.rollback();
                 return false;
+            } else {
+                con.commit();
+                return true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -168,13 +171,14 @@ public class Fornecedor {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "UPDATE fornecedor set nome = ?, email = ?, telefone = ? WHERE id = ?;";
+            String sql = "UPDATE fornecedor set nome = ?, email = ?, telefone = ?, contato = ? WHERE id = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, f.getNome());
             ps.setString(2, f.getEmail());
             ps.setString(3, f.getTelefone());
-            ps.setInt(4, f.getID());
+            ps.setString(4, f.getContato());
+            ps.setInt(5, f.getID());
 
             database.Endereco endereco = new Endereco();
             endereco.editar(f.getEndereco());

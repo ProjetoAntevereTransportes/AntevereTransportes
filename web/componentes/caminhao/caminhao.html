@@ -1,0 +1,167 @@
+<div class="col-lg-12 z1 card">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="col-lg-1">Placa</th>
+                <th class="col-lg-3">Nome</th>
+                <th class="col-lg-3">Modelo</th>
+                <th class="col-lg-3">Marca</th>
+                <th class="col-lg-2">Renavam</th>
+                <th width="100px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in itens">
+                <td>{{item.placa}}</td>
+                <td>{{item.nome}}</td>
+                <td>{{item.modelo}}</td>
+                <td>{{item.marca}}</td>
+                <td>{{item.cor}}</td>
+                <td>{{item.renavam}}</td>
+                <td>{{item.data_modelo}}</td>
+                <td>{{item.ano_modelo}}</td>
+                <td>{{item.gasto_kilometros}}</td>
+                <td>
+                    <button class="m-button" ng-click="editar(item)">
+                        <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
+                    </button>
+
+                    <button class="m-button" ng-click="excluir(item)">
+                        <i class="glyphicon glyphicon-trash" style="color: red"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{modal.titulo}}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form novalidate class="m-form" name="caminhaoform">
+
+                        <div class="row">
+                            <div class="col-lg-12">    
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Placa</label>
+                                        <input ng-model="modal.item.placa" placeholder="Placa" name="placa" pattern="^.(1,10)$"
+                                               type="text" class="form-control m-input" required>
+                                        <erro ng-show="caminhaoform.placa.$error.required && caminhaoform.placa.$touched">
+                                            Insira a Placa
+                                        </erro>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Cor</label>
+                                        <input name="cor" required ng-model="modal.item.cor" placeholder="Cor"  type="text" class="form-control m-input">
+                                        <erro ng-show="caminhaoform.cor.$error.required && caminhaoform.cor.$touched">
+                                            Insira a cor
+                                        </erro>
+                                    </div>
+                                </div>                                                                                    
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input name="nome" ng-model="modal.item.nome" required
+                                       placeholder="Nome"  type="text" class="form-control m-input">
+                                <erro ng-show="caminhaoform.nome.$error.required && caminhaoform.nome.$touched">
+                                    Insira um Nome
+                                </erro>
+                            </div>                                
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Modelo</label>
+                                <input name="modelo" required ng-model="modal.item.modelo" placeholder="Modelo" 
+                                       type="text" class="form-control m-input">
+                                <erro ng-show="caminhaoform.modelo.$error.required && caminhaoform.modelo.$touched">
+                                    Insira o Modelo
+                                </erro>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Marca</label>
+                                <input name="marca" required ng-model="modal.item.marca" placeholder="Marca" type="text" class="form-control m-input">
+                                <erro ng-show="caminhaoform.marca.$error.required && caminhaoform.marca.$touched">
+                                    Insira uma marca
+                                </erro>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Ano Modelo</label>
+                                        <input name="ano_modelo" required ng-model="modal.item.ano_modelorenavam" placeholder="Ano Modelo"  type="text" class="form-control m-input">
+                                        <erro ng-show="caminhaoform.ano_modelo.$error.required && caminhaoform.ano_modelo.$touched">
+                                            Insira o Ano do Modelo
+                                        </erro>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Data Compra</label>
+                                        <input name="data_compra" required ng-model="modal.item.data_compra" placeholder="Data Compra"  type="text" class="form-control m-input">
+                                        <erro ng-show="caminhaoform.data_compra.$error.required && caminhaoform.data_compra.$touched">
+                                            Insira a Data da Compra
+                                        </erro>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Gastos KM</label>
+                                <input name="gasto_kilometros" required ng-model="modal.item.gasto_kilometros" placeholder="Gastos por Kilometros"  type="text" class="form-control m-input">
+                                <erro ng-show="caminhaoform.gasto_kilometros.$error.required && caminhaoform.gasto_kilometros.$touched">
+                                    Insira o gasto por kilometros
+                                </erro>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Renavam</label>
+                                <input name="renavam" required ng-model="modal.item.renavam" placeholder="Renavam"  type="text" class="form-control m-input">
+
+                                <erro ng-show="caminhaoform.renavam.$error.required && caminhaoform.renavam.$touched">
+                                    Insira uma renavam
+                                </erro>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-default m-button-flat"
+                        data-dismiss="modal">Fechar</button>
+                <button type="button"
+                        ng-click="modal.salvarFuncao(modal.item)" 
+                        class="btn btn-primary m-button-flat"
+                        ng-disabled="formularioValido()">
+                    {{modal.salvarNome}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<fab></fab>

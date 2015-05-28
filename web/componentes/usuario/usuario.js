@@ -1,8 +1,8 @@
 (function () {
     var app = angular.module("usuario", []);
 
-    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService",
-        function (usuarioService, $scope, notifyService) {
+    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService","pesquisaService",
+        function (usuarioService, $scope, notifyService,pesquisaService) {
             $scope.titulo = "Gerenciamento de Usuario";
             $scope.itens = [];
 
@@ -13,7 +13,8 @@
                 nome: "",
                 email: "",
                 senha: "",
-                perguntaId: "",
+                perguntaID: "",
+                perguntaNome: "",
                 resposta: "",
                 tipoUsuarioID: "",
                 tipoUsuarioNome: "",
@@ -22,6 +23,7 @@
                 chave: ""
 
             };
+
 
             $scope.formularioValido = function () {
                 var inputs = $("[name='usuarioform']").find("input");
@@ -75,8 +77,8 @@
                     $scope.listarStatus();
 
                 },
-                principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-plus",
+                principalIcon: "md md-add",
+                secondIcon: "md md-add",
                 principalAlt: "Único"
             };
 
@@ -92,7 +94,7 @@
                 $scope.listarPergunta();
                 $scope.listarTipos();
 
-                $scope.novo = item;
+
             };
 
             $scope.editarSalvar = function (item) {
@@ -120,8 +122,11 @@
                 }, function () {
                 }, null);
             };
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
-            $scope.excluir = function (item) {                
+            $scope.excluir = function (item) {
                 if (!item.excluirID)
                     item.excluirID = notifyService.add({
                         fixed: true,
@@ -130,6 +135,7 @@
                                 text: "Sim",
                                 f: function (i) {
                                     usuarioService.excluir(function () {
+                                        $scope.carregarUsuarios();
                                     }, function () {
                                     }, null, item.id);
                                     i.excluirID = null;
@@ -148,6 +154,8 @@
             };
 
         }]);
+
+
 
     app.service("usuarioService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {

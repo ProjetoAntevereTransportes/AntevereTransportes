@@ -16,7 +16,8 @@
                     numero: "",
                     estado: "",
                     pais: "",
-                    cidade: ""
+                    cidade: "",
+                    contato:"",
                 }
             };
 
@@ -61,9 +62,9 @@
                     };
                     $("#add").modal().modal("show");
                 },
-                principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-user",
-                principalAlt: "Único"
+                principalIcon: "md md-add",
+                secondIcon: "md md-add",
+                
             };
 
             $scope.editar = function (item) {

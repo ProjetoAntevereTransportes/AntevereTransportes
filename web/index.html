@@ -102,11 +102,7 @@
                         <span class="mm-menu__link-text"><i class="md md-person"></i> Usuário</span>
                     </a>
                 </li>
-                <li class="mm-menu__item" ng-class="{active: selectedItem == '/configuracao'}">
-                    <a class="mm-menu__link" href="#/configuracao">
-                        <span class="mm-menu__link-text"><i class="md md-settings"></i> Configuração</span>
-                    </a>
-                </li>
+               
                 <li class="mm-menu__item" ng-class="{active: selectedItem == '/Pagamentos'}">
                     <a class="mm-menu__link" href="#/Pagamentos">
                         <span class="mm-menu__link-text"><i class="md md-dashboard"></i> Pagamento</span>
@@ -124,12 +120,27 @@
                 </li>
                 <li class="mm-menu__item" ng-class="{active: selectedItem == '/Funcionario'}">
                     <a class="mm-menu__link" href="#/Funcionario">
-                        <span class="mm-menu__link-text"><i class="md md-person"></i> Funcionario</span>
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Funcionário</span>
                     </a>
                 </li>
                 <li class="mm-menu__item" ng-class="{active: selectedItem == '/Clientes'}">
                     <a class="mm-menu__link" href="#/Clientes">
                         <span class="mm-menu__link-text"><i class="md md-person"></i> Clientes</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Caminhao'}">
+                    <a class="mm-menu__link" href="#/Caminhao">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Caminhãos</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Conta'}">
+                    <a class="mm-menu__link" href="#/Conta">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Contas Bancarias</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Banco'}">
+                    <a class="mm-menu__link" href="#/Banco">
+                        <span class="mm-menu__link-text"><i class="md md-person"></i> Bancos</span>
                     </a>
                 </li>
             </ul>
@@ -160,6 +171,9 @@
         <script src="js/ui-utils-0.2.3/ui-utils.min.js" type="text/javascript"></script>
         <script src="js/ui-utils-0.2.3/ui-utils-ieshiv.min.js" type="text/javascript"></script>
         <script src="componentes/pesquisa/pesquisa.js" type="text/javascript"></script>
+        <script src="componentes/banco/banco.js" type="text/javascript"></script>
+        <script src="componentes/caminhao/caminhao.js" type="text/javascript"></script>
+        <script src="componentes/conta_bancaria/conta_bancaria.js" type="text/javascript"></script>
         <script src="js/mousetrap.min.js" type="text/javascript"></script>
         <script src="js/hotkeys.js" type="text/javascript"></script>
         <script>

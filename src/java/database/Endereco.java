@@ -42,7 +42,7 @@ public class Endereco {
             endereco.setCidade(e.getString("cidade"));
             endereco.setEstado(e.getString("estado"));
             endereco.setId(e.getInt("id"));
-            endereco.setNumero(e.getInt("numero"));
+            endereco.setNumero(e.getString("numero"));
             endereco.setPais(e.getString("pais"));
             endereco.setRua(e.getString("rua"));
 
@@ -70,7 +70,7 @@ public class Endereco {
             // substitui os "?" pelos respectivos valores
             ps.setString(1, e.getRua());
             ps.setString(2, e.getBairro());
-            ps.setInt(3, e.getNumero());
+            ps.setString(3, e.getNumero());
             ps.setString(4, e.getCidade());
             ps.setString(5, e.getEstado());
             ps.setString(6, e.getPais());
@@ -106,7 +106,7 @@ public class Endereco {
             // substitui os "?" pelos respectivos valores
             ps.setString(1, e.getRua());
             ps.setString(2, e.getBairro());
-            ps.setInt(3, e.getNumero());
+            ps.setString(3, e.getNumero());
             ps.setString(4, e.getCidade());
             ps.setString(5, e.getEstado());
             ps.setString(6, e.getPais());

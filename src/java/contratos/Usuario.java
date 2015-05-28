@@ -15,6 +15,7 @@ public class Usuario {
     private String senha;
     private String email;
     private int perguntaID;
+    private String perguntaNome;
     private String resposta;
     private int tipoUsuarioID;
     private String tipoUsuarioNome;
@@ -205,5 +206,19 @@ public class Usuario {
      */
     public void setChave(String chave) {
         this.chave = chave;
+    }
+
+    /**
+     * @return the perguntaNome
+     */
+    public String getPerguntaNome() {
+        return perguntaNome;
+    }
+
+    /**
+     * @param perguntaNome the perguntaNome to set
+     */
+    public void setPerguntaNome(String perguntaNome) {
+        this.perguntaNome = perguntaNome;
     }
 }

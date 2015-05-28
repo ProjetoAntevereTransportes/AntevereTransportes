@@ -10,6 +10,7 @@ package contratos;
  * @author Felipe_Botelho
  */
 public class Cliente {
+
     private int id;
     private String nome;
     private String email;
@@ -19,6 +20,8 @@ public class Cliente {
     private int statusID;
     private String statusNome;
     private contratos.StatusCliente status;
+    private int enderecoID;
+    private contratos.Endereco endereco;
 
     /**
      * @return the id
@@ -145,5 +148,33 @@ public class Cliente {
     public void setStatusNome(String statusNome) {
         this.statusNome = statusNome;
     }
-    
+
+    /**
+     * @return the endereco
+     */
+    public contratos.Endereco getEndereco() {
+        return endereco;
+    }
+
+    /**
+     * @param endereco the endereco to set
+     */
+    public void setEndereco(contratos.Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    /**
+     * @return the enderecoID
+     */
+    public int getEnderecoID() {
+        return enderecoID;
+    }
+
+    /**
+     * @param enderecoID the enderecoID to set
+     */
+    public void setEnderecoID(int enderecoID) {
+        this.enderecoID = enderecoID;
+    }
+
 }

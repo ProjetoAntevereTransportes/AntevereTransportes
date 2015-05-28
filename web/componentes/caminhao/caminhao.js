@@ -1,131 +1,59 @@
-(function () {
-    var app = angular.module("cliente", []);
+    (function () {
+    var app = angular.module("Caminhao", []);
 
-    app.controller("clienteController", ["clienteService", "$scope", "notifyService", "pesquisaService",
-        function (clienteService, $scope, notifyService, pesquisaService) {
-            $scope.titulo = "Gerenciamento de Clientes";
+    app.controller("caminhaoController", ["caminhaoService", "$scope", "notifyService",
+        function (caminhaoService, $scope, notifyService) {
+            $scope.titulo = "Título";
             $scope.itens = [];
-            $scope.lstatus = []; // list status
+
             $scope.novo = {
                 nome: "",
-                email: "",
-                telefone: "",
-                cnpj: "",
-                observacao: "",
-                statusID: "",
-                statusNome: "",
-                endereco: {
-                    rua: "",
-                    bairro: "",
-                    numero: "",
-                    estado: "",
-                    pais: "",
-                    cidade: "",
-                    contato: "",
-                }
+                placa: "",
+                renavam: "",
+                modelo: "",
+                marca: "",
+                cor: "",
+                data_compra: "",
+                ano_modelo: "",
+                gasto_kilometros: ""
             };
 
-            $scope.formularioValido = function (cnpj) {
-                var inputs = $("[name='clienteform']").find("input");
-                if ($scope.validaCnpj($("#cnpj").val()))
-                    return false;
+            $scope.formularioValido = function () {
+                var inputs = $("[name='caminhaoform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
-            pesquisaService.setFunction(function (search) {
-                $scope.search = search;
-            });
 
             $scope.inserir = function (novo) {
-                clienteService.inserir(function () {
+                caminhaoService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarClientes();
+                    $scope.carregarcaminhao();
                 }, function () {
 
                 }, null, novo);
             };
 
-            $scope.carregarClientes = function () {
-                clienteService.listar(function (resultado) {
+            $scope.carregarCaminhao = function () {
+                caminhaoService.listar(function (resultado) {
                     $scope.itens = resultado;
                 }, function () {
 
                 }, null);
             };
 
-            $scope.validaCnpj = function (cnpj) {
-                if (cnpj == null || cnpj == "")
-                    return false
-                cnpj = cnpj.replace(/[^\d]+/g, '');
-
-                if (cnpj == '')
-                    return false;
-
-                if (cnpj.length != 14)
-                    return false;
-
-                // Elimina CNPJs invalidos conhecidos
-                if (cnpj == "00000000000000" ||
-                        cnpj == "11111111111111" ||
-                        cnpj == "22222222222222" ||
-                        cnpj == "33333333333333" ||
-                        cnpj == "44444444444444" ||
-                        cnpj == "55555555555555" ||
-                        cnpj == "66666666666666" ||
-                        cnpj == "77777777777777" ||
-                        cnpj == "88888888888888" ||
-                        cnpj == "99999999999999")
-                    return false;
-
-                // Valida DVs
-                tamanho = cnpj.length - 2
-                numeros = cnpj.substring(0, tamanho);
-                digitos = cnpj.substring(tamanho);
-                soma = 0;
-                pos = tamanho - 7;
-                for (i = tamanho; i >= 1; i--) {
-                    soma += numeros.charAt(tamanho - i) * pos--;
-                    if (pos < 2)
-                        pos = 9;
-                }
-                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-                if (resultado != digitos.charAt(0))
-                    return false;
-
-                tamanho = tamanho + 1;
-                numeros = cnpj.substring(0, tamanho);
-                soma = 0;
-                pos = tamanho - 7;
-                for (i = tamanho; i >= 1; i--) {
-                    soma += numeros.charAt(tamanho - i) * pos--;
-                    if (pos < 2)
-                        pos = 9;
-                }
-                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-                if (resultado != digitos.charAt(1))
-                    return false;
-
-                return true;
-
-            }
-
-            $scope.carregarClientes();
+            $scope.carregarCaminhao();
 
             $scope.fab = {
                 principalClick: function () {
                     $scope.modal = {
                         salvarNome: "Salvar",
-                        titulo: "Novo Cliente",
+                        titulo: "Novo Caminhão",
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-
                     $("#add").modal().modal("show");
-                    $('#clienteForm')[0].reset();
-                    $scope.listarStatus();
-
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
@@ -140,24 +68,15 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.listarStatus();
-
-
+                $scope.novo = item;
             };
 
             $scope.editarSalvar = function (item) {
-                clienteService.editar(function () {
+                caminhaoService.editar(function () {
                     $("#add").modal().modal("hide");
 
                 }, function () {
                 }, null, item);
-            };
-
-            $scope.listarStatus = function () {
-                clienteService.listarStatus(function (resultado) {
-                    $scope.lstatus = resultado;
-                }, function () {
-                }, null);
             };
 
             $scope.excluir = function (item) {
@@ -168,10 +87,9 @@
                         buttons: [{
                                 text: "Sim",
                                 f: function (i) {
-                                    clienteService.excluir(function () {
-                                        $scope.carregarClientes();
+                                    caminhaoService.excluir(function () {
                                     }, function () {
-                                    }, null, item.id);
+                                    }, null, item.ID);
                                     i.excluirID = null;
                                 },
                                 parameter: item
@@ -189,16 +107,16 @@
 
         }]);
 
-    app.service("clienteService", ["$http", "notifyService", function ($http, notifyService) {
+    app.service("caminhaoService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Adicionando cliente..."
+                    message: "Adicionando caminhão..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("INSERIR", data),
+                $http.post(server + "/Caminhao", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -208,7 +126,7 @@
                                 sucesso(resultado.resultado);
                                 notifyService.add({
                                     seconds: 5,
-                                    message: "Cliente adicionado"
+                                    message: "Caminhão adicionado"
                                 });
                             }
                             else {
@@ -219,7 +137,7 @@
                             }
                         }).error(function () {
                     notifyService.remove(id);
-                    erro("Não foi possível cadastrar o cliente.");
+                    erro("Não foi possível cadastrar o caminhão.");
                 });
 
                 if (sempre)
@@ -229,12 +147,15 @@
             this.listar = function (sucesso, erro, sempre) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Carregando clientes..."
+                    message: "Carregando caminhao..."
                 });
 
                 var server = "/AntevereTransportes";
-                $http.post(server + "/Cliente", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+
+                $http.post(server + "/Caminhao", this.formatar("LERVARIOS", null), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+
+                })
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -244,21 +165,27 @@
                                 erro(resultado.mensagem);
                             }
                         }).error(function () {
-                    erro("Não foi possível carregar os clientes.");
+                    notifyService.remove(id);
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível carregar os caminhao."
+                    });
+                    erro("Não foi possível carregar os caminhao.");
                 });
+
                 if (sempre)
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, clienteID) {
+            this.excluir = function (sucesso, erro, sempre, caminhaoID) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Excluindo Cliente..."
+                    message: "Excluindo caminhao..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("REMOVER", clienteID),
+                $http.post(server + "/Caminhao", this.formatar("REMOVER", caminhaoID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -275,9 +202,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível excluir o cliente."
+                        message: "Não foi possível excluir o caminhao."
                     });
-                    erro("Não foi possível excluir o cliente.");
+                    erro("Não foi possível excluir o caminhao.");
                 });
 
                 if (sempre)
@@ -288,37 +215,15 @@
                 return "data=" + JSON.stringify({operacao: operacao, json: JSON.stringify(dado)});
             };
 
-
-            this.listarStatus = function (sucesso, erro, sempre) {
-                var server = "/AntevereTransportes";
-                $http.post(server + "/StatusCliente", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-                        .success(function (resultado) {
-                            if (resultado.sucesso) {
-                                sucesso(resultado.resultado);
-                            }
-                            else {
-                                erro(resultado.mensagem);
-                            }
-                        }).error(function () {
-                    erro("Não foi possível carregar os status de clientes.");
-                });
-
-                if (sempre)
-                    sempre();
-
-            };
-
-
             this.editar = function (sucesso, erro, sempre, item) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Editar cliente..."
+                    message: "Editar caminhao..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("EDITAR", item),
+                $http.post(server + "/Caminhao", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {
@@ -327,7 +232,7 @@
                         sucesso(resultado.resultado);
                         notifyService.add({
                             seconds: 5,
-                            message: "Cliente editado."
+                            message: "Caminhão editado."
                         });
                     }
                     else {
@@ -341,14 +246,13 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível editar o cliente."
+                        message: "Não foi possível editar o caminhao."
                     });
-                    erro("Não foi possível editar o cliente.");
+                    erro("Não foi possível editar o caminhão.");
                 });
 
                 if (sempre)
                     sempre();
             };
         }]);
-
 })();

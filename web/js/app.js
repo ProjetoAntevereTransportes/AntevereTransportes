@@ -2,8 +2,8 @@
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
         "login", "authService", "fabElement", "notifyElement",
-        "fornecedor", "fileUploadModule", "cargo",
-        "funcionario", "cliente", "ui.utils", "pesquisaElement", 'cfp.hotkeys']);
+        "fornecedor", "fileUploadModule", "cargo", 
+        "funcionario", "cliente", "ui.utils", "pesquisaElement","Banco","Conta_Bancaria","Caminhao"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
@@ -82,6 +82,27 @@
                     $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
+                case "/Conta":
+                {
+                    $scope.title = "Conta Bancaria";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Caminhao":
+                {
+                    $scope.title = "Caminhão";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
+                case "/Banco":
+                {
+                    $scope.title = "Bancos";
+                    $scope.barColor = "#898984";
+                    $scope.searchColor = "rgb(171, 171, 171)";
+                    break;
+                }
             }
         };
 
@@ -119,6 +140,15 @@
         }).when("/Clientes", {
             templateUrl: "componentes/clientes/cliente.html",
             controller: "clienteController"
+        }).when("/Banco", {
+            templateUrl: "componentes/banco/banco.html",
+            controller: "bancoController"
+        }).when("/Caminhao", {
+            templateUrl: "componentes/caminhao/caminhao.html",
+            controller: "caminhaoController"
+        }).when("/Conta", {
+            templateUrl: "componentes/conta_bancaria/conta_bancaria.html",
+            controller: "conta_bancariaController"
         });
         $routeProvider.otherwise({
             redirectTo: '/inicio'

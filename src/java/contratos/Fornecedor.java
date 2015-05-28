@@ -16,6 +16,7 @@ public class Fornecedor {
     private String email;
     private String telefone;
     private String nome;
+    private String contato;
 
     /**
      * @return the ID
@@ -99,6 +100,20 @@ public class Fornecedor {
      */
     public void setEndereco(contratos.Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    /**
+     * @return the contato
+     */
+    public String getContato() {
+        return contato;
+    }
+
+    /**
+     * @param contato the contato to set
+     */
+    public void setContato(String contato) {
+        this.contato = contato;
     }
 
 }
