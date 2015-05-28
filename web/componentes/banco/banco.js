@@ -48,8 +48,8 @@
                     };
                     $("#add").modal().modal("show");
                 },
-                principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-user",
+                principalIcon: "md md-add",
+                secondIcon: "md md-add",
                 principalAlt: "Único"
             };
 

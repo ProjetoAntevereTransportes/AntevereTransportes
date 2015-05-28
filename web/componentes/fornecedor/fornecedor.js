@@ -58,9 +58,9 @@
                     };
                     $("#add").modal().modal("show");
                 },
-                principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-user",
-                principalAlt: "Único"
+                principalIcon: "md md-add",
+                secondIcon: "md md-close",
+                
             };
 
             $scope.editar = function (item) {

@@ -236,8 +236,8 @@
                     $("#unico").modal("show");
                     $scope.carregarFornecedores();
                 },
-                principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-file",
+                principalIcon: "md md-add",
+                secondIcon: "md md-close",
                 principalAlt: "Único",
                 miniButtons: [
                     {
