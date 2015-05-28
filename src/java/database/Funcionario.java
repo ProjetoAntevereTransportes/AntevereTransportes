@@ -272,7 +272,7 @@ public class Funcionario {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, e.getRua());
             ps.setString(2, e.getBairro());
-            ps.setInt(3, e.getNumero());
+            ps.setString(3, e.getNumero());
             ps.setString(4, e.getCidade());
             ps.setString(5, e.getEstado());
             ps.setString(6, e.getPais());
