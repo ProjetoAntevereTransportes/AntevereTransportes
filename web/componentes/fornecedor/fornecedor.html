@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in itens">
+            <tr ng-repeat="item in itens | filter:search">
                 <td>{{item.nome}}</td>
                 <td>{{item.email}}</td>
                 <td>{{item.telefone}}</td>

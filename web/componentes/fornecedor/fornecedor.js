@@ -1,8 +1,8 @@
 (function () {
     var app = angular.module("fornecedor", []);
 
-    app.controller("fornecedorController", ["fornecedorService", "$scope", "notifyService",
-        function (fornecedorService, $scope, notifyService) {
+    app.controller("fornecedorController", ["fornecedorService", "$scope", "notifyService", "pesquisaService",
+        function (fornecedorService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
@@ -19,6 +19,10 @@
                     cidade: ""
                 }
             };
+
+            pesquisaService.setFunction(function(search){
+                $scope.search = search;
+            });
 
             $scope.formularioValido = function () {
                 var inputs = $("[name='fornecedorform']").find("input");

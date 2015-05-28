@@ -2,8 +2,8 @@
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
         "login", "authService", "fabElement", "notifyElement",
-        "fornecedor", "fileUploadModule", "cargo", 
-        "funcionario", "cliente", "ui.utils", "pesquisaElement"]);
+        "fornecedor", "fileUploadModule", "cargo",
+        "funcionario", "cliente", "ui.utils", "pesquisaElement", 'cfp.hotkeys']);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
@@ -15,26 +15,29 @@
         });
 
         $scope.mudarTitulo = function (path) {
+            $scope.defaultColor = "rgb(69, 90, 100)";
+            $scope.defaultSearchColor = "rgb(114, 138, 150)";
+
             switch (path) {
                 case "/inicio":
                 {
                     $scope.title = "Início";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/configuracao":
                 {
                     $scope.title = "Configurações";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/usuario":
                 {
                     $scope.title = "Usuários";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/Pagamentos":
@@ -47,36 +50,36 @@
                 case "/Login":
                 {
                     $scope.title = "Login";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/Fornecedor":
                 {
                     $scope.title = "Fornecedores";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/Cargo":
                 {
                     $scope.title = "Cargos";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/Funcionario":
                 {
                     $scope.title = "Funcionários";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
                 case "/Clientes":
                 {
                     $scope.title = "Clientes";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
                     break;
                 }
             }
