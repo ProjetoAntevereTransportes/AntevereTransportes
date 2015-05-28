@@ -1,8 +1,8 @@
 (function () {
     var app = angular.module("cliente", []);
 
-    app.controller("clienteController", ["clienteService", "$scope", "notifyService",
-        function (clienteService, $scope, notifyService) {
+    app.controller("clienteController", ["clienteService", "$scope", "notifyService", "pesquisaService",
+        function (clienteService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Gerenciamento de Clientes";
             $scope.itens = [];
             $scope.lstatus = []; // list status
@@ -13,16 +13,29 @@
                 cnpj: "",
                 observacao: "",
                 statusID: "",
-                statusNome: ""
+                statusNome: "",
+                endereco: {
+                    rua: "",
+                    bairro: "",
+                    numero: "",
+                    estado: "",
+                    pais: "",
+                    cidade: "",
+                    contato: "",
+                }
             };
 
-            $scope.formularioValido = function () {
+            $scope.formularioValido = function (cnpj) {
                 var inputs = $("[name='clienteform']").find("input");
+                if ($scope.validaCnpj($("#cnpj").val()))
+                    return false;
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
-
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
             $scope.inserir = function (novo) {
                 clienteService.inserir(function () {
@@ -42,6 +55,62 @@
                 }, null);
             };
 
+            $scope.validaCnpj = function (cnpj) {
+                if (cnpj == null || cnpj == "")
+                    return false
+                cnpj = cnpj.replace(/[^\d]+/g, '');
+
+                if (cnpj == '')
+                    return false;
+
+                if (cnpj.length != 14)
+                    return false;
+
+                // Elimina CNPJs invalidos conhecidos
+                if (cnpj == "00000000000000" ||
+                        cnpj == "11111111111111" ||
+                        cnpj == "22222222222222" ||
+                        cnpj == "33333333333333" ||
+                        cnpj == "44444444444444" ||
+                        cnpj == "55555555555555" ||
+                        cnpj == "66666666666666" ||
+                        cnpj == "77777777777777" ||
+                        cnpj == "88888888888888" ||
+                        cnpj == "99999999999999")
+                    return false;
+
+                // Valida DVs
+                tamanho = cnpj.length - 2
+                numeros = cnpj.substring(0, tamanho);
+                digitos = cnpj.substring(tamanho);
+                soma = 0;
+                pos = tamanho - 7;
+                for (i = tamanho; i >= 1; i--) {
+                    soma += numeros.charAt(tamanho - i) * pos--;
+                    if (pos < 2)
+                        pos = 9;
+                }
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(0))
+                    return false;
+
+                tamanho = tamanho + 1;
+                numeros = cnpj.substring(0, tamanho);
+                soma = 0;
+                pos = tamanho - 7;
+                for (i = tamanho; i >= 1; i--) {
+                    soma += numeros.charAt(tamanho - i) * pos--;
+                    if (pos < 2)
+                        pos = 9;
+                }
+                resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+                if (resultado != digitos.charAt(1))
+                    return false;
+
+                return true;
+
+            }
+
             $scope.carregarClientes();
 
             $scope.fab = {
@@ -52,7 +121,7 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-                    
+
                     $("#add").modal().modal("show");
                     $('#clienteForm')[0].reset();
                     $scope.listarStatus();
@@ -71,10 +140,9 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
+                $scope.listarStatus();
 
-                $scope.listarTipos();
 
-                $scope.novo = item;
             };
 
             $scope.editarSalvar = function (item) {
@@ -101,6 +169,7 @@
                                 text: "Sim",
                                 f: function (i) {
                                     clienteService.excluir(function () {
+                                        $scope.carregarClientes();
                                     }, function () {
                                     }, null, item.id);
                                     i.excluirID = null;
