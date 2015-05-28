@@ -1,12 +1,14 @@
 (function () {
     var app = angular.module("funcionario", []);
 
-    app.controller("funcionarioController", ["funcionarioService", "$scope", "notifyService",
-        function (funcionarioService, $scope, notifyService) {
+    app.controller("funcionarioController", ["funcionarioService", "$scope", "notifyService", "cargoService",
+        function (funcionarioService, $scope, notifyService, cargoService) {
             $scope.titulo = "Título";
             $scope.itens = [];
+            $scope.cargos = [];
 
             $scope.novo = {
+                id: "0",
                 nome: "",
                 sobrenome: "",
                 telefone: "",
@@ -14,6 +16,7 @@
                 rg: "",
                 cpf: "",
                 endereco: {
+                    id: "0",
                     rua: "",
                     bairro: "",
                     numero: "",
@@ -22,6 +25,7 @@
                     cidade: ""
                 },
                 cargo: {
+                    id: "0",
                     nome: "",
                     descricao: ""
                 }
@@ -63,6 +67,7 @@
                         item: $scope.novo
                     };
                     $("#add").modal().modal("show");
+                    $scope.carregarCargos();
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
@@ -114,6 +119,13 @@
                     });
             };
 
+            $scope.carregarCargos = function () {
+                cargoService.listar(function (resultado) {
+                    $scope.cargos = resultado;
+                }, function () {
+                }, null);
+            };
+
         }]);
 
     app.service("funcionarioService", ["$http", "notifyService", function ($http, notifyService) {
@@ -125,7 +137,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/funcionario", this.formatar("INSERIR", data),
+                $http.post(server + "/Funcionario", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -161,7 +173,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/funcionario", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/Funcionario", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
                 })
@@ -194,7 +206,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/funcionario", this.formatar("REMOVER", fornecedorID),
+                $http.post(server + "/Funcionario", this.formatar("REMOVER", fornecedorID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -232,7 +244,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/funcionario", this.formatar("EDITAR", item),
+                $http.post(server + "/Funcionario", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {

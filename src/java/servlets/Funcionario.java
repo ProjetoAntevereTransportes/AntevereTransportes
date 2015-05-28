@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Bruno
  */
-public class Cargo extends HttpServlet {
+public class Funcionario extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -69,27 +69,27 @@ public class Cargo extends HttpServlet {
     }
 
     public String lervarios() {
-        JsonResult<List<contratos.Cargo>> json = new JsonResult<List<contratos.Cargo>>();
+        JsonResult<List<contratos.Funcionario>> json = new JsonResult<List<contratos.Funcionario>>();
 
-        database.Cargo data = new database.Cargo();
-        List<contratos.Cargo> cargos = data.listar();
+        database.Funcionario data = new database.Funcionario();
+        List<contratos.Funcionario> funcionarios = data.listar();
 
-        if (cargos == null) {
-            json.mensagem = "Houve um erro ao carregar os cargos.";
+        if (funcionarios == null) {
+            json.mensagem = "Houve um erro ao carregar os funcionários.";
             json.sucesso = false;
         } else {
-            json.resultado = cargos;
+            json.resultado = funcionarios;
             json.sucesso = true;
         }
         return json.Serializar();
     }
 
     private String Editar(String json) {
-        contratos.JsonReceiver<contratos.Cargo> c = new JsonReceiver<>(contratos.Cargo.class);
-        c.Desserealizar(json);
+        contratos.JsonReceiver<contratos.Funcionario> f = new JsonReceiver<>(contratos.Funcionario.class);
+        f.Desserealizar(json);
 
-        contratos.Cargo cargo = c.getData();
-        Boolean resultado = new database.Cargo().editar(cargo);
+        contratos.Funcionario funcionario = f.getData();
+        Boolean resultado = new database.Funcionario().editar(funcionario);
 
         JsonResult<Boolean> result = new JsonResult<>();
         if (resultado) {
@@ -98,7 +98,7 @@ public class Cargo extends HttpServlet {
         } else {
             result.resultado = false;
             result.sucesso = false;
-            result.mensagem = "Não foi possível editar o cargo.";
+            result.mensagem = "Não foi possível editar o funcionário.";
 
         }
 
@@ -106,12 +106,12 @@ public class Cargo extends HttpServlet {
     }
 
     private String Inserir(String json) {
-        JsonReceiver<contratos.Cargo> recebido = new JsonReceiver<>(contratos.Cargo.class);
+        JsonReceiver<contratos.Funcionario> recebido = new JsonReceiver<>(contratos.Funcionario.class);
         recebido.Desserealizar(json);
 
-        database.Cargo c = new database.Cargo();
-        boolean resultado = c.Inserir(recebido.getData());
-
+        database.Funcionario f = new database.Funcionario();
+        boolean resultado = f.inserir(recebido.getData());
+        
         JsonResult<Boolean> result = new JsonResult<>();
         if (resultado) {
             result.resultado = true;
@@ -119,7 +119,7 @@ public class Cargo extends HttpServlet {
         } else {
             result.resultado = false;
             result.sucesso = false;
-            result.mensagem = "Não foi possível salvar o cargo.";
+            result.mensagem = "Não foi possível salvar o funcionário.";
         }
 
         return result.Serializar();
@@ -130,15 +130,15 @@ public class Cargo extends HttpServlet {
         JsonReceiver<Integer> re = new JsonReceiver<Integer>(Integer.class);
         re.Desserealizar(receiveJson);
 
-        database.Cargo c = new database.Cargo();
-        boolean resultado = c.excluir(re.getData().intValue());
+        database.Funcionario f = new database.Funcionario();
+        boolean resultado = f.excluir(re.getData().intValue());
         if (resultado) {
             json.sucesso = true;
             json.resultado = true;
         } else {
             json.sucesso = true;
             json.resultado = false;
-            json.mensagem = "Não foi possível excluir o cargo.";
+            json.mensagem = "Não foi possível excluir o funcionário.";
         }
 
         return json.Serializar();

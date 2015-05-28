@@ -7,48 +7,204 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
- * @author felipe
+ * @author Bruno
  */
 public class Funcionario {
-    public static Connection con;    
-    public static int insere(String nome, String sobrenome, String telefone, String email, int cargo_id, String cpf, String rg){
-        try {
 
-            // prepara o statement para execução de um novo comaando
-            Statement st = con.createStatement();
-            // cria o comando SQL para ser executado
-            String sql = "insert into funcionario(nome,sobrenome,telefone,email,cargo_id,cpf,rg) values(?,?,?,?,?,?,?)";
-            // prepara o comando para execução, indicando que haverá "?" a substituir
+    public static Connection con;
+
+    private void abrir() {
+        con = Conexao.abrirConexao();
+    }
+
+    public contratos.Funcionario pegarPeloID(int funcionarioID) {
+        try {
+            abrir();
+            String sql = "SELECT * FROM funcionario WHERE id = ?;";
+
             PreparedStatement ps = con.prepareStatement(sql);
-            // substitui os "?" pelos respectivos valores
-            ps.setString(1, nome);
-            ps.setString(2, sobrenome);
-            ps.setString(3, telefone);
-            ps.setString(4, email);
-            ps.setInt(5, cargo_id);
-            ps.setString(6, cpf);
-            ps.setString(7, rg);
-            // executa o comando sql armazenando o resultado. 0 = erro. 1 = sucesso
-            int status = ps.executeUpdate(); // pois adiciona ou altera
-            // verifica se houve erro
-            if (status == 0) {
-                return 0;
+            ps.setInt(1, funcionarioID);
+
+            ResultSet rs = ps.executeQuery();
+
+            rs.next();
+            //Funcionario
+            contratos.Funcionario f = new contratos.Funcionario();
+            f.setNome(rs.getString("f.nome"));
+            f.setSobrenome(rs.getString("f.sobrenome"));
+            f.setTelefone(rs.getString("f.telefone"));
+            f.setEmail(rs.getString("f.email"));
+            f.setCargo_id(rs.getInt("f.cargo_id"));
+            f.setCpf(rs.getString("f.cpf"));
+            f.setRg(rs.getString("f.rg"));
+            f.setEndereco_id(rs.getInt("f.endereco_id"));
+
+            //Endereço
+            database.Endereco endereco = new Endereco();
+            f.setEndereco(endereco.get(f.getEndereco_id()));
+
+            //Cargo
+            database.Cargo cargo = new Cargo();
+            f.setCargo(cargo.pegarPeloID(f.getCargo_id()));
+
+            return f;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Funcionario pegarPeloID - Problemas no SQL");
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public boolean inserir(contratos.Funcionario f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "INSERT INTO funcionario (NOME, SOBRENOME, TELEFONE, EMAIL, CARGO_iD, CPF, RG, ENDERECO_ID) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+
+            database.Endereco endereco = new Endereco();
+            int enderecoID = endereco.insere(f.getEndereco());
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getSobrenome());
+            ps.setString(3, f.getTelefone());
+            ps.setString(4, f.getEmail());
+            ps.setInt(5, f.getCargo().getId());//cargo
+            ps.setString(6, f.getCpf());
+            ps.setString(7, f.getRg());
+            ps.setInt(8, enderecoID);
+
+            /*
+             //Endereço
+             int enderecoID = 0;
+             int x = enderecoExiste(f.getEndereco());
+             if (x == 0) {
+             //Endereço ñ existe. Salvar novo Endereço
+             database.Endereco endereco = new Endereco();
+             enderecoID = endereco.insere(f.getEndereco());
+             ps.setInt(8, enderecoID);
+             } else {
+             //Endereço existe. Não salvar novo Endereço
+             ps.setInt(8, x);
+             }
+             */
+            int status = ps.executeUpdate();
+
+            if (status != 1) {
+                con.rollback();
+                return false;
             } else {
-                return 1;
+                con.commit();
+                return true;
+            }            
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
+                System.out.println("Funcionario Inserir - Problemas com o SQL");
             }
-        } // CASO HAJA UMA EXCEÇÃO, MOSTRA ERRO NA TELA
-        catch (Exception e) {
-            // grava a mensagem de erro em um log no servidor
-            e.printStackTrace(System.out);
-            if (e.toString().contains("Duplicate")) {
-                return 2;
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public List<contratos.Funcionario> listar() {
+        try {
+            abrir();
+            String sql = "SELECT * FROM funcionario WHERE id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+
+            List<contratos.Funcionario> fs = new ArrayList<>();
+
+            while (rs.next()) {
+                //Funcionario
+                contratos.Funcionario f = new contratos.Funcionario();
+                f.setId(rs.getInt("f.id"));
+                f.setNome(rs.getString("f.nome"));
+                f.setSobrenome(rs.getString("f.sobrenome"));
+                f.setTelefone(rs.getString("f.telefone"));
+                f.setEmail(rs.getString("f.email"));
+                f.setCargo_id(rs.getInt("f.cargo_id"));
+                f.setCpf(rs.getString("f.cpf"));
+                f.setRg(rs.getString("f.rg"));
+                f.setEndereco_id(rs.getInt("f.endereco_id"));
+
+                //Endereço
+                database.Endereco endereco = new Endereco();
+                f.setEndereco(endereco.get(f.getEndereco_id()));
+
+                //Cargo
+                database.Cargo cargo = new Cargo();
+                f.setCargo(cargo.pegarPeloID(f.getCargo_id()));
+
+                fs.add(f);
+            }
+
+            return fs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Funcionario listar - Problemas com o SQL");
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public boolean excluir(int id) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM funcionario WHERE id = " + id + ";";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
             } else {
-                return 0;
+                return false;
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
+                System.out.println("Funcionario excluir - Problemas com o SQL");
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
         }
     }
 

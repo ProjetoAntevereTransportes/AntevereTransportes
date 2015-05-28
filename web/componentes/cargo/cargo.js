@@ -7,8 +7,9 @@
             $scope.itens = [];
 
             $scope.novo = {
+                id: "0",
                 nome: "",
-                descricao: "",
+                descricao: ""
             };
 
             $scope.formularioValido = function () {
