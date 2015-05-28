@@ -51,5 +51,89 @@ public class Funcionario {
             }
         }
     }
-            
+
+    public boolean editar(contratos.Funcionario f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            int enderecoID = 0;
+
+            String sql = "UPDATE FUNCIONARIO SET nome = ?, sobrenome = ?, telefone = ?, email = ?, cargo_id = ?, "
+                    + "cpf = ?, rg = ?, endereco_id = ? WHERE id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getSobrenome());
+            ps.setString(3, f.getTelefone());
+            ps.setString(4, f.getEmail());
+            ps.setInt(5, f.getCargo_id());
+            ps.setString(6, f.getCpf());
+            ps.setString(7, f.getRg());
+
+            int x = enderecoExiste(f.getEndereco());
+            if (x == 0) {
+                //Endereço ñ existe. Salvar novo Endereço
+                database.Endereco endereco = new Endereco();
+                enderecoID = endereco.insere(f.getEndereco());
+                ps.setInt(8, enderecoID);
+            } else {
+                //Endereço existe. Não salvar novo Endereço
+                ps.setInt(8, x);
+            }
+
+            ps.setInt(9, f.getId());
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
+                System.out.println("Funcionario editar - Problemas com o SQL");
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    private int enderecoExiste(contratos.Endereco e) {
+        try {
+            abrir();
+            String sql = "SELECT * FROM ENDERECO E "
+                    + "WHERE rua = ? AND bairro = ? AND numero = ? AND cidade = ? AND estado = ? AND pais = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, e.getRua());
+            ps.setString(2, e.getBairro());
+            ps.setString(3, e.getNumero());
+            ps.setString(4, e.getCidade());
+            ps.setString(5, e.getEstado());
+            ps.setString(6, e.getPais());
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs != null) {
+                return rs.getInt("id");
+            }
+            return 0;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
 }
