@@ -53,7 +53,7 @@ public class Cliente {
                 f.setId(rsF.getInt("id"));
                 f.setStatusID(rsF.getInt("statusID"));
                 f.setStatusNome(rsF.getString("statusNome"));
-                
+
                 f.setEndereco(endereco.get(f.getEnderecoID()));
                 fs.add(f);
             }
@@ -158,6 +158,10 @@ public class Cliente {
             ps.setInt(6, f.getStatusID());
 
             ps.setInt(7, f.getId());
+
+            database.Endereco endereco = new Endereco();
+            endereco.editar(f.getEndereco());
+
             int status = ps.executeUpdate();
             con.commit();
 
