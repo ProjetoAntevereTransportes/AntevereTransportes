@@ -111,12 +111,12 @@ public class Fornecedor {
 
             int status = ps.executeUpdate();
 
-            con.commit();
-
-            if (status == 1) {
-                return true;
-            } else {
+            if (status != 1) {
+                con.rollback();
                 return false;
+            } else {
+                con.commit();
+                return true;
             }
         } catch (Exception ex) {
             ex.printStackTrace();
