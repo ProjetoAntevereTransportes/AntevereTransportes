@@ -59,7 +59,7 @@
                     $("#add").modal().modal("show");
                 },
                 principalIcon: "md md-add",
-                secondIcon: "md md-close",
+                secondIcon: "md md-add",
                 
             };
 
