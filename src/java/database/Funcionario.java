@@ -92,12 +92,11 @@ public class Funcionario {
             int enderecoID;
             int x = enderecoExiste(f.getEndereco());
             if (x == 0) {
-                //Endereço ñ existe. Salvar novo Endereço
+                //Endereço ñ existe
                 database.Endereco endereco = new Endereco();
                 enderecoID = endereco.insere(f.getEndereco());
                 ps.setInt(8, enderecoID);
             } else {
-                //Endereço existe. Não salvar novo Endereço
                 ps.setInt(8, x);
             }
 
