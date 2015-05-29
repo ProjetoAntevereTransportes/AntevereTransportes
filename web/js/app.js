@@ -2,39 +2,68 @@
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
         "login", "authService", "fabElement", "notifyElement",
-        "fornecedor", "fileUploadModule", "cargo", 
-        "funcionario", "cliente", "ui.utils", "pesquisaElement","Banco","Conta_Bancaria","Caminhao"]);
+        "fornecedor", "fileUploadModule", "cargo",
+        "funcionario", "cliente", "ui.utils", "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
         }]);
 
     app.controller('appCtrl', function ($scope, $location) {
+        $scope.shadow = false;
+        $scope.showBack = true;
+
         $scope.$on('$routeChangeStart', function (next, current) {
             $scope.mudarTitulo($location.path());
         });
 
+        $(window).scroll(function () {
+            $scope.alterarSombra();
+        });
+
+        $scope.alterarSombra = function () {
+            if (!$scope.showBack) {
+                $scope.shadow = true;
+                return;
+            }
+
+            var position = (window.pageYOffset || document.documentElement.scrollTop) - (document.documentElement.clientTop || 0);
+            if (position >= 54) {
+                $scope.shadow = true;
+            } else {
+                $scope.shadow = false;
+            }
+
+            $(".back-top").css("top", (-position * 0.5));
+        };
+
         $scope.mudarTitulo = function (path) {
+            $scope.defaultColor = "rgb(69, 90, 100)";
+            $scope.defaultSearchColor = "rgb(114, 138, 150)";
+
             switch (path) {
                 case "/inicio":
                 {
                     $scope.title = "Início";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/configuracao":
                 {
                     $scope.title = "Configurações";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/usuario":
                 {
                     $scope.title = "Usuários";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Pagamentos":
@@ -42,65 +71,75 @@
                     $scope.title = "Pagamentos";
                     $scope.barColor = "#F44242";
                     $scope.searchColor = 'rgb(250, 116, 116)';
+                    $scope.showBack = false;
                     break;
                 }
                 case "/Login":
                 {
                     $scope.title = "Login";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Fornecedor":
                 {
                     $scope.title = "Fornecedores";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Cargo":
                 {
                     $scope.title = "Cargos";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Funcionario":
                 {
                     $scope.title = "Funcionários";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Clientes":
                 {
                     $scope.title = "Clientes";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Conta":
                 {
                     $scope.title = "Conta Bancaria";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Caminhao":
                 {
                     $scope.title = "Caminhão";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
                 case "/Banco":
                 {
                     $scope.title = "Bancos";
-                    $scope.barColor = "#898984";
-                    $scope.searchColor = "rgb(171, 171, 171)";
+                   $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
                     break;
                 }
             }
+            $scope.alterarSombra();
         };
 
         $scope.click = function (url) {

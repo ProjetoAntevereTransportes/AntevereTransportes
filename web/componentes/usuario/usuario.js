@@ -77,8 +77,8 @@
                     $scope.listarStatus();
 
                 },
-                principalIcon: "glyphicon glyphicon-plus",
-                secondIcon: "glyphicon glyphicon-plus",
+                principalIcon: "md md-add",
+                secondIcon: "md md-add",
                 principalAlt: "Único"
             };
 

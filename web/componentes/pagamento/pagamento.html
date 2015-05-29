@@ -59,6 +59,12 @@
         </div>
     </div>
 </div>
+<style>
+    .md.md-close{
+        padding-top: 13px;
+        padding-left: 0px;
+    }
+</style>
 
 <div class="col-lg-12 month">
     <input type="month" class="month-input" ng-change="carregarPagamentos(dataLoad)" ng-model="dataLoad">
@@ -71,7 +77,7 @@
                 <i class="glyphicon glyphicon-stats" style="color: orange;"></i>
             </button>
 
-            <button class="btn-calendar" 
+            <button class="btn-calendar" hotkey="{'alt+c': alterarStatusCalendario}"
                     ng-click="alterarStatusCalendario()"
                     ng-class="{'btn-calendar-clicked': mostrarCalendario}">
                 <i class="glyphicon glyphicon-calendar" ng-hide="mostrarCalendario"></i>
@@ -121,7 +127,7 @@
                     </div>
                 </div>
                 <div class="table-item"
-                     ng-repeat="p in dia.pagamentos"
+                     ng-repeat="p in dia.pagamentos | filter:search"
                      ng-click="clicarPagamentoCalendario(p)"
                      ng-class="{'debitoLimitado': p.debitoLimitado, 'debitoIlimitado': p.debitoIlimitado, 'unico': p.unico, 'carne': p.carne}">
                     <div class="item-title">
@@ -138,11 +144,11 @@
 
 <div class="col-lg-12 repeated-item z1 item-color" 
      ng-repeat="item in itens
-                 | filter:search 
-                 | filter:tipo
+                 | filter:search
+                         | filter:tipo
      " ng-class="{
-            'expand z2': item.expandir == true
-        }" id="{{item.ID}}"
+                 'expand z2': item.expandir == true
+                 }" id="{{item.ID}}"
      ng-mouseover="mouseOverItem(item)"
      ng-mouseleave="mouseLeaveItem(item)">
     <div class='head col-lg-12'>
@@ -186,7 +192,7 @@
                 {{item.valor| currency : 'R$ ' : 2}} 
             </span>
 
-            <div ng-show="item.mostrarBotoes" class="item-buttons">
+            <div ng-show="!item.mostrarBotoes" class="item-buttons">
                 <i class="glyphicon glyphicon-stats btn-item" style="color: rgb(255, 184, 0);" 
                    ng-click="excluir(item)" ng-show="!item.expandir"></i>
                 <i class="glyphicon glyphicon-user btn-item" style="color: blue;" ng-show="!item.expandir"></i>
@@ -196,52 +202,79 @@
                    ng-click="cancelarPagamento(item)" ng-show="item.expandir"></i>
                 <i class="glyphicon glyphicon-usd btn-item" style="color: rgb(0, 173, 0);" 
                    ng-click="mais(item)"
-                   data-toggle="tooltip" title="Pagar" ng-show="!item.expandir"></i>
+                    data-toggle="tooltip" title="Pagar" ng-show="!item.expandir">
+                </i>
                 <i class="glyphicon glyphicon-ok btn-item" style="color: rgb(0, 173, 0);" 
                    ng-click="pagar(item)"
                    data-toggle="tooltip" title="Confirmar" ng-show="item.expandir"></i>
             </div>
+            <!--
             <i class="glyphicon glyphicon-menu-left show-more-buttons"
                ng-click="mostrarAcaoBotao(item)"
                ng-show="!item.expandir"
                ng-class="{'right-button': item.mostrarBotoes,
-                          'right-button-hide': item.expandir}"></i>            
+                          'right-button-hide': item.expandir}"></i>            -->
         </div>
     </div>
     <div class='more-info col-lg-12' ng-show='item.expandir'>
-        <div class='col-lg-3'>
-            <div class='form-group'>
-                <label>Comprovante</label>
-                <input class='form-control  m-input' type='file' ng-model="item.comprovante">
+        <form novalidate name="formPagar">
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Comprovante</label>
+                    <input class='form-control  m-input' name="comprovante"
+                           type='file' required ng-model="item.comprovante">
+                    <erro ng-show="formPagar.comprovante.$error.required && formPagar.comprovante.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
             </div>
-        </div>
-        <div class='col-lg-3'>
-            <div class='form-group'>
-                <label>Banco</label>
-                <select class='form-control m-input' placeholder="Banco" ng-model="item.banco">
-                    <option selected>Selecione</option>
-                </select>
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Banco</label>
+                    <select class='form-control m-input' name="banco"
+                            required placeholder="Banco" ng-model="item.banco">
+                        <option selected>Selecione</option>
+                    </select>
+                    <erro ng-show="formPagar.banco.$error.required && formPagar.banco.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
             </div>
-        </div>
-        <div class='col-lg-3'>
-            <div class='form-group'>
-                <label>Descontos</label>
-                <input class="form-control m-input" required type="number" placeholder="Descontos" ng-model="item.descontos">
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Descontos</label>
+                    <input class="form-control m-input" 
+                           required 
+                           type="number"
+                           placeholder="Descontos" 
+                           ng-model="item.descontos"
+                           name="descontos">
+                    <erro ng-show="formPagar.descontos.$error.required && formPagar.descontos.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
             </div>
-        </div>
-        <div class='col-lg-3'>
-            <div class='form-group'>
-                <label>Juros</label>
-                <input class="form-control m-input" placeholder="Juros" required type="number" ng-model="item.juros">
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Juros</label>
+                    <input class="form-control m-input" 
+                           placeholder="Juros" 
+                           required 
+                           type="number" 
+                           ng-model="item.juros"
+                           name="juros">
+                    <erro ng-show="formPagar.juros.$error.required && formPagar.juros.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 
 <div ng-hide="itens.length">
     <center>Não há contas</center>
 </div>
-
 
 <div class="modal fade" id="editar">
     <div class="modal-dialog  modal-lg">
