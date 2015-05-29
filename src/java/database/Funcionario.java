@@ -89,23 +89,9 @@ public class Funcionario {
             ps.setString(7, f.getRg());
 
             //Endereço
-            int enderecoID;
-            int x = enderecoExiste(f.getEndereco());
-            if (x == 0) {
-                //Endereço ñ existe
-                database.Endereco endereco = new Endereco();
-                enderecoID = endereco.insere(f.getEndereco());
-                ps.setInt(8, enderecoID);
-            } else {
-                ps.setInt(8, x);
-            }
-
-            //FUNCIONA
-            /*
             database.Endereco endereco = new Endereco();
             int enderecoID = endereco.insere(f.getEndereco());
             ps.setInt(8, enderecoID);
-            */
             
             int status = ps.executeUpdate();
 
@@ -228,23 +214,10 @@ public class Funcionario {
             ps.setString(6, f.getCpf());
             ps.setString(7, f.getRg());
             
-            //FUNCIONA
-            /*
+            //Endereço
             database.Endereco endereco = new Endereco();
             int enderecoID = endereco.insere(f.getEndereco());
             ps.setInt(8, enderecoID);
-            */
-            int enderecoID;
-            int x = enderecoExiste(f.getEndereco());
-            if (x == 0) {
-                //Endereço ñ existe. Salvar novo Endereço
-                database.Endereco endereco = new Endereco();
-                enderecoID = endereco.insere(f.getEndereco());
-                ps.setInt(8, enderecoID);
-            } else {
-                //Endereço existe. Não salvar novo Endereço
-                ps.setInt(8, x);
-            }
 
             ps.setInt(9, f.getId());
 
@@ -268,39 +241,6 @@ public class Funcionario {
             return false;
         } finally {
             Conexao.fecharConexao(con);
-        }
-    }
-
-    private int enderecoExiste(contratos.Endereco e) {
-        
-        try {
-            //abrir();
-            conEndereco = Conexao.abrirConexao();
-            
-            String sql = "SELECT * FROM ENDERECO E "
-                    + "WHERE rua = ? AND bairro = ? AND numero = ? AND cidade = ? AND estado = ? AND pais = ?;";
-
-            PreparedStatement psE = conEndereco.prepareStatement(sql);
-            psE.setString(1, e.getRua());
-            psE.setString(2, e.getBairro());
-            psE.setString(3, e.getNumero());
-            psE.setString(4, e.getCidade());
-            psE.setString(5, e.getEstado());
-            psE.setString(6, e.getPais());
-
-            ResultSet rs = psE.executeQuery();
-            rs.next();
-            if (rs != null) {
-                int x = rs.getInt("id");
-                return x;
-            }
-            return 0;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return 0;
-        } finally {
-            Conexao.fecharConexao(conEndereco);
         }
     }
 

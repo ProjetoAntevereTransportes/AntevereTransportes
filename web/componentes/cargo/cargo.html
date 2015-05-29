@@ -1,4 +1,4 @@
-<h3 class="text-center">Gerenciamento de Cargos</h3>
+
 <div class="col-lg-12 z1 card">
 
     <table class="table">
@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in itens">
+            <tr ng-repeat="item in itens | filter:search">
                 <td>{{item.nome}}</td>
                 <td>{{item.descricao}}</td>
                 <td>
@@ -46,16 +46,21 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input tabindex=1 name="nome" type="text" ng-model="novo.nome" placeholder="Nome" required
-                                       ng-minlength="5" ng-maxlength="30" maxlength="30" class="form-control m-input" >
+                                <input tabindex=1 
+                                       name="nome" 
+                                       type="text"
+                                       ng-model="novo.nome"
+                                       placeholder="Nome"
+                                       required
+                                       ng-minlength="5" 
+                                       ng-maxlength="30" 
+                                       maxlength="30" 
+                                       class="form-control m-input" >
 
-                                <erro ng-show="cargoform.nome.$error.required && cargoform.nome.$touched">
-                                    Insira um nome
+                                <erro ng-show="cargoform.nome.$error.minlength || cargoform.nome.$error.maxlength 
+                                            || cargoform.nome.$error.required && cargoform.nome.$touched">
+                                    Insira um nome com no mínimo 5 e no máximo 30 caracteres
                                 </erro>
-                                <erro ng-show="cargoform.nome.$error.minlength || cargoform.nome.$error.maxlength">
-                                    Verifique se o nome respeita o padrão de no mínimo 5 caracteres e no máximo 30 caracteres
-                                </erro>
-
                             </div>
                         </div>
 
@@ -66,12 +71,10 @@
                                 <input tabindex=2 name="descricao" type="text" ng-model="novo.descricao" required
                                        ng-minlength="5" ng-maxlength="150" maxlength="150" placeholder="Descrição" class="form-control m-input">
 
-                                <erro ng-show="cargoform.descricao.$error.required && cargoform.descricao.$touched">
-                                    Insira uma descrição
+                                <erro ng-show="cargoform.descricao.$error.minlength || cargoform.descricao.$error.maxlength
+                                      || cargoform.descricao.$error.required && cargoform.descricao.$touched">
+                                    Insira uma descrição com no mínimo 5 e no máximo 150 caracteres
                                 </erro>
-                                <erro ng-show="cargoform.descricao.$error.minlength || cargoform.descricao.$error.maxlength">
-                                    Verifique se a descrição respeita o padrão de no mínimo 5 caracteres e no máximo 150 caracteres
-                                </erro>                                
                             </div>
                         </div>
                     </form>
