@@ -82,10 +82,10 @@
                                 text: "Sim",
                                 f: function (i) {
                                     cargoService.excluir(function () {
+                                        $scope.carregarCargos();
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
-                                    $scope.carregarCargos();
                                 },
                                 parameter: item
                             },
@@ -189,6 +189,7 @@
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
+                                //$scope.carregarCargos();
                             }
                             else {
                                 erro(resultado.mensagem);

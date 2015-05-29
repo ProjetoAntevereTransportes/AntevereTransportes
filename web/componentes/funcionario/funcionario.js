@@ -82,13 +82,14 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
+                $scope.carregarCargos();
                 $scope.novo = item;
             };
 
             $scope.editarSalvar = function (item) {
                 funcionarioService.editar(function () {
                     $("#add").modal().modal("hide");
-
+                    $scope.carregarFuncionarios();
                 }, function () {
                 }, null, item);
             };
@@ -102,8 +103,9 @@
                                 text: "Sim",
                                 f: function (i) {
                                     funcionarioService.excluir(function () {
+                                        $scope.carregarFuncionarios();
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
                                 },
                                 parameter: item

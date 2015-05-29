@@ -21,6 +21,7 @@ import java.util.logging.Logger;
 public class Funcionario {
 
     public static Connection con;
+    public static Connection conEndereco;
 
     private void abrir() {
         con = Conexao.abrirConexao();
@@ -74,13 +75,11 @@ public class Funcionario {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "INSERT INTO funcionario (NOME, SOBRENOME, TELEFONE, EMAIL, CARGO_iD, CPF, RG, ENDERECO_ID) "
+            String sql = "INSERT INTO funcionario (NOME, SOBRENOME, TELEFONE, EMAIL, CARGO_ID, CPF, RG, ENDERECO_ID) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
-            database.Endereco endereco = new Endereco();
-            int enderecoID = endereco.insere(f.getEndereco());
-
             PreparedStatement ps = con.prepareStatement(sql);
+
             ps.setString(1, f.getNome());
             ps.setString(2, f.getSobrenome());
             ps.setString(3, f.getTelefone());
@@ -88,22 +87,27 @@ public class Funcionario {
             ps.setInt(5, f.getCargo().getId());//cargo
             ps.setString(6, f.getCpf());
             ps.setString(7, f.getRg());
-            ps.setInt(8, enderecoID);
 
+            //Endereço
+            int enderecoID;
+            int x = enderecoExiste(f.getEndereco());
+            if (x == 0) {
+                //Endereço ñ existe. Salvar novo Endereço
+                database.Endereco endereco = new Endereco();
+                enderecoID = endereco.insere(f.getEndereco());
+                ps.setInt(8, enderecoID);
+            } else {
+                //Endereço existe. Não salvar novo Endereço
+                ps.setInt(8, x);
+            }
+
+            //FUNCIONA
             /*
-             //Endereço
-             int enderecoID = 0;
-             int x = enderecoExiste(f.getEndereco());
-             if (x == 0) {
-             //Endereço ñ existe. Salvar novo Endereço
-             database.Endereco endereco = new Endereco();
-             enderecoID = endereco.insere(f.getEndereco());
-             ps.setInt(8, enderecoID);
-             } else {
-             //Endereço existe. Não salvar novo Endereço
-             ps.setInt(8, x);
-             }
-             */
+            database.Endereco endereco = new Endereco();
+            int enderecoID = endereco.insere(f.getEndereco());
+            ps.setInt(8, enderecoID);
+            */
+            
             int status = ps.executeUpdate();
 
             if (status != 1) {
@@ -112,7 +116,7 @@ public class Funcionario {
             } else {
                 con.commit();
                 return true;
-            }            
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -131,26 +135,26 @@ public class Funcionario {
     public List<contratos.Funcionario> listar() {
         try {
             abrir();
-            String sql = "SELECT * FROM funcionario WHERE id = ?;";
+            String sql = "SELECT * FROM funcionario;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
             ResultSet rs = ps.executeQuery();
 
             List<contratos.Funcionario> fs = new ArrayList<>();
-
+            
             while (rs.next()) {
                 //Funcionario
                 contratos.Funcionario f = new contratos.Funcionario();
-                f.setId(rs.getInt("f.id"));
-                f.setNome(rs.getString("f.nome"));
-                f.setSobrenome(rs.getString("f.sobrenome"));
-                f.setTelefone(rs.getString("f.telefone"));
-                f.setEmail(rs.getString("f.email"));
-                f.setCargo_id(rs.getInt("f.cargo_id"));
-                f.setCpf(rs.getString("f.cpf"));
-                f.setRg(rs.getString("f.rg"));
-                f.setEndereco_id(rs.getInt("f.endereco_id"));
+                f.setId(rs.getInt("id"));
+                f.setNome(rs.getString("nome"));
+                f.setSobrenome(rs.getString("sobrenome"));
+                f.setTelefone(rs.getString("telefone"));
+                f.setEmail(rs.getString("email"));
+                f.setCargo_id(rs.getInt("cargo_id"));
+                f.setCpf(rs.getString("cpf"));
+                f.setRg(rs.getString("rg"));
+                f.setEndereco_id(rs.getInt("endereco_id"));
 
                 //Endereço
                 database.Endereco endereco = new Endereco();
@@ -213,8 +217,6 @@ public class Funcionario {
             abrir();
             con.setAutoCommit(false);
 
-            int enderecoID = 0;
-
             String sql = "UPDATE FUNCIONARIO SET nome = ?, sobrenome = ?, telefone = ?, email = ?, cargo_id = ?, "
                     + "cpf = ?, rg = ?, endereco_id = ? WHERE id = ?;";
 
@@ -223,10 +225,17 @@ public class Funcionario {
             ps.setString(2, f.getSobrenome());
             ps.setString(3, f.getTelefone());
             ps.setString(4, f.getEmail());
-            ps.setInt(5, f.getCargo_id());
+            ps.setInt(5, f.getCargo().getId());
             ps.setString(6, f.getCpf());
             ps.setString(7, f.getRg());
-
+            
+            //FUNCIONA
+            /*
+            database.Endereco endereco = new Endereco();
+            int enderecoID = endereco.insere(f.getEndereco());
+            ps.setInt(8, enderecoID);
+            */
+            int enderecoID;
             int x = enderecoExiste(f.getEndereco());
             if (x == 0) {
                 //Endereço ñ existe. Salvar novo Endereço
@@ -264,23 +273,27 @@ public class Funcionario {
     }
 
     private int enderecoExiste(contratos.Endereco e) {
+        
         try {
-            abrir();
+            //abrir();
+            conEndereco = Conexao.abrirConexao();
+            
             String sql = "SELECT * FROM ENDERECO E "
                     + "WHERE rua = ? AND bairro = ? AND numero = ? AND cidade = ? AND estado = ? AND pais = ?;";
 
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, e.getRua());
-            ps.setString(2, e.getBairro());
-            ps.setString(3, e.getNumero());
-            ps.setString(4, e.getCidade());
-            ps.setString(5, e.getEstado());
-            ps.setString(6, e.getPais());
+            PreparedStatement psE = conEndereco.prepareStatement(sql);
+            psE.setString(1, e.getRua());
+            psE.setString(2, e.getBairro());
+            psE.setString(3, e.getNumero());
+            psE.setString(4, e.getCidade());
+            psE.setString(5, e.getEstado());
+            psE.setString(6, e.getPais());
 
-            ResultSet rs = ps.executeQuery();
-
+            ResultSet rs = psE.executeQuery();
+            rs.next();
             if (rs != null) {
-                return rs.getInt("id");
+                int x = rs.getInt("id");
+                return x;
             }
             return 0;
 
@@ -288,7 +301,7 @@ public class Funcionario {
             ex.printStackTrace();
             return 0;
         } finally {
-            Conexao.fecharConexao(con);
+            Conexao.fecharConexao(conEndereco);
         }
     }
 
