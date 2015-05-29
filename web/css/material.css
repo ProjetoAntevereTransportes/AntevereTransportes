@@ -130,3 +130,56 @@ input.form-control.ng-valid.ng-touched {
 .titulo{
     color: #fff !important;
 }
+
+table thead{
+    font-size: 12px;
+    font-family: Roboto;
+    color: rgb(121, 121, 121);
+    border: none !important;
+}
+
+table thead tr{
+    height: 56px;
+    border-bottom: 1px solid rgb(227, 227, 227);
+}
+
+table thead tr th{
+    border: none !important;
+    padding-bottom: 15px !important;
+}
+
+table tbody{
+    font-size: 13px;
+    font-family: Roboto;
+    color: rgb(42, 42, 42);
+    font-weight: 400;
+}
+
+table tbody tr{
+    height: 48px;
+    border-bottom: 1px solid rgb(227, 227, 227);
+}
+
+table tbody tr td{
+    padding-top: 15px !important;
+}
+
+th.numero td{
+    text-align: end;
+}
+
+table tbody tr:hover{
+    background-color: #EEEEEE;
+}
+
+table tbody tr.selected{
+    background-color: #F5F5F5;
+}
+
+table tbody td:last-child{
+    text-align: end;
+}
+
+table tbody td:last-child button{
+    padding-right: 10px;
+}
