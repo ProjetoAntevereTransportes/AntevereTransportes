@@ -1,4 +1,4 @@
-<h3 class="text-center">Gerenciamento de Funcionários</h3>
+
 <div class="col-lg-12 z1 card">
 
     <table class="table">
@@ -10,19 +10,17 @@
                 <th>Email</th>
                 <th>Cargo</th>
                 <th>CPF</th>
-                <th>RG</th>
                 <th width="100px"></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in itens">
+            <tr ng-repeat="item in itens | filter:search">
                 <td>{{item.nome}}</td>
                 <td>{{item.sobrenome}}</td>
                 <td>{{item.telefone}}</td>
                 <td>{{item.email}}</td>
                 <td>{{item.cargo.nome}}</td>
                 <td>{{item.cpf}}</td>
-                <td>{{item.rg}}</td>
                 <td>
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
@@ -57,14 +55,10 @@
                                 <label>Nome</label>
                                 <input tabindex="1" ng-model="novo.nome" placeholder="Nome" name="nome" 
                                        type="text" ng-minlength="2" ng-maxlength="30" maxlength="30" class="form-control m-input" required>
-
-                                <erro ng-show="funcionarioform.nome.$error.required && funcionarioform.nome.$touched">
-                                    Insira um nome
+                                <erro ng-show="funcionarioform.nome.$error.minlength || funcionarioform.nome.$error.maxlength
+                                                        || funcionarioform.nome.$error.required && funcionarioform.nome.$touched">
+                                    Insira um nome com no mínimo 2 e no máximo 30 caracteres
                                 </erro>
-                                <erro ng-show="funcionarioform.nome.$error.minlength || funcionarioform.nome.$error.maxlength">
-                                    Verifique se o nome respeita o padrão de no mínimo 2 caracteres e no máximo 30 caracteres
-                                </erro>
-
                             </div>
                         </div>
 
@@ -74,12 +68,9 @@
                                 <label>Sobrenome</label>
                                 <input tabindex="2" ng-model="novo.sobrenome" placeholder="Sobrenome" name="sobrenome"
                                        type="text" ng-minlength="3" ng-maxlength="30" maxlength="30" class="form-control m-input" required>
-
-                                <erro ng-show="funcionarioform.sobrenome.$error.required && funcionarioform.sobrenome.$touched">
-                                    Insira um sobrenome
-                                </erro>
-                                <erro ng-show="funcionarioform.sobrenome.minlength || funcionarioform.sobrenome.$error.maxlength">
-                                    Verifique se o sobrenome respeita o padrão de no mínimo 3 caracteres e no máximo 30 caracteres
+                                <erro ng-show="funcionarioform.sobrenome.minlength || funcionarioform.sobrenome.$error.maxlength
+                                                        || funcionarioform.sobrenome.$error.required && funcionarioform.sobrenome.$touched">
+                                    Insira um sobrenome com no mínimo 3 e no máximo 30 caracteres
                                 </erro>
 
                             </div>
@@ -95,11 +86,9 @@
                                         <label>Telefone</label>
                                         <input tabindex="3" name="telefone" required ng-model="novo.telefone" placeholder="Telefone" 
                                                type="text" ng-minlength="8" ng-maxlength="15" maxlength="15" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.telefone.$error.required && funcionarioform.telefone.$touched">
-                                            Insira um telefone
-                                        </erro>
-                                        <erro ng-show="funcionarioform.telefone.minlength || funcionarioform.telefone.$error.maxlength">
-                                            Verifique se o telefone respeita o padrão de no mínimo 8 caracteres e no máximo 15 caracteres
+                                        <erro ng-show="funcionarioform.telefone.minlength || funcionarioform.telefone.$error.maxlength
+                                                                || funcionarioform.telefone.$error.required && funcionarioform.telefone.$touched">
+                                            Insira um telefone com no mínimo 8 e no máximo 15 caracteres
                                         </erro>
                                     </div>
                                 </div>
@@ -110,14 +99,10 @@
                                         <label>E-mail</label>
                                         <input tabindex="4" name="email" ng-model="novo.email" required
                                                placeholder="E-mail" ng-minlength="8" ng-maxlength="50" maxlength="50" type="email" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.email.$error.required && funcionarioform.email.$touched">
-                                            Insira um e-mail
-                                        </erro>
-                                        <erro ng-show="funcionarioform.email.$error.email && funcionarioform.email.$touched">
-                                            Insira um e-mail válido
-                                        </erro>
-                                        <erro ng-show="funcionarioform.email.minlength || funcionarioform.email.$error.maxlength">
-                                            Verifique se o e-mail respeita o padrão de no mínimo 8 caracteres e no máximo 50 caracteres
+                                        <erro ng-show="funcionarioform.email.minlength || funcionarioform.email.$error.maxlength
+                                                                || funcionarioform.email.$error.email && funcionarioform.email.$touched
+                                                                || funcionarioform.email.$error.required && funcionarioform.email.$touched">
+                                            Insira um e-mail válido com no mínimo 8 e no máximo 50 caracteres 
                                         </erro>                                        
                                     </div>
                                 </div>
@@ -134,12 +119,8 @@
                                         {{c.nome}}
                                     </option>
                                 </select>
-                                <!--
-                                <input tabindex=5 name="cargo" required ng-model="novo.cargo.nome" placeholder="Cargo"  type="text" 
-                                       ng-minlength="1" ng-maxlength="11" maxlength="11" class="form-control m-input">
-                                -->
                                 <erro ng-show="funcionarioform.cargo.$error.required && funcionarioform.cargo.$touched">
-                                    Insira um cargo
+                                    Selecione um cargo
                                 </erro>
                             </div>
                         </div>                        
@@ -150,12 +131,9 @@
                                 <label>Rua</label>
                                 <input tabindex=6 name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text"
                                        ng-minlength="1" ng-maxlength="30" maxlength="30" class="form-control m-input">
-                                <erro ng-show="funcionarioform.rua.$error.required &&
-                                                funcionarioform.rua.$touched">
-                                    Insira uma rua
-                                </erro>
-                                <erro ng-show="funcionarioform.rua.minlength || funcionarioform.rua.$error.maxlength">
-                                    Verifique se a rua respeita o padrão de no mínimo 1 caractere e no máximo 30 caracteres
+                                <erro ng-show="funcionarioform.rua.minlength || funcionarioform.rua.$error.maxlength
+                                                        || funcionarioform.rua.$error.required && funcionarioform.rua.$touched">
+                                    Insira uma rua com no mínimo 1 e no máximo 30 caracteres 
                                 </erro>                                 
                             </div>
                         </div>
@@ -169,12 +147,9 @@
                                         <label>Cidade</label>
                                         <input tabindex=7 name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade" 
                                                ng-minlength="3" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.cidade.$error.required &&
-                                                        funcionarioform.cidade.$touched">
-                                            Insira uma cidade
-                                        </erro>
-                                        <erro ng-show="funcionarioform.cidade.minlength || funcionarioform.cidade.$error.maxlength">
-                                            Verifique se a cidade respeita o padrão de no mínimo 3 caracteres e no máximo 30 caracteres
+                                        <erro ng-show="funcionarioform.cidade.minlength || funcionarioform.cidade.$error.maxlength
+                                                                || funcionarioform.cidade.$error.required && funcionarioform.cidade.$touched">
+                                            Insira uma cidade com no mínimo 3 e no máximo 30 caracteres
                                         </erro> 
                                     </div>
                                 </div>
@@ -185,11 +160,9 @@
                                         <label>Bairro</label>
                                         <input tabindex=8 name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro" 
                                                ng-minlength="3" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.bairro.$error.required && funcionarioform.bairro.$touched">
-                                            Insira um bairro
-                                        </erro>
-                                        <erro ng-show="funcionarioform.bairro.minlength || funcionarioform.bairro.$error.maxlength">
-                                            Verifique se o bairro respeita o padrão de no mínimo 3 caracteres e no máximo 30 caracteres
+                                        <erro ng-show="funcionarioform.bairro.minlength || funcionarioform.bairro.$error.maxlength
+                                                                || funcionarioform.bairro.$error.required && funcionarioform.bairro.$touched">
+                                            Insira um bairro com no mínimo 3 e no máximo 30 caracteres
                                         </erro> 
                                     </div>
                                 </div>
@@ -205,11 +178,9 @@
                                         <label>Número</label>
                                         <input tabindex=9 name="numero" required ng-model="novo.endereco.numero" placeholder="Numero" 
                                                ng-minlength="1" ng-maxlength="10" maxlength="10" type="text" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.numero.$error.required && funcionarioform.numero.$touched">
-                                            Insira um número
-                                        </erro>
-                                        <erro ng-show="funcionarioform.numero.minlength || funcionarioform.numero.$error.maxlength">
-                                            Verifique se o número respeita o padrão de no mínimo 1 caractere e no máximo 10 caracteres
+                                        <erro ng-show="funcionarioform.numero.minlength || funcionarioform.numero.$error.maxlength
+                                                                || funcionarioform.numero.$error.required && funcionarioform.numero.$touched">
+                                            Insira um bairro com no mínimo 1 e no máximo 10 caracteres
                                         </erro>
                                     </div>
                                 </div>
@@ -217,49 +188,12 @@
                                 <!-- Estado -->
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label>Estado</label>                                        
-                                        <select tabindex=10 name="estado" required ng-model="novo.endereco.estado" placeholder="Estado" type="text" class="form-control m-input">
-                                            <option value=""></option>
-                                            <option value="AC">Acre</option>
-                                            <option value="AL">Alagoas</option>
-                                            <option value="AP">Amapá</option>
-                                            <option value="AM">Amazonas</option>
-                                            <option value="BA">Bahia</option>
-                                            <option value="CE">Ceará</option>
-                                            <option value="DF">Distrito Federal</option>
-                                            <option value="ES">Espírito Santo</option>
-                                            <option value="GO">Goiás</option>
-                                            <option value="MA">Maranhão</option>
-                                            <option value="MT">Mato Grosso</option>
-                                            <option value="MS">Mato Grosso do Sul</option>
-                                            <option value="MG">Minas Gerais</option>
-                                            <option value="PA">Pará</option>
-                                            <option value="PB">Paraíba</option>
-                                            <option value="PR">Paraná</option>
-                                            <option value="PE">Pernambuco</option>
-                                            <option value="PI">Piauí</option>
-                                            <option value="RJ">Rio de Janeiro</option>
-                                            <option value="RN">Rio Grande do Norte</option>
-                                            <option value="RS">Rio Grande do Sul</option>
-                                            <option value="RO">Rondônia</option>
-                                            <option value="RR">Roraima</option>
-                                            <option value="SC">Santa Catarina</option>
-                                            <option value="SP">São Paulo</option>
-                                            <option value="SE">Sergipe</option>
-                                            <option value="TO">Tocantins</option>
-                                        </select>
-                                        <!--
-                                        <input name="estado" required ng-model="novo.endereco.estado" placeholder="Estado" type="text" 
-                                            ng-minlength="2" ng-maxlength="30" maxlength="30" class="form-control m-input">
-                                        -->
-                                        <erro ng-show="funcionarioform.estado.$error.required && funcionarioform.estado.$touched">
-                                            Insira um estado
-                                        </erro>
-                                        <!--
-                                        <erro ng-show="funcionarioform.estado.minlength || funcionarioform.estado.$error.maxlength">
-                                            Verifique se o estado respeita o padrão de no mínimo 2 caracteres e no máximo 30 caracteres
-                                        </erro>
-                                        -->
+                                        <label>Estado</label>
+                                        <input tabindex=10 name="estado" required ng-model="novo.endereco.estado" placeholder="Estado"  type="text" 
+                                               ng-minlength="2" ng-maxlength="30" maxlength="30" class="form-control m-input" >
+                                        <erro ng-show="funcionarioform.estado.$error.minlength || funcionarioform.estado.$error.maxlength || funcionarioform.estado.$error.required && funcionarioform.estado.$touched">
+                                            Insira um estado com no mínimo 2 caracteres e máximo 30 caracteres
+                                        </erro> 
                                     </div>
                                 </div>
 
@@ -268,13 +202,10 @@
                                     <div class="form-group">
                                         <label>País</label>
                                         <input tabindex=11 name="pais" required ng-model="novo.endereco.pais" placeholder="País" 
-                                               ng-minlength="4" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.pais.$error.required &&
-                                                        funcionarioform.pais.$touched">
-                                            Insira um pais
-                                        </erro>
-                                        <erro ng-show="funcionarioform.pais.minlength || funcionarioform.pais.$error.maxlength">
-                                            Verifique se o pais respeita o padrão de no mínimo 4 caracteres e no máximo 30 caracteres
+                                               ng-minlength="3" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
+                                        <erro ng-show="funcionarioform.pais.minlength || funcionarioform.pais.$error.maxlength
+                                                                || funcionarioform.pais.$error.required && funcionarioform.pais.$touched">
+                                            Insira um pais com no mínimo 3 e no máximo 30 caracteres
                                         </erro>
                                     </div>
                                 </div>
@@ -290,11 +221,9 @@
                                         <label>RG</label>
                                         <input tabindex=12 ng-model="novo.rg" placeholder="RG" name="rg" type="text"
                                                ng-minlength="9" ng-maxlength="12" maxlength="12" class="form-control m-input" required>
-                                        <erro ng-show="funcionarioform.rg.$error.required && funcionarioform.rg.$touched">
-                                            Insira um RG
-                                        </erro>
-                                        <erro ng-show="funcionarioform.rg.minlength || funcionarioform.rg.$error.maxlength">
-                                            Verifique se o RG respeita o padrão de no mínimo 9 caracteres e no máximo 12 caracteres
+                                        <erro ng-show="funcionarioform.rg.minlength || funcionarioform.rg.$error.maxlength
+                                                                || funcionarioform.rg.$error.required && funcionarioform.rg.$touched">
+                                            Insira um RG com no mínimo 9 e no máximo 12 caracteres
                                         </erro>                                        
                                     </div>
                                 </div>
@@ -303,14 +232,19 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>CPF</label>
-                                        <input tabindex=13 name="cpf" required ng-model="novo.cpf" placeholder="CPF"  type="text" 
-                                               ng-minlength="11" ng-maxlength="11" maxlength="11" class="form-control m-input">
-                                        <erro ng-show="funcionarioform.cpf.$error.required && funcionarioform.cpf.$touched">
-                                            Insira um CPF
-                                        </erro>
-                                        <erro ng-show="funcionarioform.cpf.minlength || funcionarioform.cpf.$error.maxlength">
-                                            Verifique se o CPF contêm exatamente 11 caracteres
-                                        </erro>
+                                        <input tabindex=13 
+                                               name="cpf"
+                                               id ="cpf"
+                                               required 
+                                               ng-model="modal.item.cpf" 
+                                               placeholder="CPF"
+                                               type="text" 
+                                               ng-change="validaCPF(modal.item.cpf)"
+                                               class="form-control m-input"
+                                               ng-minlength="11" ng-maxlength="11" maxlength="11">
+                                        <erro ng-show="(!validaCPF(modal.item.cpf) || funcionarioform.cpf.$error.required) && funcionarioform.cpf.$touched">
+                                            Insira um CPF válido
+                                        </erro>                                       
                                     </div>
                                 </div>
 

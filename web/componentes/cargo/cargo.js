@@ -1,8 +1,8 @@
 (function () {
     var app = angular.module("cargo", []);
 
-    app.controller("cargoController", ["cargoService", "$scope", "notifyService",
-        function (cargoService, $scope, notifyService) {
+    app.controller("cargoController", ["cargoService", "$scope", "notifyService", "pesquisaService",
+        function (cargoService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
@@ -18,6 +18,9 @@
                     return $(i).val() == "";
                 }).length != 0;
             };
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
             $scope.inserir = function (novo) {
                 cargoService.inserir(function () {
@@ -82,10 +85,10 @@
                                 text: "Sim",
                                 f: function (i) {
                                     cargoService.excluir(function () {
+                                        $scope.carregarCargos();
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
-                                    $scope.carregarCargos();
                                 },
                                 parameter: item
                             },
@@ -189,6 +192,7 @@
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
+                                //$scope.carregarCargos();
                             }
                             else {
                                 erro(resultado.mensagem);
