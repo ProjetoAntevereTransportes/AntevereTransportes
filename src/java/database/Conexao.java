@@ -4,7 +4,7 @@ import java.sql.*;
  * @author FELIPE
  */
 public class Conexao {
-    public static String database = "anteveretransportes2";
+    public static String database = "anteveretransportes";
     
     public static Connection abrirConexao() {
         Connection con = null;

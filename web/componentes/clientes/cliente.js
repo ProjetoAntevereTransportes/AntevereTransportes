@@ -198,10 +198,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("INSERIR", data),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        })
+                $http.post(server + "/Cliente", this.formatar("INSERIR", data))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -233,8 +230,7 @@
                 });
 
                 var server = "/AntevereTransportes";
-                $http.post(server + "/Cliente", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                $http.post(server + "/Cliente", this.formatar("LERVARIOS", null))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -258,11 +254,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("REMOVER", clienteID),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-                        })
+                $http.post(server + "/Cliente", this.formatar("REMOVER", clienteID))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -291,8 +283,7 @@
 
             this.listarStatus = function (sucesso, erro, sempre) {
                 var server = "/AntevereTransportes";
-                $http.post(server + "/StatusCliente", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                $http.post(server + "/StatusCliente", this.formatar("LERVARIOS", null))
                         .success(function (resultado) {
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
@@ -318,10 +309,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("EDITAR", item),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).success(function (resultado) {
+                $http.post(server + "/Cliente", this.formatar("EDITAR", item)).success(function (resultado) {
                     notifyService.remove(id);
                     if (resultado.sucesso) {
                         sucesso(resultado.resultado);
