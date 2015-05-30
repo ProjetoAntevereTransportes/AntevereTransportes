@@ -96,6 +96,29 @@
 
 
             };
+            
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#senha").hide();
+                $("#salvar").hide();
+                $scope.listarStatus();
+                $scope.listarPergunta();
+                $scope.listarTipos();
+            };
+            
+            $scope.fechar = function(item){
+               $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#senha").show();
+                $("#salvar").show();  
+            }
 
             $scope.editarSalvar = function (item) {
                 usuarioService.editar(function () {

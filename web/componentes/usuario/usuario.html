@@ -17,6 +17,9 @@
                 <td>{{item.tipoUsuarioNome}}</td>
                 <td>{{item.statusNome}}</td>             
                 <td>
+                    <button class="m-button" ng-click="consultar(item)">
+                        <i class="glyphicon glyphicon-search" style="color: blue"></i>
+                    </button>
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
                     </button>
@@ -73,10 +76,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" id="senha">
                             <div class="form-group">
                                 <label>Senha</label>
-                                <input name="senha" required ng-model="modal.item.senha" placeholder="senha" 
+                                <input name="senha"  required ng-model="modal.item.senha" placeholder="senha" 
                                        type="password" class="form-control m-input">
                                 <erro ng-show="usuarioform.senha.$error.required && usuarioform.senha.$touched">
                                     Insira uma Senha 
@@ -143,8 +146,8 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-default m-button-flat"
-                        data-dismiss="modal">Fechar</button>
-                <button type="button"
+                        data-dismiss="modal" ng-click="fechar(modal.item)">Fechar</button>
+                <button type="button" id="salvar"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
                         ng-disabled="formularioValido()">
@@ -154,5 +157,4 @@
         </div>
     </div>
 </div>
-
 <fab></fab>
