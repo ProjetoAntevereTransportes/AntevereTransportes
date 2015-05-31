@@ -6,17 +6,20 @@
                 <th class="col-lg-2">Numero</th>                
                 <th class="col-lg-4">Conta Bancaria</th>
                 <th class="col-lg-2">Pessoa</th>
-                <th class="col-lg-4">Banco</th>
-                <th width="100px"></th>
+                <th style="width: 150px" class="col-lg-4">Banco</th>
+                <th style="width: 150px"></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in itens | filter:search">
+            <tr ng-repeat="item in itens| filter:search">
                 <td>{{item.numero}}</td>
                 <td>{{item.nome}}</td>
                 <td>{{item.pessoa_nome}}</td>
-                <td>{{item.banco.nome}}</td>
+                <td>{{item.banco_nome}}</td>
                 <td>
+                     <button class="m-button" ng-click="consultar(item)">
+                        <i class="glyphicon glyphicon-search" style="color: blue"></i>
+                    </button>     
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
                     </button>
@@ -41,11 +44,11 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <form novalidate class="m-form" name="conta_bancariaform">
+                    <form novalidate class="m-form" name="conta_bancariaform" id="form">
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Número</label>
-                                <input tabindex=1 name="numero" required ng-model="novo.numero" placeholder="Número"  type="text" 
+                                <input tabindex=1 name="numero" required ng-model="modal.item.numero" placeholder="Número"  type="text" 
                                        ng-minlength="2" ng-maxlength="20" maxlength="20" class="form-control m-input"
                                        Pattern="[1-9]{2,20}" >
                                 <erro ng-show="conta_bancariaform.numero.$error.minlength || conta_bancariaform.numero.$error.maxlength
@@ -56,8 +59,20 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
+                                <label>Agência</label>
+                                <input tabindex=2 name="agencia" required ng-model="modal.item.agencia" placeholder="agencia"  type="text" 
+                                       ng-minlength="2" ng-maxlength="20" maxlength="20" class="form-control m-input"
+                                       Pattern="[1-9]{2,20}" >
+                                <erro ng-show="conta_bancariaform.agencia.$error.minlength || conta_bancariaform.agencia.$error.maxlength
+                                                        || conta_bancariaform.agencia.$error.required && conta_bancariaform.agencia.$touched">
+                                    Insira uma agencia com no mínimo 2 e no máximo 20 caracteres
+                                </erro>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
                                 <label>Conta Bancaria</label>
-                                <input tabindex=2 ng-model="novo.nome" placeholder="Nome" name="nome" type="text" class="form-control m-input"
+                                <input tabindex=3 ng-model="modal.item.nome" placeholder="Nome" name="nome" type="text" class="form-control m-input"
                                        ng-minlength="2" ng-maxlength="20" maxlength="20" required>
                                 <erro ng-show="conta_bancariaform.nome.$error.minlength || conta_bancariaform.nome.$error.maxlength
                                                         || conta_bancariaform.nome.$error.required && conta_bancariaform.nome.$touched">
@@ -68,11 +83,8 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Pessoa</label>
-                                <select tabindex=3 name="pessoa_id" required ng-model="novo.pessoa_id" placeholder="Tipo de Pessoa" 
-                                         class="form-control m-input">
-                                    <option value=""></option>
-                                    <option value="1">Física</option>
-                                    <option value="2">Jurídica</option>
+                                <select tabindex=4 class='form-control m-input' placeholder="Pessoa" ng-model="modal.item.pessoa_id">
+                                    <option ng-repeat="f in pessoas" required value="{{f.id}}">{{f.nome}}</option>
                                 </select>
                                 <erro ng-show="conta_bancariaform.pessoa_id.$error.required && conta_bancariaform.pessoa_id.$touched">
                                     Selecione uma Pessoa
@@ -83,8 +95,10 @@
                             <div class="form-group">
                                 <label>Banco</label>
                                 <!-- novo.banco.id -->
-                                <input tabindex=4 ng-model="novo.banco_id" placeholder="Banco" name="banco_id" 
-                                       type="text" class="form-control m-input" required>
+                                <select tabindex=5 class='form-control m-input' placeholder="Banco" ng-model="modal.item.banco_id">
+                                    <option ng-repeat="f in bancos" required value="{{f.id}}">{{f.nome}}</option>
+                                </select>
+
                                 <erro ng-show="conta_bancariaform.banco_id.$error.required && conta_bancariaform.banco_id.$touched">
                                     Selecione o Banco
                                 </erro>
@@ -95,15 +109,15 @@
             </div>
 
             <div class="modal-footer">
-                <button tabindex=5
-                        type="button"
+                <button tabindex=7
+                        type="button" ng-click="fechar(modal.item)"
                         class="btn btn-default m-button-flat"
                         data-dismiss="modal">Fechar</button>
-                <button tabindex=4
-                        type="button"
+                <button tabindex=6
+                        type="button" id="salvar"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="conta_bancariaform.$invalid">
                     {{modal.salvarNome}}
                 </button>
             </div>

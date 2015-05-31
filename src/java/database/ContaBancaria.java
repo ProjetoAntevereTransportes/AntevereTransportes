@@ -57,13 +57,14 @@ public class ContaBancaria {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "INSERT INTO conta_bancaria (nome, numero, pessoa_id, banco_id) VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO conta_bancaria (nome, numero, agencia, pessoa_id, banco_id) VALUES (?, ?,? , ?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, c.getNome());
             ps.setString(2, c.getNumero());
-            ps.setInt(3, c.getPessoa_id());
-            ps.setInt(4, c.getBanco_id());
+            ps.setString(3, c.getAgencia());
+            ps.setInt(4, c.getPessoa_id());
+            ps.setInt(5, c.getBanco_id());
 
             int status = ps.executeUpdate();
 
@@ -91,7 +92,7 @@ public class ContaBancaria {
     public List<contratos.ContaBancaria> listar() {
         try {
             abrir();
-            String sql = "SELECT * FROM conta_bancaria AS cb INNER JOIN pessoa AS p on cb.pessoa_id = p.id;";
+            String sql = "SELECT * FROM conta_bancaria AS cb INNER JOIN pessoa AS p on cb.pessoa_id = p.id inner join banco as b on cb.banco_id = b.id;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -103,9 +104,11 @@ public class ContaBancaria {
                 contratos.ContaBancaria c = new contratos.ContaBancaria();
                 c.setId(rs.getInt("cb.id"));
                 c.setNome(rs.getString("cb.nome"));
+                c.setAgencia(rs.getString("cb.agencia"));
                 c.setNumero(rs.getString("cb.numero"));
                 c.setPessoa_id(rs.getInt("cb.pessoa_id"));
                 c.setBanco_id(rs.getInt("cb.banco_id"));
+                c.setBanco_nome(rs.getString("b.nome"));
                 c.setPessoa_nome(rs.getString("p.nome"));
 
                 cts.add(c);
@@ -156,14 +159,15 @@ public class ContaBancaria {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "UPDATE conta_bancaria SET nome = ?, numero= ?, pessoa_id = ?, banco_id = ? WHERE id = ?;";
+            String sql = "UPDATE conta_bancaria SET nome = ?, numero= ?, agencia = ?, pessoa_id = ?, banco_id = ? WHERE id = ?;";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1, c.getNome());
             ps.setString(2, c.getNumero());
-            ps.setInt(3, c.getPessoa_id());
-            ps.setInt(4, c.getBanco_id());
-            ps.setInt(5, c.getId());
+            ps.setString(3, c.getAgencia());
+            ps.setInt(4, c.getPessoa_id());
+            ps.setInt(5, c.getBanco_id());
+            ps.setInt(6, c.getId());
 
             int status = ps.executeUpdate();
 

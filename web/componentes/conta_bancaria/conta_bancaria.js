@@ -5,27 +5,72 @@
         function (conta_bancariaService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
-
+            $scope.pessoas = [];
+            $scope.bancos = [];
             $scope.novo = {
-                id: "0",
                 nome: "",
                 numero: "",
+                agencia: "",
                 pessoa_id: "",
                 pessoa_nome: "",
                 banco_id: "",
-                banco: {
-                    id: "",
-                    nome: "",
-                    numero: ""
-                }
+                banco_nome: ""
             };
 
+
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    numero: "",
+                    agencia: "",
+                    pessoa_id: "",
+                    pessoa_nome: "",
+                    banco_id: "",
+                    banco_nome: ""
+                };
+                if ($scope.conta_bancariaform) {
+                    $scope.conta_bancariaform.$setPristine();
+                    $scope.conta_bancariaform.$setUntouched();
+                }
+            };
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+                $scope.carregarPessoas();
+                $scope.carregarBancos();
+            };
+
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
             $scope.formularioValido = function () {
                 var inputs = $("[name='conta_bancariaform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
+            $scope.carregarPessoas = function () {
+                conta_bancariaService.listarP(function (resultado) {
+                    $scope.pessoas = resultado;
+                }, function () {
+                }, null);
+            };
+            $scope.carregarBancos = function () {
+                conta_bancariaService.listarB(function (resultado) {
+                    $scope.bancos = resultado;
+                }, function () {
+                }, null);
+            };
+
 
 
             pesquisaService.setFunction(function (search) {
@@ -61,6 +106,10 @@
                         item: $scope.novo
                     };
                     $("#add").modal().modal("show");
+                    $scope.reset();
+                    $('#form')[0].reset();
+                    $scope.carregarPessoas();
+                    $scope.carregarBancos();
                     //TODO: carragar os bancos
                 },
                 principalIcon: "md md-add",
@@ -76,6 +125,9 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
+                $scope.carregarBancos();
+                $scope.carregarPessoas();
+
                 //TODO: carragar os bancos
                 $scope.novo = item;
             };
@@ -152,6 +204,45 @@
 
                 if (sempre)
                     sempre();
+            };
+            this.listarP = function (sucesso, erro, sempre) {
+                var server = "/AntevereTransportes";
+                $http.post(server + "/Pessoa", this.formatar("LERVARIOS", null), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                        .success(function (resultado) {
+                            if (resultado.sucesso) {
+                                sucesso(resultado.resultado);
+                            }
+                            else {
+                                erro(resultado.mensagem);
+                            }
+                        }).error(function () {
+                    erro("Não foi possível carregar as pessoas.");
+                });
+
+                if (sempre)
+                    sempre();
+
+            };
+
+            this.listarB = function (sucesso, erro, sempre) {
+                var server = "/AntevereTransportes";
+                $http.post(server + "/Banco", this.formatar("LERVARIOS", null), {
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                        .success(function (resultado) {
+                            if (resultado.sucesso) {
+                                sucesso(resultado.resultado);
+                            }
+                            else {
+                                erro(resultado.mensagem);
+                            }
+                        }).error(function () {
+                    erro("Não foi possível carregar os Bancos.");
+                });
+
+                if (sempre)
+                    sempre();
+
             };
 
             this.listar = function (sucesso, erro, sempre) {
