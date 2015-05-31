@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,32 +17,36 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author felipe
+ * @author Felipe_Botelho
  */
-public class Cargo {
-    public static Connection con;
+public class Banco {
 
-    private void abrir() {
+    public Connection con;
+
+    public void abrir() {
         con = Conexao.abrirConexao();
     }
-    
 
-    public contratos.Cargo pegarPeloID(int cargoID) {
+    public List<contratos.Banco> listar() {
         try {
             abrir();
-            String sql = "SELECT * FROM cargo WHERE id = ?;";
+            String sql = "select * from banco;";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, cargoID);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rsF = ps.executeQuery();
 
-            rs.next();
-            contratos.Cargo c = new contratos.Cargo();
-            c.setNome(rs.getString("nome"));
-            c.setDescricao(rs.getString("descricao"));
+            List<contratos.Banco> fs = new ArrayList<>();
 
-            return c;
+            while (rsF.next()) {
+                contratos.Banco u = new contratos.Banco();
+                u.setId(rsF.getInt("id"));
+                u.setNome(rsF.getString("nome"));
+                u.setNumero(rsF.getString("numero"));
+                fs.add(u);
+            }
+
+            return fs;
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -50,78 +55,12 @@ public class Cargo {
         }
     }
 
-    
-    //Esta igual a inserir do Fornecedor
-    public boolean Inserir(contratos.Cargo c) {
+    public boolean Excluir(int id) {
         try {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "INSERT INTO cargo(nome, descricao) VALUES (?, ?);";
-
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, c.getNome());
-            ps.setString(2, c.getDescricao());
-
-            int status = ps.executeUpdate();
-
-            con.commit();
-
-            if (status == 1) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            try {
-                con.rollback();
-            } catch (SQLException ex1) {
-                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            return false;
-        } finally {
-            Conexao.fecharConexao(con);
-        }
-
-    }
-
-
-    public List<contratos.Cargo> listar() {
-        try {
-            abrir();
-            String sql = "SELECT * FROM cargo;";
-
-            PreparedStatement ps = con.prepareStatement(sql);
-
-            ResultSet rs = ps.executeQuery();
-
-            List<contratos.Cargo> cs = new ArrayList<>();
-
-            while (rs.next()) {
-                contratos.Cargo c = new contratos.Cargo();
-                c.setId(rs.getInt("id"));
-                c.setNome(rs.getString("nome"));
-                c.setDescricao(rs.getString("descricao"));
-
-                cs.add(c);
-            }
-
-            return cs;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
-        } finally {
-            Conexao.fecharConexao(con);
-        }
-    }
-
-    public boolean excluir(int id) {
-        try {
-            abrir();
-            con.setAutoCommit(false);
-
-            String sql = "DELETE FROM cargo WHERE id = " + id + ";";
+            String sql = "DELETE FROM banco WHERE id = " + id + ";";
 
             PreparedStatement ps = con.prepareStatement(sql);
 
@@ -139,7 +78,7 @@ public class Cargo {
             try {
                 con.rollback();
             } catch (SQLException ex1) {
-                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(Banco.class.getName()).log(Level.SEVERE, null, ex1);
             }
             return false;
         } finally {
@@ -147,39 +86,73 @@ public class Cargo {
         }
     }
 
-    public boolean editar(contratos.Cargo c) {
+    public boolean Inserir(contratos.Banco f) {
         try {
             abrir();
             con.setAutoCommit(false);
 
-            String sql = "UPDATE cargo SET nome = ?, descricao = ? WHERE id = ?;";
+            String sql = "INSERT INTO banco(nome, numero)"
+                    + "VALUES (?, ?);";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, c.getNome());
-            ps.setString(2, c.getDescricao());
-            ps.setInt(3, c.getId());
-
-            int status = ps.executeUpdate();
-
-            con.commit();
-
-            if (status == 1) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            try {
-                con.rollback();
-            } catch (SQLException ex1) {
-                Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            return false;
-        } finally {
-            Conexao.fecharConexao(con);
-        }
-    }
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getNumero());
             
-           
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Banco.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+
+    }
+
+    public boolean editar(contratos.Banco f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "UPDATE banco set nome = ?, numero = ? WHERE id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getNumero());
+            ps.setInt(3, f.getId());
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Banco.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+
+    }
 }

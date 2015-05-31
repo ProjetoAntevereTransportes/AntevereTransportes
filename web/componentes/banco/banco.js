@@ -1,15 +1,18 @@
-    (function () {
+(function () {
     var app = angular.module("Banco", []);
 
-    app.controller("bancoController", ["bancoService", "$scope", "notifyService",
-        function (bancoService, $scope, notifyService) {
+    app.controller("bancoController", ["bancoService", "$scope", "notifyService", "pesquisaService",
+        function (bancoService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                nome : "" ,
-                numero : ""
+                nome: "",
+                numero: ""
             };
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
             $scope.formularioValido = function () {
                 var inputs = $("[name='bancoform']").find("input");
@@ -17,12 +20,25 @@
                     return $(i).val() == "";
                 }).length != 0;
             };
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    numero: ""
+                };
+
+                if ($scope.bancoform) {
+                    $scope.bancoform.$setPristine();
+                    $scope.bancoform.$setUntouched();
+                }
+            };
+
+
 
             $scope.inserir = function (novo) {
                 bancoService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarbanco();
+                    $scope.carregarBanco();
                 }, function () {
 
                 }, null, novo);
@@ -46,12 +62,34 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
+                    $scope.reset();
                     $("#add").modal().modal("show");
+                    $('#bancoform')[0].reset();
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
                 principalAlt: "Único"
             };
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+              
+            };
+            
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
+
 
             $scope.editar = function (item) {
                 $scope.modal = {
@@ -61,7 +99,7 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.novo = item;
+
             };
 
             $scope.editarSalvar = function (item) {
@@ -81,8 +119,9 @@
                                 text: "Sim",
                                 f: function (i) {
                                     bancoService.excluir(function () {
+                                        $scope.carregarBanco();
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
                                 },
                                 parameter: item
@@ -109,10 +148,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Banco", this.formatar("INSERIR", data),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        })
+                $http.post(server + "/Banco", this.formatar("INSERIR", data))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -145,10 +181,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Banco", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-                })
+                $http.post(server + "/Banco", this.formatar("LERVARIOS", null))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -178,11 +211,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Banco", this.formatar("REMOVER", bancoID),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-                        })
+                $http.post(server + "/Banco", this.formatar("REMOVER", bancoID))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -216,10 +245,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Banco", this.formatar("EDITAR", item),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).success(function (resultado) {
+                $http.post(server + "/Banco", this.formatar("EDITAR", item)).success(function (resultado) {
                     notifyService.remove(id);
                     if (resultado.sucesso) {
                         sucesso(resultado.resultado);

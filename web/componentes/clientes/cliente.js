@@ -37,10 +37,33 @@
                 $scope.search = search;
             });
 
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+                $scope.listarStatus();
+                $scope.listarPergunta();
+                $scope.listarTipos();
+            };
+
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
+
             $scope.inserir = function (novo) {
                 clienteService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
+
                     $scope.carregarClientes();
                 }, function () {
 
@@ -123,6 +146,7 @@
                     };
 
                     $("#add").modal().modal("show");
+                    $scope.reset();
                     $('#clienteForm')[0].reset();
                     $scope.listarStatus();
 
@@ -130,6 +154,31 @@
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
                 principalAlt: "Único"
+            };
+
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    email: "",
+                    telefone: "",
+                    cnpj: "",
+                    observacao: "",
+                    statusID: "",
+                    statusNome: "",
+                    endereco: {
+                        rua: "",
+                        bairro: "",
+                        numero: "",
+                        estado: "",
+                        pais: "",
+                        cidade: "",
+                        contato: "",
+                    }
+                };
+                if ($scope.clienteform) {
+                    $scope.clienteform.$setPristine();
+                    $scope.clienteform.$setUntouched();
+                }
             };
 
             $scope.editar = function (item) {
@@ -198,10 +247,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("INSERIR", data),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        })
+                $http.post(server + "/Cliente", this.formatar("INSERIR", data))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -233,8 +279,7 @@
                 });
 
                 var server = "/AntevereTransportes";
-                $http.post(server + "/Cliente", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                $http.post(server + "/Cliente", this.formatar("LERVARIOS", null))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -258,11 +303,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("REMOVER", clienteID),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-                        })
+                $http.post(server + "/Cliente", this.formatar("REMOVER", clienteID))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -291,8 +332,7 @@
 
             this.listarStatus = function (sucesso, erro, sempre) {
                 var server = "/AntevereTransportes";
-                $http.post(server + "/StatusCliente", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+                $http.post(server + "/StatusCliente", this.formatar("LERVARIOS", null))
                         .success(function (resultado) {
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
@@ -318,10 +358,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Cliente", this.formatar("EDITAR", item),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).success(function (resultado) {
+                $http.post(server + "/Cliente", this.formatar("EDITAR", item)).success(function (resultado) {
                     notifyService.remove(id);
                     if (resultado.sucesso) {
                         sucesso(resultado.resultado);

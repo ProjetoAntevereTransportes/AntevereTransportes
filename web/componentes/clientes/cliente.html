@@ -17,7 +17,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="item in itens | filter:search">
+            <tr ng-repeat="item in itens| filter:search">
                 <td>{{item.nome}}</td>
                 <td>{{item.email}}</td>
                 <td>{{item.telefone}}</td>
@@ -27,6 +27,9 @@
                 <td>{{item.endereco.bairro}}</td>
                 <td>{{item.endereco.cidade}}</td>
                 <td>
+                    <button class="m-button" ng-click="consultar(item)">
+                        <i class="glyphicon glyphicon-search" style="color: blue"></i>
+                    </button>                    
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
                     </button>
@@ -57,7 +60,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input ng-model="modal.item.nome" ng-minlength="7" ng-maxlength="60" maxlength="60" placeholder="Nome" name="nome" 
+                                <input tabindex="1" ng-model="modal.item.nome" ng-minlength="7" ng-maxlength="60" maxlength="60" placeholder="Nome" name="nome" 
                                        type="text" class="form-control m-input" required>
                                 <erro ng-show="clienteform.nome.$error.required && clienteform.nome.$touched">
                                     Insira um nome
@@ -70,7 +73,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>E-mail</label>
-                                <input name="email" ng-model="modal.item.email" ng-minlength="7" ng-maxlength="60" maxlength="60" required
+                                <input tabindex="2" name="email" ng-model="modal.item.email" ng-minlength="7" ng-maxlength="60" maxlength="60" required
                                        placeholder="E-mail"  type="email" class="form-control m-input">
 
 
@@ -83,7 +86,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Telefone</label>
-                                <input name="telefone" required ng-model="modal.item.telefone" placeholder="Telefone" 
+                                <input tabindex="3" name="telefone" required ng-model="modal.item.telefone" placeholder="Telefone" 
                                        type="text" class="form-control m-input">
 
                                 <erro ng-show="clienteform.telefone.$error.minlength || clienteform.telefone.$error.maxlength || clienteform.telefone.$error.required && clienteform.telefone.$touched">
@@ -94,17 +97,17 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>CNPJ</label>
-                                <input name="cnpj"  id="cnpj" required ng-model="modal.item.cnpj" ng-change="validaCnpj(modal.item.cnpj)"  placeholder="CNPJ"  type="text" class="form-control m-input">
-
+                                <input tabindex="4" name="cnpj" ui-mask="99.999.999/9999-99" id="cnpj" required ng-model="modal.item.cnpj" ng-change="validaCnpj(modal.item.cnpj)"  type="text" class="form-control m-input">
+                                
                                 <erro ng-show="(!validaCnpj(modal.item.cnpj) || clienteform.cnpj.$error.required) && clienteform.cnpj.$touched">
-                                    Insira um CNPJ válido
-                                </erro>
+                                            Insira um cnpj válido
+                                </erro>        
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Rua</label>
-                                <input name="rua" required ng-model="modal.item.endereco.rua" placeholder="Rua" ng-minlength="5" ng-maxlength="30" maxlength="30"  type="text" class="form-control m-input">
+                                <input tabindex="5" name="rua" required ng-model="modal.item.endereco.rua" placeholder="Rua" ng-minlength="5" ng-maxlength="30" maxlength="30"  type="text" class="form-control m-input">
                                 <erro ng-show="clienteform.rua.$error.minlength || clienteform.rua.$error.maxlength || clienteform.rua.$error.required && clienteform.rua.$touched">
                                     Insira uma rua com no minimo 5 caracteres e no maximo 30 caracteres
                                 </erro>
@@ -115,8 +118,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Cidade</label>
-                                        <input name="cidade" required ng-model="modal.item.endereco.cidade" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="Cidade"  type="text" class="form-control m-input">
-                                       
+                                        <input tabindex="6" name="cidade" required ng-model="modal.item.endereco.cidade" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="Cidade"  type="text" class="form-control m-input">
+
                                         <erro ng-show="clienteform.cidade.$error.minlength || clienteform.cidade.$error.maxlength || clienteform.cidade.$error.required && clienteform.cidade.$touched">
                                             Insira uma cidade com no minimo 3 caracteres e no maximo 30 caracteres
                                         </erro>
@@ -125,8 +128,8 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Bairro</label>
-                                        <input name="bairro" required ng-model="modal.item.endereco.bairro" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="Bairro"  type="text" class="form-control m-input">
-                                        <erro ng-show="clienteform.bairro.$error.minlength || clienteform.bairro.$error.maxlength ||clienteform.bairro.$error.required && clienteform.bairro.$touched">
+                                        <input tabindex="7" name="bairro" required ng-model="modal.item.endereco.bairro" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="Bairro"  type="text" class="form-control m-input">
+                                        <erro ng-show="clienteform.bairro.$error.minlength || clienteform.bairro.$error.maxlength || clienteform.bairro.$error.required && clienteform.bairro.$touched">
                                             Insira um bairro com no minimo 5 caracteres e no maximo 30 caracteres
                                         </erro>
                                     </div>
@@ -138,22 +141,22 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Número</label>
-                                        <input name="number" required ng-model="modal.item.endereco.numero" ng-minlength="1" ng-maxnumber="10" max="10"  placeholder="Número"  type="text" class="form-control m-input">
-                                  
+                                        <input tabindex="8" name="number" required ng-model="modal.item.endereco.numero" ng-minlength="1" ng-maxnumber="10" max="10"  placeholder="Número"  type="text" class="form-control m-input">
 
-                                        <erro ng-show="clienteform.number.$error.minlength || clienteform.number.$error.maxlength|| clienteform.number.$error.required && clienteform.number.$touched">
+
+                                        <erro ng-show="clienteform.number.$error.minlength || clienteform.number.$error.maxlength || clienteform.number.$error.required && clienteform.number.$touched">
                                             Insira um numero com no maximo 7 caracteres
                                         </erro>
-                                       
+
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Estado</label>
-                                        <input name="estado" required ng-model="modal.item.endereco.estado" ng-minlength="2" ng-maxlength="30" maxlength="30"  placeholder="Estado"  type="text" class="form-control m-input">
-                                       
+                                        <input tabindex="9" name="estado" required ng-model="modal.item.endereco.estado" ng-minlength="2" ng-maxlength="30" maxlength="30"  placeholder="Estado"  type="text" class="form-control m-input">
 
-                                        <erro ng-show="clienteform.estado.$error.minlength || clienteform.estado.$error.maxlength ||clienteform.estado.$error.required && clienteform.estado.$touched">
+
+                                        <erro ng-show="clienteform.estado.$error.minlength || clienteform.estado.$error.maxlength || clienteform.estado.$error.required && clienteform.estado.$touched">
                                             Insira um estado com no minimo 2 caracteres e maximo 30 caracteres
                                         </erro>
                                     </div>
@@ -161,9 +164,9 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>País</label>
-                                        <input name="pais" required ng-model="modal.item.endereco.pais" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="País"  type="text" class="form-control m-input">
-                                      
-                                        <erro ng-show="clienteform.pais.$error.minlength || clienteform.pais.$error.maxlength ||clienteform.pais.$error.required && clienteform.pais.$touched">
+                                        <input tabindex="10" name="pais" required ng-model="modal.item.endereco.pais" ng-minlength="3" ng-maxlength="30" maxlength="30"  placeholder="País"  type="text" class="form-control m-input">
+
+                                        <erro ng-show="clienteform.pais.$error.minlength || clienteform.pais.$error.maxlength || clienteform.pais.$error.required && clienteform.pais.$touched">
                                             Insira um pais com no minimo 3 caracteres e maximo 30 caracteres
                                         </erro>
                                     </div>
@@ -175,13 +178,13 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Observação *</label>
-                                        <input name="observacao" ng-model="modal.item.observacao" placeholder="Observação"  type="text" class="form-control m-input">
+                                        <input tabindex="11" name="observacao" ng-model="modal.item.observacao" placeholder="Observação"  type="text" class="form-control m-input">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class='form-group'>
                                         <label>Status</label>
-                                        <select name="status" class='form-control m-input' placeholder="Status" ng-model="modal.item.statusID">
+                                        <select tabindex="12" name="status" class='form-control m-input' placeholder="Status" ng-model="modal.item.statusID">
                                             <option ng-repeat="f in lstatus" required value="{{f.id}}">{{f.nome}}</option>
                                         </select>
                                         <erro ng-show="clienteform.status.$error.required &&
@@ -194,18 +197,20 @@
                             </div>
                         </div>
                     </form>
-                    <div class="text-center" style="color: red">(*) = campos não obrigatórios</div>
+                 
                 </div>
             </div>
 
             <div class="modal-footer">
-                <button type="button"
-                        class="btn btn-default m-button-flat"
-                        data-dismiss="modal">Fechar</button>
-                <button type="button"
+                <button type="button" tabindex="14"
+                        class="btn btn-default m-button-flat" ng-click="fechar(modal.item)"
+                        data-dismiss="modal">
+                    Fechar
+                </button>
+                <button type="button" id="salvar" tabindex="13"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="clienteform.$invalid">
                     {{modal.salvarNome}}
                 </button>
             </div>

@@ -17,11 +17,11 @@
                     estado: "",
                     pais: "",
                     cidade: "",
-                    contato:"",
+                    contato: "",
                 }
             };
 
-            pesquisaService.setFunction(function(search){
+            pesquisaService.setFunction(function (search) {
                 $scope.search = search;
             });
 
@@ -60,11 +60,12 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
+                    $scope.reset();
+                    $('#fornecedorform')[0].reset();
                     $("#add").modal().modal("show");
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
-                
             };
 
             $scope.editar = function (item) {
@@ -75,8 +76,48 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.novo = item;
+
             };
+
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+
+            };
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    email: "",
+                    telefone: "",
+                    endereco: {
+                        rua: "",
+                        bairro: "",
+                        numero: "",
+                        estado: "",
+                        pais: "",
+                        cidade: "",
+                        contato: "",
+                    }
+                };
+                if ($scope.fornecedorform) {
+                    $scope.fornecedorform.$setPristine();
+                    $scope.fornecedorform.$setUntouched();
+                }
+            };
+
 
             $scope.editarSalvar = function (item) {
                 fornecedorService.editar(function () {
@@ -95,6 +136,7 @@
                                 text: "Sim",
                                 f: function (i) {
                                     fornecedorService.excluir(function () {
+                                        $scope.carregarFornecedores();
                                     }, function () {
                                     }, null, item.ID);
                                     i.excluirID = null;

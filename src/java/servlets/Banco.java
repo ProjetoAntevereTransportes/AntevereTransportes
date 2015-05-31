@@ -18,13 +18,22 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author felipe
+ * @author Felipe_Botelho
  */
-public class Cliente extends HttpServlet {
+public class Banco extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-              throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-32");
+               throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
             contratos.JsonReceiver2 j = new JsonReceiver2();
@@ -74,15 +83,15 @@ public class Cliente extends HttpServlet {
         JsonReceiver<Integer> re = new JsonReceiver<Integer>(Integer.class);
         re.Desserealizar(receiveJson);
 
-        database.Cliente f = new database.Cliente();
-        boolean resultado = f.excluir(re.getData().intValue());
+        database.Banco f = new database.Banco();
+        boolean resultado = f.Excluir(re.getData().intValue());
         if (resultado) {
             json.sucesso = true;
             json.resultado = true;
         } else {
             json.sucesso = true;
             json.resultado = false;
-            json.mensagem = "Não foi possível excluir o cliente.";
+            json.mensagem = "Não foi possível excluir o banco.";
         }
 
         return json.Serializar();
@@ -90,11 +99,11 @@ public class Cliente extends HttpServlet {
 
     
     private String Editar(String json) {
-        contratos.JsonReceiver<contratos.Cliente> f = new JsonReceiver<>(contratos.Cliente.class);
+        contratos.JsonReceiver<contratos.Banco> f = new JsonReceiver<>(contratos.Banco.class);
         f.Desserealizar(json);
 
-        contratos.Cliente cliente = f.getData();
-        Boolean resultado = new database.Cliente().editar(cliente);
+        contratos.Banco banco = f.getData();
+        Boolean resultado = new database.Banco().editar(banco);
 
         JsonResult<Boolean> result = new JsonResult<>();
         if (resultado) {
@@ -103,44 +112,25 @@ public class Cliente extends HttpServlet {
         } else {
             result.resultado = false;
             result.sucesso = false;
-            result.mensagem = "Não foi possível editar o cliente.";
+            result.mensagem = "Não foi possível editar o banco.";
 
         }
 
         return result.Serializar();
     }
 
-    
-//    public String salvarVarios(String receiveJson) {
-//        database.Pagamento pg = new database.Pagamento();
-//
-//        JsonReceiver<contratos.Pagamento> pagamentos = new JsonReceiver<>(contratos.Pagamento.class);
-//        pagamentos.Desserealizar(receiveJson);
-//        
-//        JsonResult<Boolean> json = new JsonResult<Boolean>();
-//        
-//        try {
-//            json.resultado = pg.salvarVarios(pagamentos.getData());
-//            json.sucesso = true;
-//        } catch (Exception ex) {
-//            json.sucesso = false;
-//            json.mensagem = "Não foi possível carregar os pagamentos. " + ex.toString();
-//        }
-//
-//        return json.Serializar();
-//    }
 
     public String lervarios(String receiveJson) {
-         JsonResult<List<contratos.Cliente>> json = new JsonResult<List<contratos.Cliente>>();
+         JsonResult<List<contratos.Banco>> json = new JsonResult<List<contratos.Banco>>();
 
-        database.Cliente data = new database.Cliente();
-        List<contratos.Cliente> clientes = data.listar();
+        database.Banco data = new database. Banco();
+        List<contratos.Banco> bancos = data.listar();
 
-        if (clientes == null) {
-            json.mensagem = "Houve um erro ao carregar os clientes.";
+        if (bancos == null) {
+            json.mensagem = "Houve um erro ao carregar os bancos.";
             json.sucesso = false;
         } else {
-            json.resultado = clientes;
+            json.resultado = bancos;
             json.sucesso = true;
         }
         return json.Serializar();
@@ -148,11 +138,11 @@ public class Cliente extends HttpServlet {
     }
     
     private String Inserir(String json) {
-        JsonReceiver<contratos.Cliente> usu = new JsonReceiver<>(contratos.Cliente.class);
-        usu.Desserealizar(json);
+        JsonReceiver<contratos.Banco> banco = new JsonReceiver<>(contratos.Banco.class);
+        banco.Desserealizar(json);
 
-        database.Cliente f = new database.Cliente();
-        boolean resultado = f.Inserir(usu.getData());
+        database.Banco f = new database.Banco();
+        boolean resultado = f.Inserir(banco.getData());
 
         JsonResult<Boolean> result = new JsonResult<>();
         if (resultado) {
@@ -161,7 +151,7 @@ public class Cliente extends HttpServlet {
         } else {
             result.resultado = false;
             result.sucesso = false;
-            result.mensagem = "Não foi possível salvar o cliente.";
+            result.mensagem = "Não foi possível salvar o banco.";
         }
 
         return result.Serializar();
@@ -184,3 +174,4 @@ public class Cliente extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
+

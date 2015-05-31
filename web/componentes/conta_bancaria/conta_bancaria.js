@@ -1,16 +1,23 @@
-    (function () {
+(function () {
     var app = angular.module("Conta_Bancaria", []);
 
-    app.controller("conta_bancariaController", ["conta_bancariaService", "$scope", "notifyService",
-        function (conta_bancariaService, $scope, notifyService) {
+    app.controller("conta_bancariaController", ["conta_bancariaService", "$scope", "notifyService", "pesquisaService",
+        function (conta_bancariaService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                nome : "" ,
-                numero : "",
-                pessoa_ID : "",
-                banco_ID : ""
+                id: "0",
+                nome: "",
+                numero: "",
+                pessoa_id: "",
+                pessoa_nome: "",
+                banco_id: "",
+                banco: {
+                    id: "",
+                    nome: "",
+                    numero: ""
+                }
             };
 
             $scope.formularioValido = function () {
@@ -20,11 +27,16 @@
                 }).length != 0;
             };
 
+
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
+
             $scope.inserir = function (novo) {
                 conta_bancariaService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarconta_bancaria();
+                    $scope.carregarConta_Bancaria();
                 }, function () {
 
                 }, null, novo);
@@ -49,6 +61,7 @@
                         item: $scope.novo
                     };
                     $("#add").modal().modal("show");
+                    //TODO: carragar os bancos
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
@@ -63,13 +76,14 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
+                //TODO: carragar os bancos
                 $scope.novo = item;
             };
 
             $scope.editarSalvar = function (item) {
                 conta_bancariaService.editar(function () {
                     $("#add").modal().modal("hide");
-
+                    $scope.carregarConta_Bancaria();
                 }, function () {
                 }, null, item);
             };
@@ -83,8 +97,9 @@
                                 text: "Sim",
                                 f: function (i) {
                                     conta_bancariaService.excluir(function () {
+                                        $scope.carregarConta_Bancaria();//AQUI
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
                                 },
                                 parameter: item
@@ -111,7 +126,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Conta_Bancaria", this.formatar("INSERIR", data),
+                $http.post(server + "/ContaBancaria", this.formatar("INSERIR", data),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         })
@@ -147,7 +162,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Conta_Bancaria", this.formatar("LERVARIOS", null), {
+                $http.post(server + "/ContaBancaria", this.formatar("LERVARIOS", null), {
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
                 })
@@ -180,7 +195,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Conta_Bancaria", this.formatar("REMOVER", conta_bancariaID),
+                $http.post(server + "/ContaBancaria", this.formatar("REMOVER", conta_bancariaID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -218,7 +233,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Conta_Bancaria", this.formatar("EDITAR", item),
+                $http.post(server + "/ContaBancaria", this.formatar("EDITAR", item),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).success(function (resultado) {

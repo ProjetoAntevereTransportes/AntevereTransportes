@@ -17,6 +17,9 @@
                 <td>{{item.tipoUsuarioNome}}</td>
                 <td>{{item.statusNome}}</td>             
                 <td>
+                    <button class="m-button" ng-click="consultar(item)">
+                        <i class="glyphicon glyphicon-search" style="color: blue"></i>
+                    </button>
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
                     </button>
@@ -53,7 +56,7 @@
                                                type="text" class="form-control m-input" required>
 
                                     
-                                        <erro ng-show="clienteform.nome.$error.minlength || clienteform.nome.$error.maxlength || usuarioform.nome.$error.required && usuarioform.nome.$touched">
+                                        <erro ng-show="usuarioform.nome.$error.minlength || usuarioform.nome.$error.maxlength || usuarioform.nome.$error.required && usuarioform.nome.$touched">
                                             Insira um nome com no minimo 7 e no maximo 50 caracteres
                                         </erro>
 
@@ -65,7 +68,7 @@
                                         <input name="email" ng-model="modal.item.email" required
                                                placeholder="E-mail"  type="email" class="form-control m-input">
                                         
-                                        <erro ng-show="clienteform.email.$error.minlength || clienteform.email.$error.maxlength ||usuarioform.email.$error.email || usuarioform.email.$error.required && usuarioform.email.$touched">
+                                        <erro ng-show="usuarioform.email.$error.minlength || usuarioform.email.$error.maxlength ||usuarioform.email.$error.email || usuarioform.email.$error.required && usuarioform.email.$touched">
                                             Insira um email valido com no minimo 7 e no maximo 50 caracteres
                                         </erro>
                                        
@@ -73,10 +76,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" id="senha">
                             <div class="form-group">
                                 <label>Senha</label>
-                                <input name="senha" required ng-model="modal.item.senha" placeholder="senha" 
+                                <input name="senha"  required ng-model="modal.item.senha" placeholder="senha" 
                                        type="password" class="form-control m-input">
                                 <erro ng-show="usuarioform.senha.$error.required && usuarioform.senha.$touched">
                                     Insira uma Senha 
@@ -143,16 +146,15 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-default m-button-flat"
-                        data-dismiss="modal">Fechar</button>
-                <button type="button"
+                        data-dismiss="modal" ng-click="fechar(modal.item)">Fechar</button>
+                <button type="button" id="salvar"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="usuarioform.$invalid">
                     {{modal.salvarNome}}
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 <fab></fab>

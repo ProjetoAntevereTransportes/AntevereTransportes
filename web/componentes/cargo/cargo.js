@@ -1,13 +1,13 @@
 (function () {
     var app = angular.module("cargo", []);
 
-    app.controller("cargoController", ["cargoService", "$scope", "notifyService",
-        function (cargoService, $scope, notifyService) {
+    app.controller("cargoController", ["cargoService", "$scope", "notifyService", "pesquisaService",
+        function (cargoService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                id: "0",
+               
                 nome: "",
                 descricao: ""
             };
@@ -18,6 +18,9 @@
                     return $(i).val() == "";
                 }).length != 0;
             };
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
             $scope.inserir = function (novo) {
                 cargoService.inserir(function () {
@@ -47,11 +50,25 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
+                    $scope.reset();
+                    $('#cargoForm')[0].reset();
                     $("#add").modal("show");
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
                 principalAlt: "Único"
+            };
+
+            $scope.reset = function () {
+                $scope.novo = {
+                  
+                    nome: "",
+                    descricao: ""
+                };
+                if ($scope.cargoform) {
+                    $scope.cargoform.$setPristine();
+                    $scope.cargoform.$setUntouched();
+                }
             };
 
             $scope.editar = function (item) {
@@ -62,8 +79,27 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.novo = item;
+                
             };
+
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+
+            };
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
 
             $scope.editarSalvar = function (item) {
                 cargoService.editar(function () {
@@ -82,10 +118,10 @@
                                 text: "Sim",
                                 f: function (i) {
                                     cargoService.excluir(function () {
+                                        $scope.carregarCargos();
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
-                                    $scope.carregarCargos();
                                 },
                                 parameter: item
                             },
@@ -189,6 +225,7 @@
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
+                                //$scope.carregarCargos();
                             }
                             else {
                                 erro(resultado.mensagem);
