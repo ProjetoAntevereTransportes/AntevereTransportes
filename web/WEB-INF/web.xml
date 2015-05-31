@@ -94,7 +94,7 @@
     </filter>
     <filter-mapping>
         <filter-name>AutenticaUsuario</filter-name>
-        <url-pattern>/PagamentoTESTE</url-pattern>
+        <url-pattern>/Pagamento</url-pattern>
     </filter-mapping>
     <servlet-mapping>
         <servlet-name>FileUpload</servlet-name>

@@ -50,9 +50,9 @@ public class ValidadeUser {
         }
 
         Gson gson = new Gson();
-        AutenticaUsuario.Token token = gson.fromJson(json, AutenticaUsuario.Token.class);
+        contratos.LoginUsuario token = gson.fromJson(json, contratos.LoginUsuario.class);
 
-        contratos.Usuario usuario = ValidarToken(token.token, token.userName);
+        contratos.Usuario usuario = ValidarToken(token.getToken(), token.getUserName());
         return usuario;
     }
 

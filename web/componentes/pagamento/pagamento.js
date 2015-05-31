@@ -32,6 +32,12 @@
                 valor: 0
             };
 
+            $scope.vazio = {
+                titulo: "Não há contas",
+                icone: "md md-attach-money",
+                descricao: "Clique em + para inserir contas únicas, carnês e débitos automáticos"
+            };
+
             $scope.adicionarMes = function () {
                 if ($scope.mes == 11) {
                     $scope.mes = 0;
@@ -369,6 +375,10 @@
                             });
                         });
                     });
+                    if ($scope.itens.length)
+                        $scope.showVazio = false;
+                    else
+                        $scope.showVazio = true;
                 },
                         function (mensagem) {
                             if (mensagem)
@@ -448,7 +458,7 @@
                     ]
                 });
             };
-            
+
             $scope.confirmarExclusao = function (item) {
                 var id = notifyService.add({
                     fixed: true,
@@ -463,7 +473,7 @@
                             return false;
                         }
                     });
-                    
+
                     notifyService.remove(id);
 
                 }, function () {
@@ -473,9 +483,9 @@
                     });
                 }, null, item.ID);
             };
-            
-            $scope.cancelarExclusao = function(){
-                
+
+            $scope.cancelarExclusao = function () {
+
             };
 
             $scope.pegarTotal = function () {
@@ -566,5 +576,7 @@
                 else
                     $scope.mostrarEstatisticas = true;
             };
+
+            $scope.carregarFornecedores();
         }]);
 })();
