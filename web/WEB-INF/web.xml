@@ -56,6 +56,10 @@
         <servlet-name>Banco</servlet-name>
         <servlet-class>servlets.Banco</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FileDownload</servlet-name>
+        <servlet-class>servlets.FileDownload</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -135,6 +139,10 @@
     <servlet-mapping>
         <servlet-name>FileDownload</servlet-name>
         <url-pattern>/FileDownload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Banco</servlet-name>
+        <url-pattern>/Banco</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
