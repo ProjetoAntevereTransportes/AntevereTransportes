@@ -14,9 +14,11 @@ public class ContaBancaria {
     private int id;
     private String nome;
     private String numero;
+    private String agencia;
     private int pessoa_id;
     private String pessoa_nome;
     private int banco_id;
+    private String banco_nome;
     //
 
     
@@ -66,6 +68,34 @@ public class ContaBancaria {
 
     public void setBanco_id(int banco_id) {
         this.banco_id = banco_id;
+    }
+
+    /**
+     * @return the agencia
+     */
+    public String getAgencia() {
+        return agencia;
+    }
+
+    /**
+     * @param agencia the agencia to set
+     */
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
+    }
+
+    /**
+     * @return the banco_nome
+     */
+    public String getBanco_nome() {
+        return banco_nome;
+    }
+
+    /**
+     * @param banco_nome the banco_nome to set
+     */
+    public void setBanco_nome(String banco_nome) {
+        this.banco_nome = banco_nome;
     }
         
 }
