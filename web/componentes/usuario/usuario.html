@@ -56,7 +56,7 @@
                                                type="text" class="form-control m-input" required>
 
                                     
-                                        <erro ng-show="clienteform.nome.$error.minlength || clienteform.nome.$error.maxlength || usuarioform.nome.$error.required && usuarioform.nome.$touched">
+                                        <erro ng-show="usuarioform.nome.$error.minlength || usuarioform.nome.$error.maxlength || usuarioform.nome.$error.required && usuarioform.nome.$touched">
                                             Insira um nome com no minimo 7 e no maximo 50 caracteres
                                         </erro>
 
@@ -68,7 +68,7 @@
                                         <input name="email" ng-model="modal.item.email" required
                                                placeholder="E-mail"  type="email" class="form-control m-input">
                                         
-                                        <erro ng-show="clienteform.email.$error.minlength || clienteform.email.$error.maxlength ||usuarioform.email.$error.email || usuarioform.email.$error.required && usuarioform.email.$touched">
+                                        <erro ng-show="usuarioform.email.$error.minlength || usuarioform.email.$error.maxlength ||usuarioform.email.$error.email || usuarioform.email.$error.required && usuarioform.email.$touched">
                                             Insira um email valido com no minimo 7 e no maximo 50 caracteres
                                         </erro>
                                        
@@ -150,7 +150,7 @@
                 <button type="button" id="salvar"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="usuarioform.$invalid">
                     {{modal.salvarNome}}
                 </button>
             </div>

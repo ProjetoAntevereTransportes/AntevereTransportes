@@ -7,7 +7,7 @@
             $scope.itens = [];
 
             $scope.novo = {
-                id: "0",
+               
                 nome: "",
                 descricao: ""
             };
@@ -50,11 +50,25 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
+                    $scope.reset();
+                    $('#cargoForm')[0].reset();
                     $("#add").modal("show");
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
                 principalAlt: "Único"
+            };
+
+            $scope.reset = function () {
+                $scope.novo = {
+                  
+                    nome: "",
+                    descricao: ""
+                };
+                if ($scope.cargoform) {
+                    $scope.cargoform.$setPristine();
+                    $scope.cargoform.$setUntouched();
+                }
             };
 
             $scope.editar = function (item) {
@@ -65,8 +79,27 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.novo = item;
+                
             };
+
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+
+            };
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
 
             $scope.editarSalvar = function (item) {
                 cargoService.editar(function () {

@@ -14,6 +14,9 @@
                 <td>{{item.nome}}</td>
                 <td>{{item.descricao}}</td>
                 <td>
+                    <button class="m-button" ng-click="consultar(item)">
+                        <i class="glyphicon glyphicon-search" style="color: blue"></i>
+                    </button>  
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
                     </button>
@@ -41,7 +44,7 @@
             <div class="modal-body">
                 <div class="row">
 
-                    <form novalidate class="m-form" name="cargoform">
+                    <form novalidate class="m-form"  id="cargoForm" name="cargoform">
                         <!-- Nome -->
                         <div class="col-lg-12">
                             <div class="form-group">
@@ -49,7 +52,7 @@
                                 <input tabindex=1 
                                        name="nome" 
                                        type="text"
-                                       ng-model="novo.nome"
+                                       ng-model="modal.item.nome"
                                        placeholder="Nome"
                                        required
                                        ng-minlength="5" 
@@ -68,7 +71,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Descrição</label>
-                                <input tabindex=2 name="descricao" type="text" ng-model="novo.descricao" required
+                                <input tabindex=2 name="descricao" type="text" ng-model="modal.item.descricao" required
                                        ng-minlength="5" ng-maxlength="150" maxlength="150" placeholder="Descrição" class="form-control m-input">
 
                                 <erro ng-show="cargoform.descricao.$error.minlength || cargoform.descricao.$error.maxlength
@@ -84,13 +87,13 @@
             <div class="modal-footer">
                 <!-- Fechar -->
                 <button type="button"
-                        class="btn btn-default m-button-flat"
+                        class="btn btn-default m-button-flat" ng-click="fechar(modal.item)"
                         data-dismiss="modal" tabindex=4>Fechar</button>
                 <!-- Fechar -->
-                <button type="button"
+                <button type="button" id="salvar"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()" tabindex=3>
+                        ng-disabled="cargoform.$invalid" tabindex=3>
                     {{modal.salvarNome}}
                 </button>
             </div>

@@ -21,6 +21,14 @@
         <servlet-class>servlets.StatusUsuario</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Funcionario</servlet-name>
+        <servlet-class>servlets.Funcionario</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContaBancaria</servlet-name>
+        <servlet-class>servlets.ContaBancaria</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>StatusUsuario</servlet-name>
         <servlet-class>servlets.StatusUsuario</servlet-class>
     </servlet>
@@ -51,6 +59,14 @@
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Funcionario</servlet-name>
+        <url-pattern>/Funcionario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContaBancaria</servlet-name>
+        <url-pattern>/ContaBancaria</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>Pagamento</servlet-name>

@@ -1,8 +1,8 @@
 (function () {
     var app = angular.module("usuario", []);
 
-    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService","pesquisaService",
-        function (usuarioService, $scope, notifyService,pesquisaService) {
+    app.controller("usuarioController", ["usuarioService", "$scope", "notifyService", "pesquisaService",
+        function (usuarioService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Gerenciamento de Usuario";
             $scope.itens = [];
 
@@ -46,6 +46,7 @@
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
                     $scope.carregarUsuarios();
+                    $scope.reset();
                 }, function () {
 
                 }, null, novo);
@@ -70,6 +71,7 @@
                         item: $scope.novo
                     };
                     $('#usuarioForm')[0].reset();
+                    $scope.reset();
                     $("#add").modal().modal("show");
 
                     $scope.listarPergunta();
@@ -96,7 +98,26 @@
 
 
             };
-            
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    email: "",
+                    senha: "",
+                    perguntaID: "",
+                    perguntaNome: "",
+                    resposta: "",
+                    tipoUsuarioID: "",
+                    tipoUsuarioNome: "",
+                    statusNome: "",
+                    statusID: "",
+                    chave: ""
+                };
+                if($scope.usuarioform){
+                    $scope.usuarioform.$setPristine();
+                    $scope.usuarioform.$setUntouched();
+                }
+            };
+
             $scope.consultar = function (item) {
                 $scope.modal = {
                     salvarNome: "Consultar",
@@ -112,12 +133,12 @@
                 $scope.listarPergunta();
                 $scope.listarTipos();
             };
-            
-            $scope.fechar = function(item){
-               $("#add").modal().modal("hide");
+
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
                 $(".form-group > *").attr("disabled", false);
                 $("#senha").show();
-                $("#salvar").show();  
+                $("#salvar").show();
             }
 
             $scope.editarSalvar = function (item) {

@@ -1,16 +1,16 @@
-    (function () {
+(function () {
     var app = angular.module("Banco", []);
 
-    app.controller("bancoController", ["bancoService", "$scope", "notifyService","pesquisaService",
-        function (bancoService, $scope, notifyService,pesquisaService) {
+    app.controller("bancoController", ["bancoService", "$scope", "notifyService", "pesquisaService",
+        function (bancoService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                nome : "" ,
-                numero : ""
+                nome: "",
+                numero: ""
             };
-              pesquisaService.setFunction(function (search) {
+            pesquisaService.setFunction(function (search) {
                 $scope.search = search;
             });
 
@@ -20,12 +20,25 @@
                     return $(i).val() == "";
                 }).length != 0;
             };
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    numero: ""
+                };
+
+                if ($scope.bancoform) {
+                    $scope.bancoform.$setPristine();
+                    $scope.bancoform.$setUntouched();
+                }
+            };
+
+
 
             $scope.inserir = function (novo) {
                 bancoService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarbanco();
+                    $scope.carregarBanco();
                 }, function () {
 
                 }, null, novo);
@@ -49,7 +62,7 @@
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-                    
+                    $scope.reset();
                     $("#add").modal().modal("show");
                     $('#bancoform')[0].reset();
                 },
@@ -57,6 +70,26 @@
                 secondIcon: "md md-add",
                 principalAlt: "Único"
             };
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+              
+            };
+            
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
+
 
             $scope.editar = function (item) {
                 $scope.modal = {
@@ -66,7 +99,7 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                
+
             };
 
             $scope.editarSalvar = function (item) {

@@ -37,10 +37,33 @@
                 $scope.search = search;
             });
 
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
+                $scope.listarStatus();
+                $scope.listarPergunta();
+                $scope.listarTipos();
+            };
+
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
+
             $scope.inserir = function (novo) {
                 clienteService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
+
                     $scope.carregarClientes();
                 }, function () {
 
@@ -123,6 +146,7 @@
                     };
 
                     $("#add").modal().modal("show");
+                    $scope.reset();
                     $('#clienteForm')[0].reset();
                     $scope.listarStatus();
 
@@ -130,6 +154,31 @@
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
                 principalAlt: "Único"
+            };
+
+            $scope.reset = function () {
+                $scope.novo = {
+                    nome: "",
+                    email: "",
+                    telefone: "",
+                    cnpj: "",
+                    observacao: "",
+                    statusID: "",
+                    statusNome: "",
+                    endereco: {
+                        rua: "",
+                        bairro: "",
+                        numero: "",
+                        estado: "",
+                        pais: "",
+                        cidade: "",
+                        contato: "",
+                    }
+                };
+                if ($scope.clienteform) {
+                    $scope.clienteform.$setPristine();
+                    $scope.clienteform.$setUntouched();
+                }
             };
 
             $scope.editar = function (item) {

@@ -12,6 +12,9 @@
                 <td>{{item.numero}}</td>
                 <td>{{item.nome}}</td>
                 <td>
+                    <button class="m-button" ng-click="consultar(item)">
+                        <i class="glyphicon glyphicon-search" style="color: blue"></i>
+                    </button>         
                     <button class="m-button" ng-click="editar(item)">
                         <i class="glyphicon glyphicon-pencil" style="color: orange"></i>
                     </button>
@@ -62,12 +65,12 @@
 
             <div class="modal-footer">
                 <button type="button"
-                        class="btn btn-default m-button-flat"
+                        class="btn btn-default m-button-flat" ng-click="fechar(modal.item)"
                         data-dismiss="modal">Fechar</button>
-                <button type="button"
+                <button type="button" id="salvar"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()">
+                        ng-disabled="bancoform.$invalid">
                     {{modal.salvarNome}}
                 </button>
             </div>
