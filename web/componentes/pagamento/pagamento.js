@@ -12,9 +12,9 @@
     });
 
     app.controller("PagamentoController", ["$scope", "$http", "$pgService", "notifyService",
-        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService", "hotkeys",
+        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService", "hotkeys", "conta_bancariaService",
         function ($scope, $http, $pgService, notifyService, fornecedorService,
-                fileUpload, $window, $document, pesquisaService, hotkeys) {
+                fileUpload, $window, $document, pesquisaService, hotkeys, conta_bancariaService) {
             $scope.dataLoad = new Date();
             $scope.itens = [];
             $scope.mensagem = "";
@@ -506,6 +506,19 @@
                 }
                 else
                     item.c.expandir = true;
+                
+                $scope.carregarContaBancaria();
+            };
+            
+            $scope.carregarContaBancaria = function(){
+                conta_bancariaService.listar(function(resultado){
+                    $scope.contasBancarias = resultado;
+                }, function(){
+                    notifyService.add({
+                        message: "Não foi possível carregar as contas bancárias para realizar o pagamento",
+                        seconds: 5
+                    });
+                }, null);
             };
 
             $scope.clicarPagamentoCalendario = function (item) {
@@ -556,6 +569,7 @@
 
                             $("#debito").modal("show");
                             $scope.carregarFornecedores();
+                            $scope.carregarContaBancaria();
                         },
                         id: 2
                     }, {

@@ -305,7 +305,9 @@
                             name="contaBancariaID"
                             required placeholder="Conta bancária"
                             ng-model="item.contaBancariaID">
-                        <option value="1">ARRUMAR!</option>
+                        <option ng-repeat="f in contasBancarias" required value="{{f.ID}}">
+                            {{f.nome}}
+                        </option>
                     </select>
                     <erro ng-show="formPagar.contaBancariaID.$error.required && formPagar.banco.$touched">                                    
                         Insira uma conta bancária
@@ -685,9 +687,6 @@
                                         name="conta">
                                     <option ng-repeat="f in contasBancarias" required value="{{f.ID}}">
                                         {{f.nome}}
-                                    </option>
-                                    <option value="1">
-                                        Arrumar Input!
                                     </option>
                                 </select>
                                 <erro ng-show="formDebito.conta.$error.required && formDebito.conta.$touched">                                    
