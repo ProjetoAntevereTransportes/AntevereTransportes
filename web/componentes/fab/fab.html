@@ -36,16 +36,15 @@
         width: 56px !important;
         height: 56px !important;
         font-size: 22px;
-    }
-    .md.md-add {
         padding-top: 13px;
         padding-left: 0px;
     }
 
 
     .fab-content .mini i{
-        width: 18px !important;
-        height: 18px !important;
+        /*width: 18px !important;
+        height: 18px !important;*/
+        font-size: 18px;
     }
 
     .fab-content .fab-big .second{
@@ -285,6 +284,10 @@
             transform: scale(1);
         }
     }
+
+    .fab-hide{
+        transform: scale(0) rotate(-20deg);
+    }
 </style>
 
 <div class="fab-content">
@@ -308,7 +311,7 @@
                 ng-click="fab.principalClick()" 
                 id="fab-principal" 
                 alt="{{fab.principalAlt}}"
-                ng-class="{'z3': fab.miniShow.length > 0}">
+                ng-class="{'z3': fab.miniShow.length > 0, 'fab-hide': menuIsOpened}">
             <i class="primary {{fab.principalIcon}}"></i>
             <i class="second {{fab.secondIcon}}"></i>
         </button>    

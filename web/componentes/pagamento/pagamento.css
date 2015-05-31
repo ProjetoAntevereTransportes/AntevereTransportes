@@ -1,3 +1,12 @@
+.tags a{
+    color: #000;
+}
+
+.tags a:hover, a:active, a:focus{
+    text-decoration: none !important;
+    color: rgb(81, 81, 81) !important;
+}
+
 .btn-calendar{
     //background: #0050E2 !important;
     color: rgb(51, 118, 255);
@@ -39,8 +48,9 @@
 
 .item-buttons{
     display: inline-block;
-    height: 17px;
+    height: 25px;
     overflow: hidden;
+    font-size: 18px;
 }
 
 .item-buttons.ng-hide-add{
@@ -395,7 +405,7 @@ button:focus {outline:0;}
     animation-delay: 0.06s !important;
 }
 
-.repeated-item:hover:not(.expand){
+.repeated-item:hover:not(.expand):not(.expand-info){
     background: #F5F5F5;
 }
 
@@ -518,6 +528,11 @@ button:focus {outline:0;}
 }
 .tags{
     font-size: 13px;
+    line-height: 21px;
+}
+
+.tags i{
+    font-size: 16px;
 }
 
 .tag{
@@ -550,6 +565,14 @@ button:focus {outline:0;}
     /* box-shadow: 0px 2px 2px #C2C2C2; */
 }
 
+.expand-info{
+    height: 400px !important;
+    margin-top: 5px;
+    margin-bottom: 10px;        
+    border-radius: 4px;
+    /* box-shadow: 0px 2px 2px #C2C2C2; */
+}
+
 .head{
     display: flex;
     padding-left: 1px;
@@ -575,11 +598,13 @@ button:focus {outline:0;}
 .right-content{
     position: absolute;
     right: 18px;
-    top: 12px;       
+    top: 12px;  
+    display: flex;
 }
 
 .value{
     margin-right: 20px;
+    margin-top: 3px;
 }
 
 .right-content i {

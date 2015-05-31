@@ -1,16 +1,28 @@
 (function () {
     var app = angular.module("pagamento", []);
 
+    app.directive("pagamentoItem", function () {
+        return {
+            restrict: 'E',
+            templateUrl: '/componentes/pagamento/pagamento-item.html',
+            scope: {
+                filter: "=filter"
+            }
+        };
+    });
+
     app.controller("PagamentoController", ["$scope", "$http", "$pgService", "notifyService",
-        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService",
+        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService", "hotkeys",
         function ($scope, $http, $pgService, notifyService, fornecedorService,
-        fileUpload, $window, $document, pesquisaService) {
+                fileUpload, $window, $document, pesquisaService, hotkeys) {
             $scope.dataLoad = new Date();
             $scope.itens = [];
             $scope.mensagem = "";
             $scope.mostrarCalendario = false;
             $scope.semanas = [];
             $scope.fornecedores = [];
+            $scope.mes = new Date().getMonth();
+            $scope.ano = new Date().getFullYear();
             $scope.itemNovoMassa = {
                 parcelas: [],
                 fornecedorID: "",
@@ -20,42 +32,140 @@
                 valor: 0
             };
 
-            pesquisaService.setFunction(function(search){
+            $scope.adicionarMes = function () {
+                if ($scope.mes == 11) {
+                    $scope.mes = 0;
+                    $scope.ano++;
+                } else
+                    $scope.mes++;
+
+                $scope.carregarPagamentos();
+            };
+
+            $scope.removerMes = function () {
+                if ($scope.mes == 0) {
+                    $scope.mes = 11;
+                    $scope.ano--;
+                } else
+                    $scope.mes--;
+
+                $scope.carregarPagamentos();
+            };
+
+            hotkeys.bindTo($scope)
+                    .add({
+                        combo: 'right',
+                        description: 'Adiciona um mês.',
+                        callback: function () {
+                            $scope.adicionarMes();
+                        }
+                    });
+
+            hotkeys.bindTo($scope)
+                    .add({
+                        combo: 'left',
+                        description: 'Remove um mês.',
+                        callback: function () {
+                            $scope.removerMes();
+                        }
+                    });
+
+            pesquisaService.setFunction(function (search) {
                 $scope.search = search;
             });
 
-            $scope.unico = {
-                parcelas: [{
-                        vencimento: "",
-                        descricao: "",
-                        valor: 0,
-                        boleto: ""
-                    }],
-                fornecedorID: "",
-                nome: ""
+            $scope.resetUnico = function () {
+                $scope.unico = {
+                    fornecedorID: "",
+                    nome: "",
+                    parcelas: []
+                };
+
+                $scope.unicoParcela = {
+                    vencimento: "",
+                    descricao: "",
+                    valor: "",
+                    boletoID: null
+                };
+
+                if ($scope.unicoForm) {
+                    $scope.unicoForm.$setPristine();
+                    $scope.unicoForm.$setUntouched();
+                }
             };
-            
+
+            $scope.resetUnico();
+
+            $scope.expandirInfo = function (item) {
+                if (item.c.expandirInfo)
+                    item.c.expandirInfo = false;
+                else {
+                    item.c.expandirInfo = true;
+
+                    $pgService.pagamentoFornecedorMensal(function (dados) {
+
+                        new Morris.Bar({
+                            element: item.ID + "-fornecedor-chart",
+                            data: dados,
+                            xkey: 'mes',
+                            ykeys: ['valor'],
+                            labels: ['Valor'],
+                            yLabelFormat: function (y) {
+                                return "R$ " + y.toString();
+                            },
+                            xLabelFormat: function (x) {
+                                x = new Date(x.label);
+                                return (x.getMonth() + 1) + "/" + x.getFullYear();
+                            }
+                        });
+
+                    }, function () {
+                        notifyService.add({
+                            seconds: 5,
+                            message: "Não foi possível obter as informações dos fornecedores."
+                        });
+                    }, null, item.fornecedorID);
+                }
+            };
+
             $scope.gerarParcelas = function () {
                 if ($scope.itemNovoMassa.inicial && $scope.itemNovoMassa.final) {
                     $scope.itemNovoMassa.parcelas = [];
-                    var anoInicial = $scope.itemNovoMassa.inicial.getFullYear();
-                    var mesInicial = $scope.itemNovoMassa.inicial.getMonth();
-                    var diaInicial = $scope.itemNovoMassa.inicial.getDate();
+                    var inicial = $scope.itemNovoMassa.inicial;
+                    var final = $scope.itemNovoMassa.final;
 
-                    var anoFinal = $scope.itemNovoMassa.final.getFullYear();
-                    var mesFinal = $scope.itemNovoMassa.final.getMonth();
+                    while (inicial <= final) {
 
-                    for (var ano = anoInicial; ano <= anoFinal; ano++) {
-                        for (var mes = mesInicial; mes <= mesFinal; mes++) {
-                            $scope.itemNovoMassa.parcelas.push({
-                                descricao: "descriocao!",
-                                vencimento: new Date(ano, mes, diaInicial),
-                                valor: $scope.itemNovoMassa.valor,
-                                comprovante: "OLA MUNDO"
-                            });
-                        }
+                        $scope.itemNovoMassa.parcelas.push({
+                            descricao: "descriocao!",
+                            vencimento: angular.copy(inicial),
+                            valor: $scope.itemNovoMassa.valor,
+                            boletoID: "OLA MUNDO"
+                        });
+
+                        inicial = new Date(inicial.setMonth(inicial.getMonth() + 1));
+
+                        console.log(inicial);
                     }
                 }
+            };
+
+
+            $scope.debitoAutomaticoValido = function () {
+                if (!$scope.debito)
+                    return true;
+
+                var d = $scope.debito;
+
+                return !(d.contaBancariaID && d.fornecedorID && d.nome && d.valor &&
+                        ((d.dataFim && d.dataInicio) || (d.dia && d.dia >= 1 && d.dia <= 31)));
+            };
+
+            $scope.corrigirDatasDebitoAutomatico = function (data) {
+                var dia = data.getDate();
+
+                $scope.debito.dataFim = new Date($scope.debito.dataFim.setDate(dia));
+                $scope.debito.dataInicio = new Date($scope.debito.dataInicio.setDate(dia));
             };
 
             $scope.salvarMassa = function (contas) {
@@ -67,6 +177,57 @@
                 }, null, contas);
             };
 
+            $scope.salvarUnico = function () {
+                var id = notifyService.add({
+                    fixed: true,
+                    message: "Salvando conta..."
+                });
+
+                if ($scope.unicoParcela.boletoID != null)
+                    fileUpload.upload(function (fileId) {
+                        $scope.unicoParcela.boletoID = fileId;
+
+                        $scope.salvarUnicoSemComprovante(id);
+
+                    }, function () {
+                        notifyService.remove(id);
+                        notifyService.add({
+                            seconds: 5,
+                            message: "Houve um erro ao salvar o boleto. Tente novamente."
+                        });
+                    }, null, $scope.unicoParcela.boletoID);
+                else
+                    $scope.salvarUnicoSemComprovante(id);
+            };
+
+            $scope.salvarUnicoSemComprovante = function (notificationID) {
+                $scope.unico.parcelas = [];
+                $scope.unico.parcelas.push($scope.unicoParcela);
+
+                $pgService.salvarMassa(function () {
+                    notifyService.remove(notificationID);
+
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Conta salva."
+                    });
+
+                    $scope.carregarPagamentos($scope.dataLoad);
+                    $("#editar").modal("hide");
+                    $("#unico").modal("hide");
+
+                    $scope.resetUnico();
+                }, function () {
+                    notifyService.remove(notificationID);
+                    notifyService.add({
+                        seconds: 10,
+                        message: "Houve um erro ao salvar a conta. Tente novamente."
+                    });
+                }, null, $scope.unico);
+            };
+
+
+
             $scope.mouseOverItem = function (item) {
 
             };
@@ -76,10 +237,10 @@
             };
 
             $scope.mostrarAcaoBotao = function (item) {
-                if (item.mostrarBotoes)
-                    item.mostrarBotoes = false;
+                if (item.c.mostrarBotoes)
+                    item.c.mostrarBotoes = false;
                 else
-                    item.mostrarBotoes = true;
+                    item.c.mostrarBotoes = true;
             };
 
             $scope.alterarStatusCalendario = function () {
@@ -91,14 +252,97 @@
                 }
             };
 
-            $scope.carregarPagamentos = function (data) {
-                if (data == null) {
+            $scope.pagarUnico = function (item) {
+                if (!item.comprovanteID) {
                     notifyService.add({
-                        seconds: 5,
-                        message: "O mês e ano não podem ser nulos."
+                        message: "Insira um comprovante",
+                        seconds: 5
                     });
                     return;
                 }
+
+                var message = "";
+                if (item.vencido && !item.juros)
+                    message = "O valor do juros não foi preenchido.";
+
+                if (item.c.notificationID == null)
+                    item.c.notificationID = notifyService.add({
+                        fixed: true,
+                        message: "Deseja realizar o pagamento de " + item.descricao + "? " + message,
+                        buttons: [{
+                                text: "Sim",
+                                parameter: item,
+                                f: $scope.realizarPagamentoUnico
+                            },
+                            {
+                                text: "Não",
+                                parameter: item,
+                                f: $scope.cancelarPagamentoUnico,
+                                defaultExit: true
+                            }
+                        ]
+                    });
+            };
+
+            $scope.realizarPagamentoUnico = function (item) {
+                item.c.expandir = false;
+                item.c.notificationID = null;
+
+                notifyService.add({
+                    seconds: 3,
+                    message: "Realizando pagamento de " + item.nome
+                });
+
+                fileUpload.upload(function (comprovanteID) {
+
+                    item.comprovanteID = comprovanteID;
+
+                    $pgService.pagarUnico(function () {
+
+                        notifyService.add({
+                            seconds: 5,
+                            message: "Conta paga."
+                        });
+
+                        $scope.carregarPagamentos($scope.dataLoad);
+
+                    }, function () {
+                        notifyService.add({
+                            seconds: 5,
+                            message: "Não foi possível pagar a conta."
+                        });
+                    }, null, item);
+
+                }, function () {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível salvar o comprovante."
+                    });
+                }, null, item.comprovanteID);
+
+
+
+            };
+
+            $scope.cancelarPagamentoUnico = function (item) {
+                if (item.c.notificationID != null) {
+                    notifyService.remove(item.c.notificationID);
+                    item.c.notificationID = null;
+                }
+
+                $scope.mais(item);
+            };
+
+            $scope.carregarPagamentos = function () {
+//                if (data == null) {
+//                    notifyService.add({
+//                        seconds: 5,
+//                        message: "O mês e ano não podem ser nulos."
+//                    });
+//                    return;
+//                }
+
+                var date = new Date($scope.ano, $scope.mes, 01);
 
                 $pgService.listar(function (result) {
                     $scope.semanas = result;
@@ -106,10 +350,21 @@
                     $(result).each(function (i, w) {
                         $(w.dias).each(function (j, d) {
                             $(d.pagamentos).each(function (k, p) {
+                                p.c = {};
+
+                                p.c.diasVencidos = (((new Date(p.vencimento.substring(0, 10)) - new Date()) / (1000 * 60 * 60 * 24)) * -1).toFixed(0);
+
                                 if (p.debitoIlimitado)
-                                    p.numeroVezes = p.numero;
+                                    p.c.numeroVezes = p.numero;
                                 else
-                                    p.numeroVezes = p.numero + "/" + p.quantidade;
+                                    p.c.numeroVezes = p.numero + "/" + p.quantidade;
+
+                                if (p.boletoID)
+                                    p.c.boletoUrl = fileUpload.getUrlDownload(p.boletoID);
+
+                                if (p.comprovanteID)
+                                    p.c.comprovanteUrl = fileUpload.getUrlDownload(p.comprovanteID);
+
                                 $scope.itens.push(p);
                             });
                         });
@@ -121,16 +376,43 @@
                             else
                                 $scope.mensagem = "Nao foi possivel comunicar com o servidor.";
                         },
-                        null, data);
+                        null, date);
             };
 
-            $scope.carregarPagamentos($scope.dataLoad);
+            $scope.carregarPagamentos();
 
             $scope.itemEditar = {};
 
             $scope.editar = function (item) {
                 $scope.itemEditar = item;
                 $("#editar").modal("show");
+            };
+
+            $scope.uploadBoleto = function () {
+                var id = notifyService.add({
+                    fixed: true,
+                    message: "Salvando boleto..."
+                });
+
+                fileUpload.upload(function () {
+                    notifyService.remove(id);
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Boleto salvo."
+                    });
+                }, function () {
+                    notifyService.remove(id);
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Boleto não salvo."
+                    });
+                }, null, $scope.unicoParcela.boleto);
+            };
+
+            $scope.downloadFile = function (id) {
+                fileUpload.download(function () {
+                }, function () {
+                }, null, id);
             };
 
             $scope.salvarEdicao = function (item) {
@@ -143,13 +425,57 @@
             };
 
             $scope.excluir = function (item) {
-                var index;
-                $($scope.itens).each(function (i, it) {
-                    if (it.ID == item.ID) {
-                        $scope.itens.splice(i, 1);
-                        return false;
-                    }
+                if (item.pago)
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não é possível remover contas pagas"
+                    });
+
+                var id = notifyService.add({
+                    fixed: true,
+                    message: "Tem certeza que deseja excluir " + item.nome + "?",
+                    buttons: [
+                        {
+                            text: "Excluir",
+                            parameter: item,
+                            f: $scope.confirmarExclusao
+                        },
+                        {
+                            text: "Não",
+                            parameter: item,
+                            f: $scope.cancelarExclusao
+                        }
+                    ]
                 });
+            };
+            
+            $scope.confirmarExclusao = function (item) {
+                var id = notifyService.add({
+                    fixed: true,
+                    message: "Excluindo " + item.nome
+                });
+
+                $pgService.excluir(function () {
+
+                    $($scope.itens).each(function (i, it) {
+                        if (it.ID == item.ID) {
+                            $scope.itens.splice(i, 1);
+                            return false;
+                        }
+                    });
+                    
+                    notifyService.remove(id);
+
+                }, function () {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível excluir " + item.nome
+                    });
+                }, null, item.ID);
+            };
+            
+            $scope.cancelarExclusao = function(){
+                
             };
 
             $scope.pegarTotal = function () {
@@ -165,55 +491,17 @@
             };
 
             $scope.mais = function (item) {
-                if (item.expandir) {
-                    item.expandir = false;
+                if (item.c.expandir) {
+                    item.c.expandir = false;
                 }
                 else
-                    item.expandir = true;
-            };
-
-            $scope.pagar = function (item) {
-                if (item.notificationID == null)
-                    item.notificationID = notifyService.add({
-                        fixed: true,
-                        message: "Deseja realizar o pagamento de " + item.descricao + "?",
-                        buttons: [{
-                                text: "Sim",
-                                parameter: item,
-                                f: $scope.realizarPagamento
-                            },
-                            {
-                                text: "Não",
-                                parameter: item,
-                                f: $scope.cancelarPagamento
-                            }
-                        ]
-                    });
-            };
-
-            $scope.realizarPagamento = function (item) {
-                item.expandir = false;
-                item.notificationID = null;
-
-                notifyService.add({
-                    seconds: 3,
-                    message: item.descricao + " pago!"
-                });
-            };
-
-            $scope.cancelarPagamento = function (item) {
-                if (item.notificationID != null) {
-                    notifyService.remove(item.notificationID);
-                    item.notificationID = null;
-                }
-
-                $scope.mais(item);
+                    item.c.expandir = true;
             };
 
             $scope.clicarPagamentoCalendario = function (item) {
-                if (!item.mostrarBotoes)
+                if (!item.c.mostrarBotoes)
                     $scope.mostrarAcaoBotao(item);
-                item.expandir = true;
+                item.c.expandir = true;
                 window.scrollBy(0, $("#" + item.ID).offset().top - 100);
             };
 
@@ -237,11 +525,11 @@
                     $scope.carregarFornecedores();
                 },
                 principalIcon: "md md-add",
-                secondIcon: "md md-close",
+                secondIcon: "md md-crop-portrait",
                 principalAlt: "Único",
                 miniButtons: [
                     {
-                        icon: "glyphicon glyphicon-refresh",
+                        icon: "md md-autorenew",
                         color: "green",
                         alt: "Automáticos",
                         click: function () {
@@ -261,7 +549,7 @@
                         },
                         id: 2
                     }, {
-                        icon: "glyphicon glyphicon-duplicate",
+                        icon: "md md-content-copy",
                         color: "blue",
                         alt: "Diversos",
                         click: function () {

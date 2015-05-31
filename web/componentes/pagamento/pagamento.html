@@ -67,22 +67,54 @@
 </style>
 
 <div class="col-lg-12 month">
-    <input type="month" class="month-input" ng-change="carregarPagamentos(dataLoad)" ng-model="dataLoad">
-
-    <div class="pull-right">            
-        {{itens.length}} contas totalizando {{pegarTotal() | currency : "R$ " : 2}}   
-
-        <div class="pull-right month-buttons">
-            <button class="btn-calendar" ng-click="mostrarEstatisticasMensais()">
-                <i class="glyphicon glyphicon-stats" style="color: orange;"></i>
+    <div class="col-lg-6">
+        <div class="form-inline">
+            <button class="btn-calendar" ng-click="removerMes()">
+                <i class="md md-remove-circle"></i>
             </button>
 
-            <button class="btn-calendar" hotkey="{'alt+c': alterarStatusCalendario}"
-                    ng-click="alterarStatusCalendario()"
-                    ng-class="{'btn-calendar-clicked': mostrarCalendario}">
-                <i class="glyphicon glyphicon-calendar" ng-hide="mostrarCalendario"></i>
-                <i class="glyphicon glyphicon-remove" ng-show="mostrarCalendario"></i>
+            <div class="form-group">
+                <select ng-model="mes" ng-change="carregarPagamentos()">
+                    <option value="0">Janeiro</option>
+                    <option value="1">Fevereiro</option>
+                    <option value="2">Março</option>
+                    <option value="3">Abril</option>
+                    <option value="4">Maio</option>
+                    <option value="5">Junho</option>
+                    <option value="6">Julho</option>
+                    <option value="7">Agosto</option>
+                    <option value="8">Setembro</option>
+                    <option value="9">Outubro</option>
+                    <option value="10">Novembro</option>
+                    <option value="11">Dezembro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="number" ng-model="ano" ng-change="carregarPagamentos()">
+            </div>
+            <button class="btn-calendar" ng-click="adicionarMes()">
+                <i class="md md-add-circle"></i>
             </button>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="pull-right">            
+            {{itens.length}} contas totalizando {{pegarTotal() | currency : "R$ " : 2}}   
+
+            <div class="pull-right month-buttons">
+                <button class="btn-calendar" ng-click="mostrarEstatisticasMensais()">
+                    <i class="md md-poll" style="color: orange;"></i>
+                </button>
+
+                <button class="btn-calendar" hotkey="{'alt+c': alterarStatusCalendario}"
+                        ng-click="alterarStatusCalendario()"
+                        ng-class="{'btn-calendar-clicked': mostrarCalendario}">
+                    <i class="glyphicon glyphicon-calendar" ng-hide="mostrarCalendario"></i>
+                    <i class="glyphicon glyphicon-remove" ng-show="mostrarCalendario"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -127,7 +159,7 @@
                     </div>
                 </div>
                 <div class="table-item"
-                     ng-repeat="p in dia.pagamentos | filter:search"
+                     ng-repeat="p in dia.pagamentos| filter:search"
                      ng-click="clicarPagamentoCalendario(p)"
                      ng-class="{'debitoLimitado': p.debitoLimitado, 'debitoIlimitado': p.debitoIlimitado, 'unico': p.unico, 'carne': p.carne}">
                     <div class="item-title">
@@ -147,7 +179,8 @@
                  | filter:search
                          | filter:tipo
      " ng-class="{
-                 'expand z2': item.expandir == true
+                 'expand z2': item.c.expandir == true,
+                 'expand-info z2': item.c.expandirInfo
                  }" id="{{item.ID}}"
      ng-mouseover="mouseOverItem(item)"
      ng-mouseleave="mouseLeaveItem(item)">
@@ -166,24 +199,38 @@
 
             <div class="tags">
                 <div class="tag">
-                    <i class="glyphicon glyphicon-refresh"></i>
-                    {{item.numeroVezes}}                    
-                </div>                
+                    <i class="md md-cached"></i>
+                    {{item.c.numeroVezes}}                    
+                </div>
                 <div class="tag">
-                    <i class="glyphicon glyphicon-user"></i>
-                    {{item.fornecedorNome}}
-                </div>                    
-                <div class="tag">
-                    <i class="glyphicon glyphicon-stats"></i>
+                    <i class="md md-equalizer"></i>
                     {{pegarPorcentagem(item) | number : 2}}%
                 </div>   
-                <div class="tag">
-                    <i class="glyphicon glyphicon-paperclip"></i>
-                    Sem comprovantes
+                <a href="#Fornecedor">
+                    <div class="tag">
+                        <i class="md md-person"></i>
+                        {{item.fornecedorNome}}
+                    </div>                    
+                </a>                
+                <a href="{{item.c.boletoUrl}}" ng-show="item.boletoID">
+                    <div class="tag">
+                        <i class="md md-description"></i>
+                        Baixar boleto                    
+                    </div> 
+                </a>
+                <a href="{{item.c.comprovanteUrl}}" ng-show="item.comprovanteID">
+                    <div class="tag">
+                        <i class="md md-attachment"></i>
+                        Baixar comprovante
+                    </div>                 
+                </a>                
+                <div class="tag" style="color: green;" ng-show="item.pago">
+                    <i class="md md-done"></i>
+                    Pago em {{item.dataPagamento| date:"dd/MM/yy" }}
                 </div> 
-                <div class="tag">
-                    <i class="glyphicon glyphicon-file"></i>
-                    Sem boleto
+                <div class="tag" style="color: red;" ng-show="item.vencido && !item.pago && !item.debitoIlimitado && !item.debitoLimitado">
+                    <i class="md md-warning"></i>
+                    Vencido há {{item.c.diasVencidos}} dias
                 </div> 
             </div>
         </div>
@@ -192,21 +239,28 @@
                 {{item.valor| currency : 'R$ ' : 2}} 
             </span>
 
-            <div ng-show="!item.mostrarBotoes" class="item-buttons">
-                <i class="glyphicon glyphicon-stats btn-item" style="color: rgb(255, 184, 0);" 
-                   ng-click="excluir(item)" ng-show="!item.expandir"></i>
-                <i class="glyphicon glyphicon-user btn-item" style="color: blue;" ng-show="!item.expandir"></i>
-                <i class="glyphicon glyphicon-trash btn-item" style="color: red;" 
-                   ng-click="excluir(item)" ng-show="!item.expandir"></i>
-                <i class="glyphicon glyphicon-remove btn-item" style="color: red;" 
-                   ng-click="cancelarPagamento(item)" ng-show="item.expandir"></i>
-                <i class="glyphicon glyphicon-usd btn-item" style="color: rgb(0, 173, 0);" 
+            <div ng-show="!item.c.mostrarBotoes" class="item-buttons">
+                <i class="md md-delete btn-item" style="color: red;" 
+                   ng-click="excluir(item)" ng-show="!item.c.expandir && !item.pago && (item.unico || item.carne)"></i>
+
+
+                <i class="md md-clear btn-item" style="color: red;" 
+                   ng-click="cancelarPagamentoUnico(item)"
+                   ng-show="item.c.expandir && !item.pago"></i>               
+                <i class="md md-attach-money btn-item" style="color: rgb(0, 173, 0);" 
                    ng-click="mais(item)"
-                    data-toggle="tooltip" title="Pagar" ng-show="!item.expandir">
+                   data-toggle="tooltip" title="Pagar"
+                   ng-show="!item.c.expandir && !item.pago">
                 </i>
-                <i class="glyphicon glyphicon-ok btn-item" style="color: rgb(0, 173, 0);" 
-                   ng-click="pagar(item)"
-                   data-toggle="tooltip" title="Confirmar" ng-show="item.expandir"></i>
+                <i class="md md-done btn-item" style="color: rgb(0, 173, 0);" 
+                   ng-click="pagarUnico(item)"
+                   data-toggle="tooltip" title="Confirmar"
+                   ng-show="item.c.expandir && !item.pago"></i>
+
+                <i class="md md-info btn-item" style="color: gray;" 
+                   ng-click="expandirInfo(item)"
+                   data-toggle="tooltip" title="Confirmar"
+                   ng-show="!item.c.expandir"></i>
             </div>
             <!--
             <i class="glyphicon glyphicon-menu-left show-more-buttons"
@@ -216,27 +270,42 @@
                           'right-button-hide': item.expandir}"></i>            -->
         </div>
     </div>
-    <div class='more-info col-lg-12' ng-show='item.expandir'>
+    <div class='more-info col-lg-12' ng-show='item.c.expandirInfo'>
+        <div class="col-lg-6">
+            <h4>Parcelas</h4>
+        </div>
+        <div class="col-lg-6">
+            <h4>Valores mensais de {{item.fornecedorNome}}</h4>
+            <div id="{{item.ID}}-fornecedor-chart" style="height: 270px;"></div>
+        </div>
+    </div>
+    <div class='more-info col-lg-12' ng-show='item.c.expandir'>
         <form novalidate name="formPagar">
             <div class='col-lg-3'>
                 <div class='form-group'>
                     <label>Comprovante</label>
-                    <input class='form-control  m-input' name="comprovante"
-                           type='file' required ng-model="item.comprovante">
-                    <erro ng-show="formPagar.comprovante.$error.required && formPagar.comprovante.$touched">                                    
-                        campo obrigatório
+                    <input class='form-control  m-input'
+                           name="comprovanteID"
+                           type='file'
+                           required
+                           file-model="item.comprovanteID"
+                           validFile>
+                    <erro ng-show="formPagar.comprovanteID.$valid && formPagar.comprovante.$touched">                                    
+                        Insira um comprovante
                     </erro>
                 </div>
             </div>
             <div class='col-lg-3'>
                 <div class='form-group'>
                     <label>Banco</label>
-                    <select class='form-control m-input' name="banco"
-                            required placeholder="Banco" ng-model="item.banco">
-                        <option selected>Selecione</option>
+                    <select class='form-control m-input'
+                            name="contaBancariaID"
+                            required placeholder="Conta bancária"
+                            ng-model="item.contaBancariaID">
+                        <option value="1">ARRUMAR!</option>
                     </select>
-                    <erro ng-show="formPagar.banco.$error.required && formPagar.banco.$touched">                                    
-                        campo obrigatório
+                    <erro ng-show="formPagar.contaBancariaID.$error.required && formPagar.banco.$touched">                                    
+                        Insira uma conta bancária
                     </erro>
                 </div>
             </div>
@@ -245,10 +314,11 @@
                     <label>Descontos</label>
                     <input class="form-control m-input" 
                            required 
-                           type="number"
+                           type="text"
                            placeholder="Descontos" 
                            ng-model="item.descontos"
-                           name="descontos">
+                           name="descontos"
+                           ui-number-mask>
                     <erro ng-show="formPagar.descontos.$error.required && formPagar.descontos.$touched">                                    
                         campo obrigatório
                     </erro>
@@ -256,13 +326,14 @@
             </div>
             <div class='col-lg-3'>
                 <div class='form-group'>
-                    <label>Juros</label>
+                    <label>Juros {{formPagar.$invalid}} </label>
                     <input class="form-control m-input" 
                            placeholder="Juros" 
                            required 
-                           type="number" 
+                           type="text" 
                            ng-model="item.juros"
-                           name="juros">
+                           name="juros"
+                           ui-number-mask>
                     <erro ng-show="formPagar.juros.$error.required && formPagar.juros.$touched">                                    
                         campo obrigatório
                     </erro>
@@ -284,43 +355,90 @@
                 <h4 class="modal-title">Adição em Massa {{itemEditar.descricao}}</h4>
             </div>
 
-            <form novalidate>
+            <form novalidate name="carneForm">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label>Data Inicial</label>
-                                <input class="form-control" type="date" ng-change="gerarParcelas()"
-                                       required ng-model="itemNovoMassa.inicial">
-                            </div>
-                        </div>            
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label>Data Final</label>
-                                <input class="form-control" type="date" ng-change="gerarParcelas()" required ng-model="itemNovoMassa.final">
-                            </div>
-                        </div>                                        
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label>Valor</label>
-                                <input class="form-control" ng-change="gerarParcelas()" required ng-model="itemNovoMassa.valor">
-                            </div>
-                        </div>
-
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input class="form-control" ng-change="gerarParcelas()" required ng-model="itemNovoMassa.nome">
+                                <input class="form-control"
+                                       ng-change="gerarParcelas()"
+                                       required
+                                       ng-model="itemNovoMassa.nome"
+                                       maxlength="40"
+                                       min="4"
+                                       ng-maxlength="40"
+                                       ng-minlength="4"
+                                       name="nome">
+                                <erro ng-show="carneForm.nome.$error.required && carneForm.nome.$touched">
+                                    Insira o nome
+                                </erro>
+                                <erro ng-show="(carneForm.nome.$error.maxlength || carneForm.nome.$error.minlength)
+                                                    && carneForm.nome.$touched">
+                                    Campo deve estar entre 4 e 40 caracteres
+                                </erro>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Fornecedor</label>
-                                <select class="form-control" ng-change="gerarParcelas()" ng-model="itemNovoMassa.fornecedorID">
+                                <select class="form-control"
+                                        ng-change="gerarParcelas()"
+                                        ng-model="itemNovoMassa.fornecedorID"
+                                        name="fornecedor"
+                                        required>
                                     <option ng-repeat="f in fornecedores" required value="{{f.ID}}">{{f.nome}}</option>
                                 </select>
+                                <erro ng-show="carneForm.fornecedor.$error.required && carneForm.fornecedor.$touched">
+                                    Selecione um fornecedor
+                                </erro>
                             </div>
                         </div>
+
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Data Inicial {{itemNovoMassa.inicial}}</label>
+                                <input class="form-control"
+                                       type="date"
+                                       ng-change="gerarParcelas()"
+                                       required
+                                       ng-model="itemNovoMassa.inicial"
+                                       name="dataInicial">
+                                <erro ng-show="carneForm.dataInicial.$error.required && carneForm.dataInicial.$touched">
+                                    Informe a data inicial
+                                </erro>
+                            </div>
+                        </div>            
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Data Final {{itemNovoMassa.final}}</label>
+                                <input class="form-control"
+                                       type="date"
+                                       ng-change="gerarParcelas()"
+                                       required
+                                       name="dataFinal"
+                                       ng-model="itemNovoMassa.final">
+                                <erro ng-show="carneForm.dataFinal.$error.required && carneForm.dataFinal.$touched">
+                                    Informe a data final
+                                </erro>
+                            </div>
+                        </div>                                        
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Valor</label>
+                                <input class="form-control"
+                                       ng-change="gerarParcelas()"
+                                       required
+                                       name="valor"
+                                       ng-model="itemNovoMassa.valor"
+                                       ui-number-mask>
+                                <erro ng-show="carneForm.valor.$error.required && carneForm.valor.$touched">
+                                    Informe o valor
+                                </erro>
+                            </div>
+                        </div>
+
+
 
                     </div>
                     <div ng-show="itemNovoMassa.parcelas.length > 0">
@@ -342,13 +460,13 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Valor</label>
-                                    <input class="form-control" required ng-model="item.valor">
+                                    <input class="form-control" required ng-model="item.valor" ui-number-mask>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Boleto</label>
-                                    <input class="form-control" type="file" required ng-model="item.comprovante">
+                                    <input class="form-control" type="file" required file-model="item.boletoID">
                                 </div>
                             </div>
                         </div>
@@ -357,8 +475,8 @@
             </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" ng-click="salvarMassa(itemNovoMassa)">
-                    Salvar alterações
+                <button type="button" ng-disabled="carneForm.$invalid" class="btn btn-primary" ng-click="salvarMassa(itemNovoMassa)">
+                    Salvar
                 </button>
             </div>
         </div>
@@ -374,52 +492,93 @@
                 <h4 class="modal-title">Inserção única</h4>
             </div>
 
-            <form novalidate>
+            <form novalidate name="unicoForm">
                 <div class="modal-body">                    
                     <div class="row">          
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label>Vencimento</label>
-                                <input class="form-control" type="date" 
-                                       required ng-model="unico.parcelas[0].vencimento">
-                            </div>
-                        </div>            
-                        <div class="col-lg-12">
-                            <div class="form-group">
                                 <label>Nome</label>
-                                <input class="form-control" required ng-model="unico.nome">
+                                <input class="form-control"
+                                       name="nome"
+                                       required
+                                       ng-model="unico.nome"
+                                       maxlength="40"
+                                       ng-maxlength="40"
+                                       min="4"
+                                       ng-minlength="4">
+                                <erro ng-show="unicoForm.nome.$error.required && unicoForm.nome.$touched">
+                                    Insira um nome
+                                </erro>
+                                <erro ng-show="(unicoForm.nome.$error.minlength
+                                                    || unicoForm.nome.$error.maxlength) &&
+                                                    unicoForm.nome.$touched">
+                                    Campo entre 4 e 40 caracteres
+                                </erro>
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Descrição</label>
-                                <input class="form-control" type="text"
-                                       required ng-model="unico.parcelas[0].descricao">
+                                <input class="form-control"
+                                       name="descricao"
+                                       type="text"
+                                       ng-model="unicoParcela.descricao"
+                                       maxlength="90"
+                                       ng-maxlength="90">
+                                <erro ng-show="unicoForm.descricao.$error.maxlength &&
+                                                    unicoForm.descricao.$touched">
+                                    Máximo 90 caracteres
+                                </erro>
                             </div>
                         </div>  
-
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Fornecedor</label>
-                                <select class="form-control" ng-model="unico.fornecedorID">
-                                    <option ng-repeat="f in fornecedores" required value="{{f.ID}}">
+                                <select class="form-control" name="fornecedor" ng-model="unico.fornecedorID" required>
+                                    <option ng-repeat="f in fornecedores" value="{{f.ID}}">
                                         {{f.nome}}
                                     </option>
                                 </select>
+                                <erro ng-show="unicoForm.fornecedor.$error.required &&
+                                            unicoForm.fornecedor.$touched">
+                                    Selecione um fornecedor
+                                </erro>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input class="form-control" required
-                                       ng-model="unico.parcelas[0].valor">
+                                <input class="form-control"
+                                       required
+                                       ng-model="unicoParcela.valor"
+                                       name="valor"
+                                       ui-number-mask>
+                                <erro ng-show="unicoForm.valor.$error.required &&
+                                                    unicoForm.valor.$touched">
+                                    Informe o valor
+                                </erro>
                             </div>
                         </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Vencimento</label>
+                                <input class="form-control"
+                                       type="date" 
+                                       required 
+                                       name="vencimento"
+                                       ng-model="unicoParcela.vencimento">
+                                <erro ng-show="unicoForm.vencimento.$error.required &&
+                                                    unicoForm.vencimento.$touched">
+                                    Informe a data de vencimento
+                                </erro>
+                            </div>
+                        </div>  
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Boleto</label>
-                                <input class="form-control" type="file"
-                                       required ng-model="unico.parcelas[0].boleto">
+                                <input class="form-control" type="file" 
+                                       required 
+                                       file-model="unicoParcela.boletoID">
                             </div>
                         </div>
                     </div>
@@ -427,9 +586,14 @@
             </form>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" ng-click="salvarMassa(unico)">
-                    Salvar alterações
+
+
+                <button type="button" class="btn btn-primary" ng-click="salvarUnico()"
+                        ng-disabled="unicoForm.$invalid">
+                    Salvar
                 </button>
+
+
             </div>
         </div>
     </div>
@@ -463,16 +627,12 @@
                                        min="2"
                                        ng-minlength="2"
                                        required
-                                       ng-model="debito.nome"
-                                       pattern="[A-Za-z ]{2,40}">
+                                       ng-model="debito.nome">
                                 <erro ng-show="formDebito.nome.$error.required && formDebito.nome.$touched">                                    
-                                    campo obrigatório
+                                    Insira o nome
                                 </erro>
                                 <erro ng-show="formDebito.nome.$error.maxlength && formDebito.nome.$touched">
                                     campo entre 2 e 40 caracteres
-                                </erro>
-                                <erro ng-show="formDebito.nome.$error.pattern && formDebito.nome.$touched">
-                                    somente letras
                                 </erro>
                             </div>
                         </div>  
@@ -484,23 +644,12 @@
                                 <input tabindex="2"
                                        class="form-control"
                                        type="text"
-                                       required
                                        ng-model="debito.descricao"
                                        maxlength="60"
-                                       min="5"
                                        ng-maxlength="60"
-                                       ng-minlength="5"
-                                       name="descricao"
-                                       pattern="[A-Za-z ]{5,60}">
-                                <erro ng-show="formDebito.descricao.$error.required && formDebito.nome.$touched">                                    
-                                    campo obrigatório
-                                </erro>
-                                <erro ng-show="formDebito.descricao.$error.maxlength
-                                                    && formDebito.descricao.$error.minlength && formDebito.nome.$touched">
-                                    campo entre 5 e 60 caracteres
-                                </erro>
-                                <erro ng-show="formDebito.descricao.$error.pattern && formDebito.nome.$touched">
-                                    somente letras entre 5 a 60 caracteres
+                                       name="descricao">                                
+                                <erro ng-show="(formDebito.descricao.$error.maxlength) && formDebito.descricao.$touched">
+                                    campo com no máximo 60 caracteres
                                 </erro>
                             </div>
                         </div> 
@@ -518,8 +667,8 @@
                                         {{f.nome}}
                                     </option>
                                 </select>
-                                <erro ng-show="formDebito.fornecedor.$error.required && formDebito.nome.$touched">                                    
-                                    campo obrigatório
+                                <erro ng-show="formDebito.fornecedor.$error.required && formDebito.fornecedor.$touched">                                    
+                                    Selecione o fornecedor
                                 </erro>
                             </div>
                         </div>
@@ -540,8 +689,8 @@
                                         Arrumar Input!
                                     </option>
                                 </select>
-                                <erro ng-show="formDebito.conta.$error.required && formDebito.nome.$touched">                                    
-                                    campo obrigatório
+                                <erro ng-show="formDebito.conta.$error.required && formDebito.conta.$touched">                                    
+                                    Selecione a conta bancária
                                 </erro>
                             </div>
                         </div>
@@ -554,9 +703,10 @@
                                        class="form-control"
                                        required
                                        ng-model="debito.valor"
-                                       name="valor">
-                                <erro ng-show="formDebito.valor.$error.required && formDebito.nome.$touched">                                    
-                                    campo obrigatório
+                                       name="valor"
+                                       ui-number-mask>
+                                <erro ng-show="formDebito.valor.$error.required && formDebito.valor.$touched">                                    
+                                    Insira o valor
                                 </erro>
                             </div>
                         </div>
@@ -579,23 +729,49 @@
                                 <label>
                                     Dia de Débito
                                 </label>
-                                <input  tabindex="8" class="form-control" ui-mask="99" required ng-model="debito.dia">
+                                <input
+                                    tabindex="8"
+                                    class="form-control"
+                                    ui-mask="99"
+                                    required 
+                                    nam="dia"
+                                    ng-model="debito.dia">
+                                <erro ng-show="formDebito.dia.$error.required && formDebito.dia.$touched">                                    
+                                    Insira o dia de débito
+                                </erro>
                             </div>
                         </div>
                         <div class="col-lg-6" ng-show="debitoTipo == 'limitado'">
                             <div class="form-group">
                                 <label>
                                     Data Inicial</label>
-                                <input tabindex="9" class="form-control" type="date" 
-                                       required ng-model="debito.dataFim">
+                                <input tabindex="9"
+                                       class="form-control"
+                                       type="date" 
+                                       required
+                                       name="dataInicial"
+                                       ng-model="debito.dataInicio"
+                                       ng-change="corrigirDatasDebitoAutomatico(debito.dataInicio)">
+                                <erro ng-show="formDebito.dataInicial.$error.required && formDebito.dataInicial.$touched">                                    
+                                    Insira a data inicial
+                                </erro>
                             </div>
                         </div>            
                         <div class="col-lg-6" ng-show="debitoTipo == 'limitado'">
                             <div class="form-group">
                                 <label>
                                     Data Final</label>
-                                <input  tabindex="10" class="form-control" type="date" 
-                                        required ng-model="debito.dataInicio">
+                                <input 
+                                    tabindex="10"
+                                    class="form-control"
+                                    type="date" 
+                                    required 
+                                    name="dataFinal"
+                                    ng-model="debito.dataFim"
+                                    ng-change="corrigirDatasDebitoAutomatico(debito.dataFim)">
+                                <erro ng-show="formDebito.dataFinal.$error.required && formDebito.dataFinal.$touched">                                    
+                                    Insira a data final
+                                </erro>
                             </div>
                         </div>            
                     </div>
@@ -603,8 +779,9 @@
             </form>
             <div class="modal-footer">
                 <button type="button"  tabindex="12" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button"  tabindex="11" class="btn btn-primary" ng-click="salvarDebito(debito)">
-                    Salvar alterações
+                <button type="button" ng-disabled="debitoAutomaticoValido()"  
+                        tabindex="11" class="btn btn-primary" ng-click="salvarDebito(debito)">
+                    Salvar
                 </button>
             </div>
         </div>

@@ -1,0 +1,168 @@
+<div class="col-lg-12 repeated-item z1 item-color" 
+     ng-repeat="item in itens
+                 | filter:search
+                 | filter:tipo
+     " ng-class="{
+                 'expand z2': item.c.expandir == true,
+                         'expand-info z2': item.c.expandirInfo
+                 }" id="{{item.ID}}"
+     ng-mouseover="mouseOverItem(item)"
+     ng-mouseleave="mouseLeaveItem(item)">
+    <div class='head col-lg-12'>
+        <div class="day" ng-class="{'debitoLimitado': item.debitoLimitado, 'debitoIlimitado': item.debitoIlimitado, 'unico': item.unico, 'carne': item.carne}">
+            {{item.vencimento| date: "d"}}
+            <div class="week">
+                {{item.vencimento| date: "EEE" | uppercase}}
+            </div>
+        </div>
+        <div class="title">
+            {{item.nome}} <div class="description">
+                <input style="border: none;" ng-model="item.descricao" placeholder="Inserir descrição">
+
+            </div>   
+
+            <div class="tags">
+                <div class="tag">
+                    <i class="md md-cached"></i>
+                    {{item.c.numeroVezes}}                    
+                </div>                
+                <a href="#Fornecedor">
+                    <div class="tag">
+                        <i class="md md-person"></i>
+                        {{item.fornecedorNome}}
+                    </div>                    
+                </a>
+                <div class="tag">
+                    <i class="md md-equalizer"></i>
+                    {{pegarPorcentagem(item) | number : 2}}%
+                </div>   
+                <a href="{{item.c.boletoUrl}}" ng-show="item.boletoID">
+                    <div class="tag">
+                        <i class="md md-description"></i>
+                        Baixar boleto                    
+                    </div> 
+                </a>
+                <a href="{{item.c.comprovanteUrl}}" ng-show="item.comprovanteID">
+                    <div class="tag">
+                        <i class="md md-attachment"></i>
+                        Baixar comprovante
+                    </div>                 
+                </a>                
+                <div class="tag" style="color: green;" ng-show="item.pago">
+                    <i class="md md-done"></i>
+                    Pago em {{item.dataPagamento| date:"dd/MM/yy" }}
+                </div> 
+            </div>
+        </div>
+        <div class='right-content buttons'>
+            <span class='value'>
+                {{item.valor| currency : 'R$ ' : 2}} 
+            </span>
+
+            <div ng-show="!item.c.mostrarBotoes" class="item-buttons">
+                <i class="md md-poll btn-item" style="color: rgb(255, 184, 0);" 
+                   ng-click="excluir(item)" ng-show="!item.c.expandir"></i>
+
+
+                <i class="md md-person btn-item" style="color: blue;" ng-show="!item.c.expandir"></i>
+
+
+                <i class="md md-delete btn-item" style="color: red;" 
+                   ng-click="excluir(item)" ng-show="!item.c.expandir && !item.pago"></i>
+
+
+                <i class="md md-clear btn-item" style="color: red;" 
+                   ng-click="cancelarPagamentoUnico(item)"
+                   ng-show="item.c.expandir && !item.pago"></i>               
+                <i class="md md-attach-money btn-item" style="color: rgb(0, 173, 0);" 
+                   ng-click="mais(item)"
+                   data-toggle="tooltip" title="Pagar"
+                   ng-show="!item.c.expandir && !item.pago">
+                </i>
+                <i class="md md-done btn-item" style="color: rgb(0, 173, 0);" 
+                   ng-click="pagarUnico(item)"
+                   data-toggle="tooltip" title="Confirmar"
+                   ng-show="item.c.expandir && !item.pago"></i>
+
+                <i class="md md-info btn-item" style="color: gray;" 
+                   ng-click="expandirInfo(item)"
+                   data-toggle="tooltip" title="Confirmar"
+                   ng-show="!item.c.expandir"></i>
+            </div>
+            <!--
+            <i class="glyphicon glyphicon-menu-left show-more-buttons"
+               ng-click="mostrarAcaoBotao(item)"
+               ng-show="!item.expandir"
+               ng-class="{'right-button': item.mostrarBotoes,
+                          'right-button-hide': item.expandir}"></i>            -->
+        </div>
+    </div>
+    <div class='more-info col-lg-12' ng-show='item.c.expandirInfo'>
+        <div class="col-lg-6">
+            <h4>Parcelas</h4>
+        </div>
+        <div class="col-lg-6">
+            <h4>Valores mensais de {{item.fornecedorNome}}</h4>
+            <div id="{{item.ID}}-fornecedor-chart" style="height: 270px;"></div>
+        </div>
+    </div>
+    <div class='more-info col-lg-12' ng-show='item.c.expandir'>
+        <form novalidate name="formPagar">
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Comprovante</label>
+                    <input class='form-control  m-input'
+                           name="comprovanteID"
+                           type='file'
+                           required
+                           file-model="item.comprovanteID">
+                    <erro ng-show="formPagar.comprovanteID.$error.required && formPagar.comprovante.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
+            </div>
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Banco</label>
+                    <select class='form-control m-input'
+                            name="contaBancariaID"
+                            required placeholder="Conta bancária"
+                            ng-model="item.contaBancariaID">
+                        <option value="1" selected>ARRUMAR!</option>
+                    </select>
+                    <erro ng-show="formPagar.contaBancariaID.$error.required && formPagar.banco.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
+            </div>
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Descontos</label>
+                    <input class="form-control m-input" 
+                           required 
+                           type="number"
+                           placeholder="Descontos" 
+                           ng-model="item.descontos"
+                           name="descontos">
+                    <erro ng-show="formPagar.descontos.$error.required && formPagar.descontos.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
+            </div>
+            <div class='col-lg-3'>
+                <div class='form-group'>
+                    <label>Juros</label>
+                    <input class="form-control m-input" 
+                           placeholder="Juros" 
+                           required 
+                           type="number" 
+                           ng-model="item.juros"
+                           name="juros">
+                    <erro ng-show="formPagar.juros.$error.required && formPagar.juros.$touched">                                    
+                        campo obrigatório
+                    </erro>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

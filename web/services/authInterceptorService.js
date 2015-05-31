@@ -1,7 +1,7 @@
 (function () {
     var app = angular.module("authService", []);
-    
-    app.factory('authInterceptorService', ['$q', '$location', 
+
+    app.factory('authInterceptorService', ['$q', '$location',
         function ($q, $location) {
 
             var authInterceptorServiceFactory = {};
@@ -11,16 +11,20 @@
                 config.headers = config.headers || {};
 
                 var authData = localStorage["authorizationData"];
-                if (authData) {
+                if (config.headers.Ignore) {
+                    config.headers = {
+                        "Authorization": authData
+                    };
+                } else if (authData) {
                     config.headers = {
                         "Authorization": authData,
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Accept": "application/json;charset=utf-32"
                     };
                     /*config.headers.Authorization = authData;
-                    config.headers.ContentType = 'application/x-www-form-urlencoded';
-                    config.headers.Accept = 'application/json;charset=utf-32';
-                    config.headers.AcceptCharset = 'charset=utf-32';*/
+                     config.headers.ContentType = 'application/x-www-form-urlencoded';
+                     config.headers.Accept = 'application/json;charset=utf-32';
+                     config.headers.AcceptCharset = 'charset=utf-32';*/
                 }
 
                 return config;

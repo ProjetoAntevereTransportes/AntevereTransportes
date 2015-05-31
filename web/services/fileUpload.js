@@ -7,7 +7,7 @@
                 fd.append('file', file);
                 $http.post("/AntevereTransportes/FileUpload", fd, {
                     transformRequest: angular.identity,
-                    headers: {'Content-Type': undefined}
+                    headers: {'Content-Type': 'multipart/form-data', 'Ignore': true}
                 })
                         .success(function (resultado) {
                             if (resultado.sucesso) {
@@ -19,8 +19,28 @@
                         .error(function () {
                             erro("Não foi possível salvar o arquivo.");
                         });
+                if (sempre)
+                    sempre();
+            };
 
-                sempre();
+            this.getUrlDownload = function (fileId) {
+                return "/AntevereTransportes/FileDownload?id=" + fileId;                
+            };
+        }]);
+
+    app.directive('fileModel', ['$parse', function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
             };
         }]);
 })();

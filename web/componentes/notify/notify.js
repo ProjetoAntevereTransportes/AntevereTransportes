@@ -34,6 +34,14 @@
                             notifyService.add(msg);
                         }
                     };
+
+                    scope.exit = function (msg) {
+                        $(msg.buttons).each(function (i, b) {
+                            if(b.defaultExit)
+                                scope.func(msg, b);
+                        });
+                        notifyService.remove(msg.ID);
+                    };
                 }
             };
         }]);

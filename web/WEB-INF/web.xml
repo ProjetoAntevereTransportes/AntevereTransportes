@@ -44,6 +44,10 @@
         <servlet-name>Cargo</servlet-name>
         <servlet-class>servlets.Cargo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FileDownload</servlet-name>
+        <servlet-class>servlets.FileDownload</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -111,6 +115,10 @@
     <servlet-mapping>
         <servlet-name>Cargo</servlet-name>
         <url-pattern>/Cargo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileDownload</servlet-name>
+        <url-pattern>/FileDownload</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

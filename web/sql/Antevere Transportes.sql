@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS tipo_usuario(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(30) NOT NULL,
 	descricao VARCHAR(90));
-	
 
 
 CREATE TABLE IF NOT EXISTS status_usuario(

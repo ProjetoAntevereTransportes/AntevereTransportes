@@ -9,27 +9,87 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Pagamento {
-    
+
     public Connection con;
-    
+
     private void abrir() {
         con = Conexao.abrirConexao();
     }
-    /*
-     id INT PRIMARY KEY AUTO_INCREMENT,
-     conta_bancaria_id INT NOT NULL,
-     FOREIGN KEY (conta_bancaria_id) REFERENCES conta_bancaria(id),
-     data_inicio DATE,
-     data_fim DATE,
-     dia_mensal INT,
-     nome VARCHAR(40) NOT NULL,
-     descricao VARCHAR(60),
-     fornecedor_id INT NOT NULL,
-     FOREIGN KEY (fornecedor_id) REFERENCES fornecedor(id),
-     valor DECIMAL(10,2) NOT NULL,
-     e_valido boolean not null
-     */
-    
+
+    public List<contratos.PagamentoFornecedor> pagamentoFornecedorMensal(int fornecedorID) {
+        try {
+            abrir();
+            Statement st = con.createStatement();
+            String sql = "select sum(parcela_pagamento.valor) + sum(parcela_pagamento.juros) - sum(parcela_pagamento.descontos) as total,\n"
+                    + "fornecedor.nome,\n"
+                    + "parcela_pagamento.data_pagamento\n"
+                    + " from parcela_pagamento\n"
+                    + " inner join conta_pagar on conta_pagar.id = parcela_pagamento.id\n"
+                    + " inner join fornecedor on fornecedor.id = conta_pagar.fornecedor_id\n"
+                    + " where parcela_pagamento.status_pagamento_id = 2\n"
+                    + " and data_pagamento between DATE(CONCAT(YEAR(NOW()) - 1, '-', MONTH(NOW()), '-', '01')) and data_pagamento"
+                    + " and conta_pagar.fornecedor_id = ?\n"
+                    + "group by  YEAR(data_pagamento), MONTH(data_pagamento) ASC"
+                    + " order by data_pagamento;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, fornecedorID);
+
+            ResultSet rs = ps.executeQuery();
+
+            List<contratos.PagamentoFornecedor> pf = new ArrayList<>();
+
+            while (rs.next()) {
+                contratos.PagamentoFornecedor p = new PagamentoFornecedor();
+                p.setMes(rs.getDate("data_pagamento"));
+                p.setNomeFornecedor(rs.getString("nome"));
+                p.setValor(rs.getDouble("total"));
+
+                pf.add(p);
+            }
+
+            return pf;
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public boolean pagarUnico(contratos.Pagamento2 pg) {
+
+        try {
+            abrir();
+            Statement st = con.createStatement();
+            String sql = "update parcela_pagamento set descontos = ?, juros = ?, status_pagamento_id = 2, data_pagamento = NOW(), comprovante_id = ?, conta_bancaria_id = ? where id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setDouble(1, pg.getDescontos());
+            ps.setDouble(2, pg.getJuros());
+            ps.setInt(3, pg.getComprovanteID());
+            ps.setInt(4, pg.getContaBancariaID());
+            ps.setInt(5, pg.getID());
+
+            int status = ps.executeUpdate();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
     public boolean salvarDebito(contratos.DebitoAutomatico debito) {
         try {
             abrir();
@@ -38,12 +98,12 @@ public class Pagamento {
             String sql = "INSERT INTO debito_automatico (conta_bancaria_id, data_inicio, data_fim, dia_mensal, "
                     + "nome, descricao, fornecedor_id, valor) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(sql);
-            
+
             ps.setInt(1, debito.getContaBancariaID());
-            
+
             java.sql.Date sqlDataInicio = new java.sql.Date(debito.getDataInicio().getTime());
             java.sql.Date sqlDataFim = new java.sql.Date(debito.getDataFim().getTime());
-            
+
             ps.setDate(2, sqlDataInicio);
             ps.setDate(3, sqlDataFim);
             ps.setInt(4, debito.getDia());
@@ -51,9 +111,9 @@ public class Pagamento {
             ps.setString(6, debito.getDescricao());
             ps.setInt(7, debito.getFornecedorID());
             ps.setDouble(8, debito.getValor());
-            
+
             int sucesso = ps.executeUpdate();
-            
+
             if (sucesso != 1) {
                 con.rollback();
                 return false;
@@ -65,23 +125,25 @@ public class Pagamento {
             ex.printStackTrace();
             try {
                 con.rollback();
+
             } catch (SQLException ex1) {
-                Logger.getLogger(Pagamento.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(Pagamento.class
+                        .getName()).log(Level.SEVERE, null, ex1);
             }
             return false;
         } finally {
             Conexao.fecharConexao(con);
         }
     }
-    
+
     public List<contratos.DebitoAutomatico> listarDebitos() {
         try {
             Statement st = con.createStatement();
             String sql = "select * from debito_automatico;";
             PreparedStatement ps = con.prepareStatement(sql);
-            
+
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs != null) {
                 List<contratos.DebitoAutomatico> lista = new ArrayList<>();
                 while (rs.next()) {
@@ -97,7 +159,7 @@ public class Pagamento {
                     d.setValor(rs.getDouble("valor"));
                     //d.seteValido(rs.getBoolean("e_valido"));
                 }
-                
+
                 return lista;
             } else {
                 return null;
@@ -109,40 +171,43 @@ public class Pagamento {
             Conexao.fecharConexao(con);
         }
     }
-    
+
     public boolean salvarVarios(contratos.Pagamento pagamento) {
         try {
             abrir();
             con.setAutoCommit(false);
             Statement st = con.createStatement();
-            String sql = "insert into conta_pagar(nome, fornecedor_id) values(?, ?);";
+            String sql = "insert into conta_pagar(nome, fornecedor_id, quantidade) values(?, ?, ?);";
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-            
+
             ps.setString(1, pagamento.getNome());
             ps.setInt(2, pagamento.getFornecedorID());
-            
+            ps.setInt(3, pagamento.getTotalParcelas());
+
             int sucesso = ps.executeUpdate();
-            
+
             if (sucesso != 1) {
                 con.rollback();
                 return false;
             }
-            
+
             ResultSet keys = ps.getGeneratedKeys();
             keys.next();
             int contaPagarID = keys.getInt(1);
-            
+
             String sqlParcela = "insert into parcela_pagamento(vencimento, valor, "
-                    + "descontos, juros, status_pagamento_id, descricao, conta_pagar_id, numero) values(?,?,?,?,?,?,?,?)";
-            
+                    + "descontos, juros, status_pagamento_id, descricao, conta_pagar_id, numero,"
+                    + "boleto_id) "
+                    + "values(?,?,?,?,?,?,?,?,?)";
+
             int count = 1;
-            
+
             pagamento.getParcelas().sort((contratos.ParcelaPagamento pg1,
                     contratos.ParcelaPagamento pg2) -> pg1.getVencimento().compareTo(pg2.getVencimento()));
-            
+
             for (contratos.ParcelaPagamento p : pagamento.getParcelas()) {
                 PreparedStatement par = con.prepareStatement(sqlParcela);
-                
+
                 par.setString(1, new java.text.SimpleDateFormat("yyyy-MM-dd").format(p.getVencimento()));
                 par.setDouble(2, p.getValor());
                 par.setDouble(3, 0);
@@ -151,63 +216,71 @@ public class Pagamento {
                 par.setString(6, p.getDescricao());
                 par.setInt(7, contaPagarID);
                 par.setInt(8, count);
-                
+
+                if (p.getBoletoID() == 0) {
+                    par.setNull(9, Types.INTEGER);
+                } else {
+                    par.setInt(9, p.getBoletoID());
+                }
+
                 int status = par.executeUpdate();
                 if (status != 1) {
                     con.rollback();
                     return false;
                 }
-                
+
                 count++;
             }
             con.commit();
-            
+
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();
             try {
                 con.rollback();
+
             } catch (SQLException ex1) {
-                Logger.getLogger(Pagamento.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(Pagamento.class
+                        .getName()).log(Level.SEVERE, null, ex1);
             }
             return false;
         } finally {
             Conexao.fecharConexao(con);
         }
     }
-    
+
     public List<contratos.Pagamento> listar() {
         try {
             abrir();
             Statement st = con.createStatement();
             String sql = "select * from conta_pagar;";
-            
+
             PreparedStatement ps = con.prepareStatement(sql);
-            
+
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs != null) {
                 List<contratos.Pagamento> lista = new ArrayList<contratos.Pagamento>();
-                
+
                 database.Fornecedor f = new Fornecedor();
-                
+
                 while (rs.next()) {
                     contratos.Pagamento p = new contratos.Pagamento();
                     p.setID(rs.getInt("id"));
                     p.setNome(rs.getString("nome"));
                     int fornecedorID = rs.getInt("fornecedor_id");
-                    
+
                     p.setFornecedor(f.pegarPeloID(fornecedorID));
-                    
+
                     List<contratos.ParcelaPagamento> parcelas = new ArrayList<contratos.ParcelaPagamento>();
-                    
+
                     p.setParcelas(listarParcelasPeloPagamentoID(p.getID()));
-                    
+
                     lista.add(p);
                 }
                 return lista;
             }
-            
+
             return null;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -216,15 +289,15 @@ public class Pagamento {
             Conexao.fecharConexao(con);
         }
     }
-    
+
     public List<contratos.Pagamento2> listarTodosPagamentos(java.util.Date date) {
         try {
             abrir();
             Statement st = con.createStatement();
-            
+
             Calendar c = Calendar.getInstance();
             c.set(date.getYear(), date.getMonth(), date.getDate());
-            
+
             String sql = "select parcela_pagamento.id,\n"
                     + "	conta_pagar.nome,\n"
                     + "       parcela_pagamento.vencimento,\n"
@@ -235,7 +308,8 @@ public class Pagamento {
                     + "       parcela_pagamento.descontos,\n"
                     + "       parcela_pagamento.juros,\n"
                     + "       parcela_pagamento.data_pagamento,\n"
-                    + "       parcela_pagamento.comprovante,\n"
+                    + "       parcela_pagamento.comprovante_id,\n"
+                    + "       parcela_pagamento.boleto_id,\n"
                     + "       parcela_pagamento.descricao,\n"
                     + "       status_pagamento.nome as 'status_nome',\n"
                     + "       conta_bancaria.nome as 'conta_nome',\n"
@@ -265,7 +339,8 @@ public class Pagamento {
                     + "       0 as 'descontos',\n"
                     + "       0 as 'juros',\n"
                     + "       null as 'data_pagamento',\n"
-                    + "       null as 'comprovante',\n"
+                    + "       null as 'comprovante_id',\n"
+                    + "       null as 'boleto_id',\n"
                     + "       debito_automatico.descricao as 'descricao',\n"
                     + "       conta_bancaria.nome as 'conta_nome',\n"
                     + "       debito_automatico.fornecedor_id as 'fornecedor_id',\n"
@@ -289,17 +364,17 @@ public class Pagamento {
                     + " between DATE(debito_automatico.data_inicio) and DATE(debito_automatico.data_fim)))"
                     + " or (debito_automatico.data_fim = '0000-00-00' and debito_automatico.data_fim = '0000-00-00')"
                     + " order by vencimento;";
-            
+
             PreparedStatement ps = con.prepareStatement(sql);
-            
+
             ps.setString(1, new SimpleDateFormat("MM").format(c.getTime()));
             ps.setString(2, String.valueOf(c.get(Calendar.YEAR) + 1900));
             ps.setString(3, String.valueOf(c.get(Calendar.YEAR) + 1900));
             ps.setString(4, new SimpleDateFormat("MM").format(c.getTime()));
-            
+
             c.set(Calendar.DATE, c.getMaximum(Calendar.DATE));
             java.util.Date ultimaData = c.getTime();
-            
+
             c.set(Calendar.DATE, c.getMinimum(Calendar.DATE));
             java.util.Date primeiraData = c.getTime();
 
@@ -307,14 +382,14 @@ public class Pagamento {
             //ps.setInt(6, ultimaData.getDate());
             ps.setString(5, String.valueOf(date.getYear() + 1900));
             ps.setString(6, new SimpleDateFormat("MM").format(date));
-            
+
             ps.setString(7, String.valueOf(date.getYear() + 1900));
             ps.setString(8, new SimpleDateFormat("MM").format(date));
-            
+
             System.out.print(ps);
-            
+
             ResultSet rs = ps.executeQuery();
-            
+
             List<contratos.Pagamento2> list = new ArrayList<>();
             while (rs.next()) {
                 contratos.Pagamento2 pg = new Pagamento2();
@@ -323,14 +398,15 @@ public class Pagamento {
                 pg.setValor(rs.getDouble("valor"));
                 pg.setDescricao(rs.getString("descricao"));
                 pg.setVencimento(rs.getDate("vencimento"));
-                pg.setComprovante(rs.getString("comprovante"));
+                pg.setComprovanteID(rs.getInt("comprovante_id"));
+                pg.setBoletoID(rs.getInt("boleto_id"));
                 pg.setContaBancariaID(rs.getInt("conta_bancaria_id"));
                 pg.setContaNome(rs.getString("conta_nome"));
                 pg.setDataPagamento(rs.getDate("data_pagamento"));
-                pg.setDebitoLimitado(rs.getBoolean("debito_limitado"));                
+                pg.setDebitoLimitado(rs.getBoolean("debito_limitado"));
                 pg.setDebitoIlimitado(rs.getBoolean("debito_ilimitado"));
                 pg.setUnico(rs.getBoolean("unico"));
-                pg.setCarne(rs.getBoolean("carne"));                
+                pg.setCarne(rs.getBoolean("carne"));
                 pg.setDescontos(rs.getDouble("descontos"));
                 pg.setFornecedorID(rs.getInt("fornecedor_id"));
                 pg.setFornecedorNome(rs.getString("fornecedor_nome"));
@@ -339,20 +415,25 @@ public class Pagamento {
                 pg.setStatusPagamentoID(rs.getInt("status_pagamento_id"));
                 pg.setQuantidade(rs.getInt("quantidade"));
                 pg.setNumero(rs.getInt("numero"));
+
+                pg.setPago(pg.getStatusPagamentoID() == 2);
+
+                pg.setVencido(pg.getVencimento().compareTo(new java.util.Date()) < 0);
+
                 list.add(pg);
             }
-            
+
             return list;
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         } finally {
             Conexao.fecharConexao(con);
         }
-        
+
     }
-    
+
     public List<contratos.ParcelaPagamento> listarParcelasPeloPagamentoID(int pagamentoID) {
         try {
             abrir();
@@ -373,16 +454,16 @@ public class Pagamento {
                     + " from parcela_pagamento left join conta_bancaria on conta_bancaria.id = parcela_pagamento.conta_bancaria_id\n"
                     + "inner join status_pagamento on status_pagamento.id = parcela_pagamento.status_pagamento_id\n"
                     + "where parcela_pagamento.conta_pagar_id = ?;";
-            
+
             PreparedStatement ps = con.prepareStatement(sql);
-            
+
             ps.setInt(1, pagamentoID);
-            
+
             ResultSet rs = ps.executeQuery();
-            
+
             if (rs != null) {
                 List<contratos.ParcelaPagamento> lista = new ArrayList<contratos.ParcelaPagamento>();
-                
+
                 while (rs.next()) {
                     contratos.ParcelaPagamento p = new contratos.ParcelaPagamento();
                     p.setID(rs.getInt("id"));
@@ -398,12 +479,12 @@ public class Pagamento {
                     p.setVencimento(rs.getDate("vencimento"));
                     p.setStatusNome(rs.getString("status_nome"));
                     p.setContaBancariaNome(rs.getString("conta_nome"));
-                    
+
                     lista.add(p);
                 }
                 return lista;
             }
-            
+
             return null;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -412,13 +493,13 @@ public class Pagamento {
             Conexao.fecharConexao(con);
         }
     }
-    
+
     public List<contratos.PagamentoView> listarPagamentosView() {
         List<contratos.PagamentoView> lista = new ArrayList<PagamentoView>();
-        
+
         List<contratos.Pagamento> boletos = listar();
         List<contratos.DebitoAutomatico> debitos = listarDebitos();
-        
+
         for (contratos.DebitoAutomatico d : debitos) {
             if (d.geteValido() && d.getDataFim() == null && d.getDataInicio() == null) {
                 contratos.Pagamento p = new contratos.Pagamento();
@@ -433,10 +514,10 @@ public class Pagamento {
                 p.setParcelas(null);
             }
         }
-        
+
         return lista;
     }
-    
+
     public List<Semana> GetMonthPayments(java.util.Date data) {
 
 //        Calendar calStart = Calendar.getInstance();
@@ -448,9 +529,9 @@ public class Pagamento {
 //        java.util.Date end = calEnd.getTime();
         con = Conexao.abrirConexao();
         List<contratos.Pagamento2> pagamentos = listarTodosPagamentos(data);
-        
+
         List<Semana> semanas = new ArrayList<>();
-        
+
         Calendar cal = Calendar.getInstance();
         cal.setTime(data);
         cal.set(Calendar.DAY_OF_MONTH, cal.getMinimum(Calendar.DAY_OF_MONTH));
@@ -479,7 +560,7 @@ public class Pagamento {
         for (int i = 0; i < daysNumber / 7; i++) {
             Semana semana = new Semana();
             semana.numero = cal.get(Calendar.WEEK_OF_MONTH);
-            
+
             for (int d = 0; d < 7; d++, cal.add(Calendar.DATE, 1)) {
                 Dia dia = new Dia();
                 dia.data = cal.getTime();
@@ -490,29 +571,29 @@ public class Pagamento {
                         dia.pagamentos.add(p);
                     }
                 }
-                
+
                 semana.dias.add(dia);
             }
-            
+
             semanas.add(semana);
         }
-        
+
         Conexao.fecharConexao(con);
         return semanas;
     }
-    
+
     private static java.util.Date getZeroTimeDate(java.util.Date date) {
         java.util.Date res = date;
         Calendar calendar = Calendar.getInstance();
-        
+
         calendar.setTime(date);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        
+
         res = calendar.getTime();
-        
+
         return res;
     }
 }

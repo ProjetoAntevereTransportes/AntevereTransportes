@@ -6,6 +6,56 @@
                 return "data=" + JSON.stringify({operacao: operacao, json: JSON.stringify(dado)});
             };
 
+            this.excluir = function(sucesso, erro, sempre, pagamentoID){
+                var resultado = null;
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("EXCLUIR", pagamentoID))
+                        .success(function (data) {
+                            resultado = data;
+                            if (data.sucesso)
+                                sucesso(data.resultado);
+                            else {
+                                erro(data.mensagem);
+                            }
+                        }).error(function () {
+                    erro(resultado.mensagem);
+                });
+            };
+
+            this.pagamentoFornecedorMensal = function(sucesso, erro, sempre, fornecedorID){               
+                var resultado = null;
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("PAGAMENTOMENSALFORNECEDOR", fornecedorID))
+                        .success(function (data) {
+                            resultado = data;
+                            if (data.sucesso)
+                                sucesso(data.resultado);
+                            else {
+                                erro(data.mensagem);
+                            }
+                        }).error(function () {
+                    erro(resultado.mensagem);
+                });
+            };
+
+            this.pagarUnico = function (sucesso, erro, sempre, data) {
+                var resultado = null;
+                
+                delete data["$$hashKey"];
+                delete data["c"];
+                data.vencimento = null;
+                
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("PAGARUNICO", data))
+                        .success(function (data) {
+                            resultado = data;
+                            if (data.sucesso)
+                                sucesso(data.resultado);
+                            else {
+                                erro(data.mensagem);
+                            }
+                        }).error(function () {
+                    erro(resultado.mensagem);
+                });
+            };
+
             this.listar = function (sucesso, erro, sempre, data) {
                 var resultado;
                 var id = notifyService.add({

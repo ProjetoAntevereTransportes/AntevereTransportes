@@ -19,6 +19,8 @@ public class ParcelaPagamento {
     private Double juros;
     private int statusPagamento;
     private String comprovante;
+    private int comprovanteID;
+    private int boletoID;
     private int contaBancariaID;
     private String descricao;
     private int debitoAutomaticoID;
@@ -192,5 +194,33 @@ public class ParcelaPagamento {
      */
     public void setContaBancariaNome(String contaBancariaNome) {
         this.contaBancariaNome = contaBancariaNome;
+    }
+
+    /**
+     * @return the comprovanteID
+     */
+    public int getComprovanteID() {
+        return comprovanteID;
+    }
+
+    /**
+     * @param comprovanteID the comprovanteID to set
+     */
+    public void setComprovanteID(int comprovanteID) {
+        this.comprovanteID = comprovanteID;
+    }
+
+    /**
+     * @return the boletoID
+     */
+    public int getBoletoID() {
+        return boletoID;
+    }
+
+    /**
+     * @param boletoID the boletoID to set
+     */
+    public void setBoletoID(int boletoID) {
+        this.boletoID = boletoID;
     }
 }

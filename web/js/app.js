@@ -3,15 +3,40 @@
         "pagamento", "ngAnimate", "pagamentoService",
         "login", "authService", "fabElement", "notifyElement",
         "fornecedor", "fileUploadModule", "cargo",
-        "funcionario", "cliente", "ui.utils", "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao"]);
+        "funcionario", "cliente", "ui.utils", "cfp.hotkeys",
+        "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
         }]);
 
+    app.directive('validFile', function () {
+        return {
+            require: 'ngModel',
+            link: function (scope, el, attrs, ngModel) {
+                //change event is fired when file is selected
+                el.bind('change', function () {
+                    scope.$apply(function () {
+                        ngModel.$setViewValue(el.val());
+                        ngModel.$render();
+                    });
+                });
+            }
+        }
+    });
+
     app.controller('appCtrl', function ($scope, $location) {
         $scope.shadow = false;
         $scope.showBack = true;
+
+        $scope.menuIsOpened = false;
+
+        $("#mm-menu-toggle").on("changeClass", "click", function () {
+            if ($(this).hasClass("active"))
+                $scope.menuIsOpened = true;
+            else
+                $scope.menuIsOpened = false;
+        });
 
         $scope.$on('$routeChangeStart', function (next, current) {
             $scope.mudarTitulo($location.path());
@@ -37,6 +62,11 @@
             $(".back-top").css("top", (-position * 0.5));
         };
 
+        $scope.abrirMenu = function () {
+            $("#mm-menu-toggle").click();
+            $("#vertical-menu").find("a:first").focus();
+        };
+
         $scope.mudarTitulo = function (path) {
             $scope.defaultColor = "rgb(69, 90, 100)";
             $scope.defaultSearchColor = "rgb(114, 138, 150)";
@@ -44,7 +74,7 @@
             switch (path) {
                 case "/inicio":
                 {
-                    $scope.title = "Início";
+                    $scope.title = "Antevere Transportes";
                     $scope.barColor = $scope.defaultColor;
                     $scope.searchColor = $scope.defaultSearchColor;
                     $scope.showBack = true;
@@ -133,7 +163,7 @@
                 case "/Banco":
                 {
                     $scope.title = "Bancos";
-                   $scope.barColor = $scope.defaultColor;
+                    $scope.barColor = $scope.defaultColor;
                     $scope.searchColor = $scope.defaultSearchColor;
                     $scope.showBack = true;
                     break;

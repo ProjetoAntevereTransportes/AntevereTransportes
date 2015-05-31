@@ -5,26 +5,21 @@
  */
 package servlets;
 
-import contratos.JsonResult;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.RequestContext;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 /**
  *
  * @author lucas
  */
-public class FileUpload extends HttpServlet {
+public class FileDownload extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,41 +32,28 @@ public class FileUpload extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        JsonResult<String> result = new JsonResult<>();
-        try (PrintWriter out = response.getWriter()) {
+        response.setContentType("application/octet-stream");
+//        response.setHeader("Content-Disposition",
+//                "attachment;filename=downloadfilename.csv");
 
-            if (ServletFileUpload.isMultipartContent(request)) {
-                try {
-                    Map<String, List<FileItem>> multiparts = new ServletFileUpload(
-                            new DiskFileItemFactory()).parseParameterMap(request);
+        try (ServletOutputStream out = response.getOutputStream()) {
+            database.FileUpload f = new database.FileUpload();
 
-                    FileItem item = multiparts.get("file").get(0);
+            contratos.Arquivo a = f.getFile(Integer.parseInt(request.getParameter("id")));
 
-                    if (!item.isFormField()) {
-                        database.FileUpload f = new database.FileUpload();
-                        int id = f.uploadFile(item);
-                        
-                        if(id == 0){
-                            throw new Exception();
-                        }
-                        result.sucesso = true;
-                        result.resultado = String.valueOf(id);
-                    } else {
-                        result.sucesso = false;
-                        result.mensagem = "Resquest não é válido.";
-                    }
+            response.setHeader("Content-Disposition",
+                    "attachment;filename=" + a.getNome());
 
-                } catch (Exception ex) {
-                    result.sucesso = false;
-                    result.mensagem = "Não foi possível salvar o arquivo. Erro: " + ex;
-                }
-            } else {
-                result.sucesso = false;
-                result.mensagem = "O método não é MultipartContent.";
+            FileInputStream fileIn = new FileInputStream(a.getFile());
+
+            byte[] outputByte = new byte[4096];
+//copy binary contect to output stream
+            while (fileIn.read(outputByte, 0, 4096) != -1) {
+                out.write(outputByte, 0, 4096);
             }
-
-            out.println(result.Serializar());
+            fileIn.close();
+            out.flush();
+            out.close();
         }
     }
 

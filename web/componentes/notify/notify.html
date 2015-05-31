@@ -10,13 +10,17 @@
                 ng-click="func(msg, btn)">
             {{btn.text}}
         </button>
-                <button class="notify-button">
-                    <i class="glyphicon glyphicon-remove"></i>
+        <button class="notify-button exit-notify" ng-click="exit(msg)">
+            <i class="md md-clear"></i>
         </button>
     </div>
 </div>
 
 <style>
+    .exit-notify{
+        color: darkgrey !important;    
+    }
+
     .notify-button{
         display: inline;
         margin-left: 20px;
@@ -84,15 +88,6 @@
         -webkit-transition-delay: 0.06s !important;
         -webkit-animation-delay: 0.06s !important;
         animation-delay: 0.06s !important;
-    }
-    
-    @-webkit-keyframes notifyMove{
-        0%{
-            background: red;
-        }
-        100%{
-            background: blue;
-        }
     }
 
     @-webkit-keyframes notifyShow{

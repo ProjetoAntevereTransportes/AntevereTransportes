@@ -2,6 +2,7 @@ body{
     background-color: #ececec !important;
     padding-bottom: 100px; 
     font-family: Roboto;
+    height: 100% !important;
 }
 
 #page-wrapper{

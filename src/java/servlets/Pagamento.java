@@ -23,7 +23,6 @@ public class Pagamento extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
 
-            
             contratos.JsonReceiver2 j = new JsonReceiver2();
 
             JsonReceiver<JsonReceiver2> json = new JsonReceiver<JsonReceiver2>(JsonReceiver2.class);
@@ -33,10 +32,9 @@ public class Pagamento extends HttpServlet {
                 json.Desserealizar(request.getParameter("data"));
                 receiveJson = json.getData().getJson();
             }
-            
+
             String value = new String(receiveJson.getBytes("UTF-8"), "UTF-8");
-            
-            
+
             String resposta = "";
 
             switch (json.getData().getOperacao()) {
@@ -60,24 +58,71 @@ public class Pagamento extends HttpServlet {
                 case SALVARVARIOS: {
                     resposta = salvarVarios(receiveJson);
                     break;
-                } case SALVARDEBITO:{
+                }
+                case SALVARDEBITO: {
                     resposta = salvarDebito(receiveJson);
                     break;
-                }                    
+                }
+                case PAGARUNICO: {
+                    resposta = pagarUnico(receiveJson);
+                    break;
+                }
+                case PAGAMENTOMENSALFORNECEDOR: {
+                    resposta = pagamentoFornecedorMensal(receiveJson);
+                    break;
+                }
             }
 
             out.print(resposta);
         }
     }
-    
-    public String salvarDebito(String receiveJson){
+
+    public String pagamentoFornecedorMensal(String receiveJson) {
+        database.Pagamento pg = new database.Pagamento();
+
+        JsonReceiver<Integer> pagamento = new JsonReceiver<>(Integer.class);
+        pagamento.Desserealizar(receiveJson);
+
+        JsonResult<List<contratos.PagamentoFornecedor>> json = new JsonResult<List<contratos.PagamentoFornecedor>>();
+
+        try {
+            json.resultado = pg.pagamentoFornecedorMensal(pagamento.getData());
+            json.sucesso = true;
+        } catch (Exception ex) {
+            json.sucesso = false;
+            json.mensagem = "Não foi possível obter as informações dos fornecedores. " + ex.toString();
+        }
+
+        return json.Serializar();
+    }
+
+    public String pagarUnico(String receiveJson) {
+        database.Pagamento pg = new database.Pagamento();
+
+        JsonReceiver<contratos.Pagamento2> pagamento = new JsonReceiver<>(contratos.Pagamento2.class);
+        pagamento.Desserealizar(receiveJson);
+
+        JsonResult<Boolean> json = new JsonResult<Boolean>();
+
+        try {
+            json.resultado = pg.pagarUnico(pagamento.getData());
+            json.sucesso = true;
+        } catch (Exception ex) {
+            json.sucesso = false;
+            json.mensagem = "Não foi possível realizar o pagamento. " + ex.toString();
+        }
+
+        return json.Serializar();
+    }
+
+    public String salvarDebito(String receiveJson) {
         database.Pagamento pg = new database.Pagamento();
 
         JsonReceiver<contratos.DebitoAutomatico> pagamentos = new JsonReceiver<>(contratos.DebitoAutomatico.class);
         pagamentos.Desserealizar(receiveJson);
-               
+
         JsonResult<Boolean> json = new JsonResult<Boolean>();
-        
+
         try {
             json.resultado = pg.salvarDebito(pagamentos.getData());
             json.sucesso = true;
@@ -87,17 +132,17 @@ public class Pagamento extends HttpServlet {
         }
 
         return json.Serializar();
-    }    
+    }
 
     public String salvarVarios(String receiveJson) {
-        database.Pagamento pg = new database.Pagamento();
-
-        JsonReceiver<contratos.Pagamento> pagamentos = new JsonReceiver<>(contratos.Pagamento.class);
-        pagamentos.Desserealizar(receiveJson);
-        
         JsonResult<Boolean> json = new JsonResult<Boolean>();
-        
+
         try {
+            database.Pagamento pg = new database.Pagamento();
+
+            JsonReceiver<contratos.Pagamento> pagamentos = new JsonReceiver<>(contratos.Pagamento.class);
+            pagamentos.Desserealizar(receiveJson);
+
             json.resultado = pg.salvarVarios(pagamentos.getData());
             json.sucesso = true;
         } catch (Exception ex) {
@@ -109,10 +154,10 @@ public class Pagamento extends HttpServlet {
     }
 
     public String lervarios(String receiveJson) {
-        
+
         JsonReceiver<java.util.Date> r = new JsonReceiver<java.util.Date>(java.util.Date.class);
         r.Desserealizar(receiveJson);
-        
+
         database.Pagamento pg = new database.Pagamento();
 
         JsonResult<List<contratos.Semana>> json = new JsonResult<>();

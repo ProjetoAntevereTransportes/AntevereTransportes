@@ -13,20 +13,18 @@ import com.google.gson.GsonBuilder;
  * @author felipe
  */
 public class JsonReceiver<T> {
-    public JsonReceiver(Class<T> type){
+
+    public JsonReceiver(Class<T> type) {
         this.type = type;
     }
     private T data;
     private Class<T> type;
-    public void Desserealizar(String json){
-        
+
+    public void Desserealizar(String json) {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
-        try{
         data = gson.fromJson(json, type);
-        }catch(Exception e){
-            System.out.println(e.toString());
-        }
     }
+
     /**
      * @return the data
      */

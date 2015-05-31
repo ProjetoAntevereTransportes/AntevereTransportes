@@ -25,6 +25,7 @@
         <link href="css/style.min.css" rel="stylesheet" type="text/css"/>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/animation/card.css" rel="stylesheet" type="text/css"/>
+        <link href="css/morris.css" rel="stylesheet" type="text/css"/>
         <!-- Morris Charts CSS -->
         <link href='http://fonts.googleapis.com/css?family=Roboto:400,300italic,300,100italic,100,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
         <!-- Custom Fonts -->
@@ -73,6 +74,34 @@
                 position: fixed;
                 top: 0;
             }
+
+            .menu-title{
+                font-family: roboto;
+                color: #333 !important;
+                font-weight: 500;
+                font-size: 14px !important;
+                padding-left: 10px;
+            }
+
+            .mm-menu__item:hover{
+                text-decoration: none !important;
+                background-color: rgb(228, 228, 228);
+            }
+
+            .mm-menu__link{
+                text-decoration: none !important;
+            }
+
+            .menu-title i{
+                padding-right: 26px;
+                font-size: 19px;
+                color: rgb(112, 112, 112);
+            }
+
+            #vertical-menu a:focus{  
+                background: rgb(226, 226, 226) !important;                
+                outline: none;
+            }
         </style>
 
         <div ng-show="showBack" class="back-top" style="background: {{barColor}} !important;">
@@ -97,7 +126,7 @@
 
         </div>
 
-        <button id="mm-menu-toggle" class="mm-menu-toggle" style="z-index: 300">
+        <button id="mm-menu-toggle" hotkey="{'alt+m': abrirMenu}" class="mm-menu-toggle" style="z-index: 300">
             Toggle Menu
         </button>
         <nav id="mm-menu" class="mm-menu">
@@ -107,10 +136,10 @@
                 </h2>
                 Teste
             </div>
-            <ul class="mm-menu__items">
+            <ul class="mm-menu__items" id="vertical-menu">
                 <li ng-click="click('/inicio')" class="mm-menu__item" ng-class="{active: selectedItem == '/inicio'}">
                     <a class="mm-menu__link" href="#/inicio">
-                        <span class="mm-menu__link-text"><i class="md md-home"></i> Inicio</span>
+                        <span class="mm-menu__link-text menu-title"><i class="md md-home"></i> Inicio</span>
                     </a>
                 </li>
                 <li class="mm-menu__item" ng-class="{active: selectedItem == '/usuario'}">
@@ -191,7 +220,11 @@
         <script src="componentes/caminhao/caminhao.js" type="text/javascript"></script>
         <script src="componentes/conta_bancaria/conta_bancaria.js" type="text/javascript"></script>
         <script src="js/mousetrap.min.js" type="text/javascript"></script>
-        <script src="js/hotkeys.js" type="text/javascript"></script>
+        <script src="js/hotkeys.js" type="text/javascript"></script>   
+        <script src="js/morris.min.js" type="text/javascript"></script>
+        <script src="js/raphael-min.js" type="text/javascript"></script>
+        <script src="js/masks.js" type="text/javascript"></script>
+        
         <script>
                             var menu = new Menu;
                             $(".mm-menu__item").click(function () {

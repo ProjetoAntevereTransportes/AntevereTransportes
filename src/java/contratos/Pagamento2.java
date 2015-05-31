@@ -19,6 +19,8 @@ public class Pagamento2 {
     private Double juros;
     private java.util.Date dataPagamento;
     private String comprovante;
+    private int comprovanteID;
+    private int boletoID;
     private String descricao;
     private String nome;
     private String contaNome;
@@ -31,7 +33,9 @@ public class Pagamento2 {
     private Boolean carne;
     private int quantidade;
     private int numero;
-
+    private boolean pago;
+    private boolean vencido;
+    
     /**
      * @return the ID
      */
@@ -324,6 +328,62 @@ public class Pagamento2 {
      */
     public void setCarne(Boolean carne) {
         this.carne = carne;
+    }
+
+    /**
+     * @return the comprovanteID
+     */
+    public int getComprovanteID() {
+        return comprovanteID;
+    }
+
+    /**
+     * @param comprovanteID the comprovanteID to set
+     */
+    public void setComprovanteID(int comprovanteID) {
+        this.comprovanteID = comprovanteID;
+    }
+
+    /**
+     * @return the boletoID
+     */
+    public int getBoletoID() {
+        return boletoID;
+    }
+
+    /**
+     * @param boletoID the boletoID to set
+     */
+    public void setBoletoID(int boletoID) {
+        this.boletoID = boletoID;
+    }
+
+    /**
+     * @return the pago
+     */
+    public boolean isPago() {
+        return pago;
+    }
+
+    /**
+     * @param pago the pago to set
+     */
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
+
+    /**
+     * @return the vencido
+     */
+    public boolean isVencido() {
+        return vencido;
+    }
+
+    /**
+     * @param vencido the vencido to set
+     */
+    public void setVencido(boolean vencido) {
+        this.vencido = vencido;
     }
     
     
