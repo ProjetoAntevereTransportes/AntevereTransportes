@@ -287,7 +287,7 @@
             <div class='col-lg-3'>
                 <div class='form-group'>
                     <label>Comprovante</label>
-                    <input class='form-control  m-input'
+                    <input tabindex="1" class='form-control  m-input'
                            name="comprovanteID"
                            type='file'
                            required
@@ -301,7 +301,7 @@
             <div class='col-lg-3'>
                 <div class='form-group'>
                     <label>Banco</label>
-                    <select class='form-control m-input'
+                    <select tabindex="2" class='form-control m-input'
                             name="contaBancariaID"
                             required placeholder="Conta bancária"
                             ng-model="item.contaBancariaID">
@@ -317,7 +317,7 @@
             <div class='col-lg-3'>
                 <div class='form-group'>
                     <label>Descontos</label>
-                    <input class="form-control m-input" 
+                    <input tabindex="3" class="form-control m-input" 
                            required 
                            type="text"
                            placeholder="Descontos" 
@@ -332,7 +332,7 @@
             <div class='col-lg-3'>
                 <div class='form-group'>
                     <label>Juros {{formPagar.$invalid}} </label>
-                    <input class="form-control m-input" 
+                    <input tabindex="4" class="form-control m-input" 
                            placeholder="Juros" 
                            required 
                            type="text" 
@@ -364,7 +364,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input class="form-control"
+                                <input tabindex="1" class="form-control"
                                        ng-change="gerarParcelas()"
                                        required
                                        ng-model="itemNovoMassa.nome"
@@ -385,7 +385,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Fornecedor</label>
-                                <select class="form-control"
+                                <select tabindex="2" class="form-control"
                                         ng-change="gerarParcelas()"
                                         ng-model="itemNovoMassa.fornecedorID"
                                         name="fornecedor"
@@ -401,7 +401,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Data Inicial {{itemNovoMassa.inicial}}</label>
-                                <input class="form-control"
+                                <input tabindex="3" class="form-control"
                                        type="date"
                                        ng-change="gerarParcelas()"
                                        required
@@ -415,7 +415,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Data Final {{itemNovoMassa.final}}</label>
-                                <input class="form-control"
+                                <input tabindex="4" class="form-control"
                                        type="date"
                                        ng-change="gerarParcelas()"
                                        required
@@ -429,7 +429,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input class="form-control"
+                                <input tabindex="5" class="form-control"
                                        ng-change="gerarParcelas()"
                                        required
                                        name="valor"
@@ -477,8 +477,8 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" ng-disabled="carneForm.$invalid" class="btn btn-primary" ng-click="salvarMassa(itemNovoMassa)">
+                <button tabindex="7" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button tabindex="6" type="button" ng-disabled="carneForm.$invalid" class="btn btn-primary" ng-click="salvarMassa(itemNovoMassa)">
                     Salvar
                 </button>
             </div>
@@ -501,7 +501,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input class="form-control"
+                                <input tabindex="1" class="form-control"
                                        name="nome"
                                        required
                                        ng-model="unico.nome"
@@ -522,7 +522,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Descrição</label>
-                                <input class="form-control"
+                                <input tabindex="2" class="form-control"
                                        name="descricao"
                                        type="text"
                                        ng-model="unicoParcela.descricao"
@@ -537,7 +537,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Fornecedor</label>
-                                <select class="form-control" name="fornecedor" ng-model="unico.fornecedorID" required>
+                                <select tabindex="3" class="form-control" name="fornecedor" ng-model="unico.fornecedorID" required>
                                     <option ng-repeat="f in fornecedores" value="{{f.ID}}">
                                         {{f.nome}}
                                     </option>
@@ -551,7 +551,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Valor</label>
-                                <input class="form-control"
+                                <input tabindex="4" class="form-control"
                                        required
                                        ng-model="unicoParcela.valor"
                                        name="valor"
@@ -565,7 +565,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Vencimento</label>
-                                <input class="form-control"
+                                <input tabindex="5" class="form-control"
                                        type="date" 
                                        required 
                                        name="vencimento"
@@ -579,7 +579,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Boleto</label>
-                                <input class="form-control" type="file" 
+                                <input tabindex="6" class="form-control" type="file" 
                                        required 
                                        file-model="unicoParcela.boletoID">
                             </div>
@@ -588,10 +588,10 @@
                 </div>
             </form>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button tabindex="8" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
 
 
-                <button type="button" class="btn btn-primary" ng-click="salvarUnico()"
+                <button tabindex="7" type="button" class="btn btn-primary" ng-click="salvarUnico()"
                         ng-disabled="unicoForm.$invalid">
                     Salvar
                 </button>

@@ -48,7 +48,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Número</label>
-                                <input tabindex=1 name="numero" required ng-model="modal.item.numero" placeholder="Número"  type="text" 
+                                <input tabindex="1" name="numero" required ng-model="modal.item.numero" placeholder="Número"  type="text" 
                                        ng-minlength="2" ng-maxlength="20" maxlength="20" class="form-control m-input"
                                        Pattern="[1-9]{2,20}" >
                                 <erro ng-show="conta_bancariaform.numero.$error.minlength || conta_bancariaform.numero.$error.maxlength
@@ -60,7 +60,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Agência</label>
-                                <input tabindex=2 name="agencia" required ng-model="modal.item.agencia" placeholder="agencia"  type="text" 
+                                <input tabindex="2" name="agencia" required ng-model="modal.item.agencia" placeholder="agencia"  type="text" 
                                        ng-minlength="2" ng-maxlength="20" maxlength="20" class="form-control m-input"
                                        Pattern="[1-9]{2,20}" >
                                 <erro ng-show="conta_bancariaform.agencia.$error.minlength || conta_bancariaform.agencia.$error.maxlength
@@ -72,7 +72,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Conta Bancaria</label>
-                                <input tabindex=3 ng-model="modal.item.nome" placeholder="Nome" name="nome" type="text" class="form-control m-input"
+                                <input tabindex="3" ng-model="modal.item.nome" placeholder="Nome" name="nome" type="text" class="form-control m-input"
                                        ng-minlength="2" ng-maxlength="20" maxlength="20" required>
                                 <erro ng-show="conta_bancariaform.nome.$error.minlength || conta_bancariaform.nome.$error.maxlength
                                                         || conta_bancariaform.nome.$error.required && conta_bancariaform.nome.$touched">
@@ -83,7 +83,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Pessoa</label>
-                                <select tabindex=4 class='form-control m-input' placeholder="Pessoa" ng-model="modal.item.pessoa_id">
+                                <select tabindex="4" class='form-control m-input' placeholder="Pessoa" ng-model="modal.item.pessoa_id">
                                     <option ng-repeat="f in pessoas" required value="{{f.id}}">{{f.nome}}</option>
                                 </select>
                                 <erro ng-show="conta_bancariaform.pessoa_id.$error.required && conta_bancariaform.pessoa_id.$touched">
@@ -95,7 +95,7 @@
                             <div class="form-group">
                                 <label>Banco</label>
                                 <!-- novo.banco.id -->
-                                <select tabindex=5 class='form-control m-input' placeholder="Banco" ng-model="modal.item.banco_id">
+                                <select tabindex="5" class='form-control m-input' placeholder="Banco" ng-model="modal.item.banco_id">
                                     <option ng-repeat="f in bancos" required value="{{f.id}}">{{f.nome}}</option>
                                 </select>
 
@@ -109,12 +109,11 @@
             </div>
 
             <div class="modal-footer">
-                <button tabindex=7
+                <button tabindex="7"
                         type="button" ng-click="fechar(modal.item)"
                         class="btn btn-default m-button-flat"
                         data-dismiss="modal">Fechar</button>
-                <button tabindex=6
-                        type="button" id="salvar"
+                <button type="button" id="salvar" tabindex="6"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
                         ng-disabled="conta_bancariaform.$invalid">

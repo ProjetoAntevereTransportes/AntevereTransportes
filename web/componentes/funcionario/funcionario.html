@@ -114,7 +114,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Cargo</label>
-                                <select tabindex="5" class="form-control" ng-model="novo.cargo.id" required name="cargo">
+                                <select tabindex="5" class="form-control" ng-model="modal.item.cargo.id" required name="cargo">
                                     <option ng-repeat="c in cargos" required value="{{c.id}}">
                                         {{c.nome}}
                                     </option>
@@ -129,7 +129,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Rua</label>
-                                <input tabindex=6 name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text"
+                                <input tabindex="6" name="rua" required ng-model="novo.endereco.rua" placeholder="Rua"  type="text"
                                        ng-minlength="1" ng-maxlength="30" maxlength="30" class="form-control m-input">
                                 <erro ng-show="funcionarioform.rua.minlength || funcionarioform.rua.$error.maxlength
                                                         || funcionarioform.rua.$error.required && funcionarioform.rua.$touched">
@@ -145,7 +145,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Cidade</label>
-                                        <input tabindex=7 name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade" 
+                                        <input tabindex="7" name="cidade" required ng-model="novo.endereco.cidade" placeholder="Cidade" 
                                                ng-minlength="3" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.cidade.minlength || funcionarioform.cidade.$error.maxlength
                                                                 || funcionarioform.cidade.$error.required && funcionarioform.cidade.$touched">
@@ -158,7 +158,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Bairro</label>
-                                        <input tabindex=8 name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro" 
+                                        <input tabindex="8" name="bairro" required ng-model="novo.endereco.bairro" placeholder="Bairro" 
                                                ng-minlength="3" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.bairro.minlength || funcionarioform.bairro.$error.maxlength
                                                                 || funcionarioform.bairro.$error.required && funcionarioform.bairro.$touched">
@@ -176,7 +176,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Número</label>
-                                        <input tabindex=9 name="numero" required ng-model="novo.endereco.numero" placeholder="Numero" 
+                                        <input tabindex="9" name="numero" required ng-model="novo.endereco.numero" placeholder="Numero" 
                                                ng-minlength="1" ng-maxlength="10" maxlength="10" type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.numero.minlength || funcionarioform.numero.$error.maxlength
                                                                 || funcionarioform.numero.$error.required && funcionarioform.numero.$touched">
@@ -189,7 +189,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>Estado</label>
-                                        <input tabindex=10 name="estado" required ng-model="novo.endereco.estado" placeholder="Estado"  type="text" 
+                                        <input tabindex="10" name="estado" required ng-model="novo.endereco.estado" placeholder="Estado"  type="text" 
                                                ng-minlength="2" ng-maxlength="30" maxlength="30" class="form-control m-input" >
                                         <erro ng-show="funcionarioform.estado.$error.minlength || funcionarioform.estado.$error.maxlength || funcionarioform.estado.$error.required && funcionarioform.estado.$touched">
                                             Insira um estado com no mínimo 2 caracteres e máximo 30 caracteres
@@ -201,7 +201,7 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label>País</label>
-                                        <input tabindex=11 name="pais" required ng-model="novo.endereco.pais" placeholder="País" 
+                                        <input tabindex="11" name="pais" required ng-model="novo.endereco.pais" placeholder="País" 
                                                ng-minlength="3" ng-maxlength="30" maxlength="30" type="text" class="form-control m-input">
                                         <erro ng-show="funcionarioform.pais.minlength || funcionarioform.pais.$error.maxlength
                                                                 || funcionarioform.pais.$error.required && funcionarioform.pais.$touched">
@@ -219,7 +219,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>RG</label>
-                                        <input tabindex=12 ng-model="novo.rg" placeholder="RG" name="rg" type="text"
+                                        <input tabindex="12" ng-model="novo.rg" placeholder="RG" name="rg" type="text"
                                                ng-minlength="9" ng-maxlength="12" maxlength="12" class="form-control m-input" required>
                                         <erro ng-show="funcionarioform.rg.minlength || funcionarioform.rg.$error.maxlength
                                                                 || funcionarioform.rg.$error.required && funcionarioform.rg.$touched">
@@ -232,7 +232,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>CPF</label>
-                                        <input tabindex=13 
+                                        <input tabindex="13" 
                                                name="cpf"
                                                id ="cpf"
                                                required 
@@ -255,13 +255,13 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button"
+                <button type="button" tabindex="15"
                         class="btn btn-default m-button-flat"
-                        data-dismiss="modal" tabindex=15>Fechar</button>
-                <button type="button"
+                        data-dismiss="modal">Fechar</button>
+                <button type="button" tabindex="14"
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
-                        ng-disabled="formularioValido()" tabindex=14>
+                        ng-disabled="formularioValido()">
                     {{modal.salvarNome}}
                 </button>
             </div>
