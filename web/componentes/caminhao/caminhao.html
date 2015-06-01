@@ -53,7 +53,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Placa</label>
-                                        <input ng-model="modal.item.placa" placeholder="Placa" name="placa" pattern="^.(1,10)$"
+                                        <input tabindex=1 ng-model="modal.item.placa" placeholder="Placa" name="placa" pattern="^.(1,10)$"
                                                type="text" class="form-control m-input" required>
                                         <erro ng-show="caminhaoform.placa.$error.required && caminhaoform.placa.$touched">
                                             Insira a Placa
@@ -63,7 +63,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Cor</label>
-                                        <input name="cor" required ng-model="modal.item.cor" placeholder="Cor"  type="text" class="form-control m-input">
+                                        <input tabindex=2 name="cor" required ng-model="modal.item.cor" placeholder="Cor"  type="text" class="form-control m-input">
                                         <erro ng-show="caminhaoform.cor.$error.required && caminhaoform.cor.$touched">
                                             Insira a cor
                                         </erro>
@@ -75,7 +75,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Nome</label>
-                                <input name="nome" ng-model="modal.item.nome" required
+                                <input tabindex=3 name="nome" ng-model="modal.item.nome" required
                                        placeholder="Nome"  type="text" class="form-control m-input">
                                 <erro ng-show="caminhaoform.nome.$error.required && caminhaoform.nome.$touched">
                                     Insira um Nome
@@ -86,7 +86,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Modelo</label>
-                                <input name="modelo" required ng-model="modal.item.modelo" placeholder="Modelo" 
+                                <input tabindex=4 name="modelo" required ng-model="modal.item.modelo" placeholder="Modelo" 
                                        type="text" class="form-control m-input">
                                 <erro ng-show="caminhaoform.modelo.$error.required && caminhaoform.modelo.$touched">
                                     Insira o Modelo
@@ -98,7 +98,7 @@
                             <div class="form-group">
                                 <label>Marca</label>
                                 <input name="marca" required ng-model="modal.item.marca" placeholder="Marca" type="text" class="form-control m-input">
-                                <erro ng-show="caminhaoform.marca.$error.required && caminhaoform.marca.$touched">
+                                <erro tabindex=5 ng-show="caminhaoform.marca.$error.required && caminhaoform.marca.$touched">
                                     Insira uma marca
                                 </erro>
                             </div>
@@ -109,7 +109,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Ano Modelo</label>
-                                        <input name="ano_modelo" required ng-model="modal.item.ano_modelorenavam" placeholder="Ano Modelo"  type="text" class="form-control m-input">
+                                        <input tabindex=6 name="ano_modelo" required ng-model="modal.item.ano_modelorenavam" placeholder="Ano Modelo"  type="text" class="form-control m-input">
                                         <erro ng-show="caminhaoform.ano_modelo.$error.required && caminhaoform.ano_modelo.$touched">
                                             Insira o Ano do Modelo
                                         </erro>
@@ -118,7 +118,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Data Compra</label>
-                                        <input name="data_compra" required ng-model="modal.item.data_compra" placeholder="Data Compra"  type="text" class="form-control m-input">
+                                        <input tabindex=7 name="data_compra" required ng-model="modal.item.data_compra" placeholder="Data Compra"  type="text" class="form-control m-input">
                                         <erro ng-show="caminhaoform.data_compra.$error.required && caminhaoform.data_compra.$touched">
                                             Insira a Data da Compra
                                         </erro>
@@ -129,7 +129,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Gastos KM</label>
-                                <input name="gasto_kilometros" required ng-model="modal.item.gasto_kilometros" placeholder="Gastos por Kilometros"  type="text" class="form-control m-input">
+                                <input tabindex=8 name="gasto_kilometros" required ng-model="modal.item.gasto_kilometros" placeholder="Gastos por Kilometros"  type="text" class="form-control m-input">
                                 <erro ng-show="caminhaoform.gasto_kilometros.$error.required && caminhaoform.gasto_kilometros.$touched">
                                     Insira o gasto por kilometros
                                 </erro>
@@ -139,7 +139,7 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label>Renavam</label>
-                                <input name="renavam" required ng-model="modal.item.renavam" placeholder="Renavam"  type="text" class="form-control m-input">
+                                <input tabindex=9 name="renavam" required ng-model="modal.item.renavam" placeholder="Renavam"  type="text" class="form-control m-input">
 
                                 <erro ng-show="caminhaoform.renavam.$error.required && caminhaoform.renavam.$touched">
                                     Insira uma renavam
@@ -150,10 +150,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button"
+                <button type="button" tabindex=11
                         class="btn btn-default m-button-flat"
                         data-dismiss="modal">Fechar</button>
-                <button type="button"
+                <button type="button" tabindex=10
                         ng-click="modal.salvarFuncao(modal.item)" 
                         class="btn btn-primary m-button-flat"
                         ng-disabled="formularioValido()">
