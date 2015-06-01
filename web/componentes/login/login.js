@@ -32,7 +32,7 @@
                     if (response.sucesso) {
 
                         localStorage["authorizationData"] = JSON.stringify({userName: loginData.userName,
-                            token: response.resultado.Token});
+                            token: response.resultado.token});
 
                         _authentication.isAuth = true;
                         _authentication.userName = loginData.userName;

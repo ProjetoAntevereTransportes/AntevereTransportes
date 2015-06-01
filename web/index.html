@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>SB Admin - Bootstrap Admin Template</title>
+        <title>Antevere Transportes</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -158,21 +158,22 @@
                         <span class="mm-menu__link-text menu-title"><i class="md md-perm-identity"></i> Fornecedor</span>
                     </a>
                 </li>
-                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Cargo'}">
-                    <a class="mm-menu__link" href="#/Cargo">
-                        <span class="mm-menu__link-text menu-title"><i class="md md-person"></i> Cargo</span>
-                    </a>
-                </li>
-                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Funcionario'}">
-                    <a class="mm-menu__link" href="#/Funcionario">
-                        <span class="mm-menu__link-text menu-title"><i class="md md-person"></i> Funcionário</span>
-                    </a>
-                </li>
-                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Clientes'}">
+                 <li class="mm-menu__item" ng-class="{active: selectedItem == '/Clientes'}">
                     <a class="mm-menu__link" href="#/Clientes">
                         <span class="mm-menu__link-text menu-title"><i class="md md-contacts"></i> Clientes</span>
                     </a>
                 </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Cargo'}">
+                    <a class="mm-menu__link" href="#/Cargo">
+                        <span class="mm-menu__link-text menu-title"><i class="md md-assignment"></i> Cargo</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Funcionario'}">
+                    <a class="mm-menu__link" href="#/Funcionario">
+                        <span class="mm-menu__link-text menu-title"><i class="md md-account-box"></i> Funcionário</span>
+                    </a>
+                </li>
+               
                 <!--<li class="mm-menu__item" ng-class="{active: selectedItem == '/Caminhao'}">
                     <a class="mm-menu__link" href="#/Caminhao">
                         <span class="mm-menu__link-text"><i class="md md-person"></i> Caminhãos</span>
@@ -224,7 +225,7 @@
         <script src="js/morris.min.js" type="text/javascript"></script>
         <script src="js/raphael-min.js" type="text/javascript"></script>
         <script src="js/masks.js" type="text/javascript"></script>
-        
+        <script src="componentes/vazio/vazio.js" type="text/javascript"></script>
         <script>
                             var menu = new Menu;
                             $(".mm-menu__item").click(function () {

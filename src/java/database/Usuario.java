@@ -179,11 +179,15 @@ public class Usuario {
 
     public contratos.Usuario get(String login, String senha) {
         try {
+            abrir();
             Statement st = con.createStatement();
             String sql = "select * from usuario"
-                    + " where email = '" + login + "' and senha = '" + senha + "';";
+                    + " where email = ? and senha = ?;";
             PreparedStatement ps = con.prepareStatement(sql);
 
+            ps.setString(1, login);
+            ps.setString(2, senha);
+            
             ResultSet rs = ps.executeQuery();
             rs.next();
             contratos.Usuario u = new contratos.Usuario();
@@ -193,6 +197,7 @@ public class Usuario {
             u.setStatusID(rs.getInt("status_id"));
             u.setTipoUsuarioID(rs.getInt("tipo_usuario_id"));
             u.setEmail(rs.getString("email"));
+            
             
             return u;
         } catch (Exception e) {
@@ -204,11 +209,15 @@ public class Usuario {
 
     public boolean ValidaUsuario(String usuario, String senha) {
         try {
+            abrir();
             Statement st = con.createStatement();
             String sql = "select * from usuario"
-                    + " where email = '" + usuario + "' and senha = '" + senha + "';";
+                    + " where email = ? and senha = ? and status_id = 1;";
             PreparedStatement ps = con.prepareStatement(sql);
 
+            ps.setString(1, usuario);
+            ps.setString(2, senha);
+            
             ResultSet rs = ps.executeQuery();
 
             if (rs == null) {

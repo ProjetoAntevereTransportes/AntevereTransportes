@@ -4,7 +4,7 @@
         "login", "authService", "fabElement", "notifyElement",
         "fornecedor", "fileUploadModule", "cargo",
         "funcionario", "cliente", "ui.utils", "cfp.hotkeys",
-        "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks"]);
+        "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks", "vazioElement"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');

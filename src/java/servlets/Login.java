@@ -22,18 +22,13 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Login extends HttpServlet {
-
+    
     private class User {
-
+        
         public String userName;
         public String password;
     }
-
-    private class Response {
-
-        public String Token;
-    }
-
+        
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, IllegalStateException {
@@ -44,22 +39,23 @@ public class Login extends HttpServlet {
             
             User user = j.getData();
             
-            JsonResult<Response> json = new JsonResult<>();
+            JsonResult<contratos.LoginUsuario> json = new JsonResult<>();
             
             try {
-                if (!new Usuario().ValidaUsuario(user.userName, user.password)) {
+                if (!new Usuario().ValidaUsuario(user.userName, new authentication.MD5().gerar(user.password))) {
                     json.mensagem = "Usuário ou senha inválido.";
                     json.sucesso = false;
                 } else {
-                    contratos.Usuario u = new Usuario().get(user.userName, user.password);
-
+                    contratos.Usuario u = new Usuario().get(user.userName, new authentication.MD5().gerar(user.password));
+                    
                     if (u != null) {
                         ValidadeUser v = new ValidadeUser();
                         String token = v.GerarToken(u.getEmail(), u);
-
-                        Response r = new Response();
-                        r.Token = token;
-
+                        
+                        contratos.LoginUsuario r = new contratos.LoginUsuario();
+                        r.setToken(token);
+                        r.setUserName(user.userName);
+                        
                         json.sucesso = true;
                         json.resultado = r;
                     } else {

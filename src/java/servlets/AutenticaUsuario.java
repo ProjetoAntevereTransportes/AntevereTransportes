@@ -27,11 +27,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author lucas
  */
 public class AutenticaUsuario implements Filter {
-    public class Token {
-        public String userName;
-        public String token;
-    }
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

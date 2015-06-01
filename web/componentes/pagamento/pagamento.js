@@ -12,9 +12,9 @@
     });
 
     app.controller("PagamentoController", ["$scope", "$http", "$pgService", "notifyService",
-        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService", "hotkeys",
+        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService", "hotkeys", "conta_bancariaService",
         function ($scope, $http, $pgService, notifyService, fornecedorService,
-                fileUpload, $window, $document, pesquisaService, hotkeys) {
+                fileUpload, $window, $document, pesquisaService, hotkeys, conta_bancariaService) {
             $scope.dataLoad = new Date();
             $scope.itens = [];
             $scope.mensagem = "";
@@ -30,6 +30,12 @@
                 final: null,
                 nome: "",
                 valor: 0
+            };
+
+            $scope.vazio = {
+                titulo: "Não há contas",
+                icone: "md md-attach-money",
+                descricao: "Clique em + para inserir contas únicas, carnês e débitos automáticos"
             };
 
             $scope.adicionarMes = function () {
@@ -369,6 +375,10 @@
                             });
                         });
                     });
+                    if ($scope.itens.length)
+                        $scope.showVazio = false;
+                    else
+                        $scope.showVazio = true;
                 },
                         function (mensagem) {
                             if (mensagem)
@@ -448,7 +458,7 @@
                     ]
                 });
             };
-            
+
             $scope.confirmarExclusao = function (item) {
                 var id = notifyService.add({
                     fixed: true,
@@ -463,7 +473,7 @@
                             return false;
                         }
                     });
-                    
+
                     notifyService.remove(id);
 
                 }, function () {
@@ -473,9 +483,9 @@
                     });
                 }, null, item.ID);
             };
-            
-            $scope.cancelarExclusao = function(){
-                
+
+            $scope.cancelarExclusao = function () {
+
             };
 
             $scope.pegarTotal = function () {
@@ -496,6 +506,19 @@
                 }
                 else
                     item.c.expandir = true;
+                
+                $scope.carregarContaBancaria();
+            };
+            
+            $scope.carregarContaBancaria = function(){
+                conta_bancariaService.listar(function(resultado){
+                    $scope.contasBancarias = resultado;
+                }, function(){
+                    notifyService.add({
+                        message: "Não foi possível carregar as contas bancárias para realizar o pagamento",
+                        seconds: 5
+                    });
+                }, null);
             };
 
             $scope.clicarPagamentoCalendario = function (item) {
@@ -546,6 +569,7 @@
 
                             $("#debito").modal("show");
                             $scope.carregarFornecedores();
+                            $scope.carregarContaBancaria();
                         },
                         id: 2
                     }, {
@@ -566,5 +590,7 @@
                 else
                     $scope.mostrarEstatisticas = true;
             };
+
+            $scope.carregarFornecedores();
         }]);
 })();
