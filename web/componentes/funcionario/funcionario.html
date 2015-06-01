@@ -237,11 +237,11 @@
                                                id ="cpf"
                                                required 
                                                ng-model="modal.item.cpf" 
-                                               placeholder="CPF"
                                                type="text" 
                                                ng-change="validaCPF(modal.item.cpf)"
                                                class="form-control m-input"
-                                               ng-minlength="11" ng-maxlength="11" maxlength="11">
+                                               ng-minlength="11" ng-maxlength="11" maxlength="11"
+                                               ui-mask="999.999.999-99">
                                         <erro ng-show="(!validaCPF(modal.item.cpf) || funcionarioform.cpf.$error.required) && funcionarioform.cpf.$touched">
                                             Insira um CPF válido
                                         </erro>                                       

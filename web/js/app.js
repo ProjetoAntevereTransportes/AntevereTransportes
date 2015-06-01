@@ -146,7 +146,7 @@
                 }
                 case "/Conta":
                 {
-                    $scope.title = "Conta Bancaria";
+                    $scope.title = "Conta Bancária";
                     $scope.barColor = $scope.defaultColor;
                     $scope.searchColor = $scope.defaultSearchColor;
                     $scope.showBack = true;
