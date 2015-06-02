@@ -4,7 +4,8 @@
         "login", "authService", "fabElement", "notifyElement",
         "fornecedor", "fileUploadModule", "cargo",
         "funcionario", "cliente", "ui.utils", "cfp.hotkeys",
-        "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks", "vazioElement"]);
+        "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks", "vazioElement",
+        "uiGmapgoogle-maps", "rota"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
@@ -168,6 +169,14 @@
                     $scope.showBack = true;
                     break;
                 }
+                case "/Rota":
+                {
+                    $scope.title = "Rotas";
+                    $scope.barColor = "green";
+                    $scope.searchColor = "white";
+                    $scope.showBack = false;
+                    break;
+                }
             }
             $scope.alterarSombra();
         };
@@ -215,6 +224,9 @@
         }).when("/Conta", {
             templateUrl: "componentes/conta_bancaria/conta_bancaria.html",
             controller: "conta_bancariaController"
+        }).when("/Rota", {
+            templateUrl: "componentes/rota/rota.html",
+            controller: "rotaController"
         });
         $routeProvider.otherwise({
             redirectTo: '/inicio'

@@ -223,7 +223,7 @@
                 </a>                
                 <div class="tag" style="color: green;" ng-show="item.pago">
                     <i class="md md-done"></i>
-                    Pago em {{item.dataPagamento| date:"dd/MM/yy" }} na
+                    Pago em {{item.dataPagamento| date:"dd/MM/yy" }}
                 </div> 
                 <a href="#/Conta" ng-show="item.pago">
                     <div class="tag" style="color: green;">
@@ -305,7 +305,7 @@
                             name="contaBancariaID"
                             required placeholder="Conta bancária"
                             ng-model="item.contaBancariaID">
-                        <option ng-repeat="f in contasBancarias" required value="{{f.ID}}">
+                        <option ng-repeat="f in contasBancarias" value="{{f.id}}">
                             {{f.nome}}
                         </option>
                     </select>

@@ -1,6 +1,5 @@
 (function () {
     var app = angular.module('inicio', []);
-
     app.controller('inicioCtrl', ["$scope", function ($scope) {
 
             $scope.chart1 = function () {
@@ -32,8 +31,7 @@
                     }
                 });
             };
-
-
+            
             $scope.chart1();
         }]);
 })();
