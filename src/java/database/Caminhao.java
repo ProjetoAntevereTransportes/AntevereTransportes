@@ -7,50 +7,171 @@ package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author felipe
  */
 public class Caminhao {
-    public static Connection con;
-    public static int insere(String nome, String placa, String renavam, String cor, String marca, String modelo, String data_compra, int ano_modelo, int gasto_kilometros){
-        try {
+ 
+    private Connection con;
 
-            // prepara o statement para execução de um novo comaando
-            Statement st = con.createStatement();
-            // cria o comando SQL para ser executado
-            String sql = "insert into caminhao(nome,placa,renavam,cor,marca,modelo,data_compra,ano_modelo,gasto_kilometros) values(?,?,?,?,?,?,?,?,?)";
-            // prepara o comando para execução, indicando que haverá "?" a substituir
+    private void abrir() {
+        con = Conexao.abrirConexao();
+    }
+
+    public List<contratos.Caminhao> listar() {
+        try {
+            abrir();
+            String sql = "select * from caminhao;";
+
             PreparedStatement ps = con.prepareStatement(sql);
-            // substitui os "?" pelos respectivos valores
-            ps.setString(1,nome);
-            ps.setString(2,placa);
-            ps.setString(3,renavam);
-            ps.setString(4,cor);
-            ps.setString(5,marca);
-            ps.setString(6,modelo);
-            ps.setString(7,data_compra);
-            ps.setInt(8,ano_modelo);
-            ps.setInt(9,gasto_kilometros);
-            // executa o comando sql armazenando o resultado. 0 = erro. 1 = sucesso
-            int status = ps.executeUpdate(); // pois adiciona ou altera
-            // verifica se houve erro
-            if (status == 0) {
-                return 0;
-            } else {
-                return 1;
+            
+            ResultSet rsF = ps.executeQuery();
+
+            List<contratos.Caminhao> fs = new ArrayList<>();
+
+            while (rsF.next()) {
+                contratos.Caminhao f = new contratos.Caminhao();
+                f.setNome(rsF.getString("nome"));
+                f.setPlaca(rsF.getString("placa"));
+                f.setRenavam(rsF.getString("renavam"));
+                f.setCor(rsF.getString("cor"));
+                f.setMarca(rsF.getString("marca"));
+                f.setModelo(rsF.getString("modelo"));
+                f.setData_compra(rsF.getDate("data_compra"));
+                f.setAno(rsF.getInt("ano_modelo"));
+                f.setGasto(rsF.getInt("gasto_kilometros"));
+                fs.add(f);
             }
-        } // CASO HAJA UMA EXCEÇÃO, MOSTRA ERRO NA TELA
-        catch (Exception e) {
-            // grava a mensagem de erro em um log no servidor
-            e.printStackTrace(System.out);
-            if (e.toString().contains("Duplicate")) {
-                return 2;
+
+            return fs;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public boolean Inserir(contratos.Caminhao f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "INSERT INTO caminhao(nome, placa, renavam, cor, marca,modelo, data_compra, ano_modelo,gasto_kilometros)"
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?,?,?);";
+
+            java.sql.Date sqlData_compra = new java.sql.Date(f.getData_compra().getDate());
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getPlaca());
+            ps.setString(3, f.getRenavam());
+            ps.setString(4, f.getCor());
+            ps.setString(5, f.getMarca());
+            ps.setString(6, f.getModelo());
+            ps.setDate(7, sqlData_compra);
+            ps.setInt(8, f.getAno());
+            ps.setInt(9, f.getGasto());
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
             } else {
-                return 0;
+                return false;
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+
+    }
+
+    public boolean excluir(int id) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "DELETE FROM caminhao WHERE id = " + id + ";";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            int status = ps.executeUpdate();
+
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+
+    public boolean editar(contratos.Caminhao f) {
+        try {
+            abrir();
+            con.setAutoCommit(false);
+
+            String sql = "UPDATE caminhao set nome = ?, placa = ?, renavam = ?, cor = ?, marca = ?,modelo = ?, data_compra = ?, ano_modelo = ?,gasto_kilometros = ?  WHERE id = ?;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+           java.sql.Date sqlData_compra = new java.sql.Date(f.getData_compra().getDate());
+            ps.setString(1, f.getNome());
+            ps.setString(2, f.getPlaca());
+            ps.setString(3, f.getRenavam());
+            ps.setString(4, f.getCor());
+            ps.setString(5, f.getMarca());
+            ps.setString(6, f.getModelo());
+            ps.setDate(7, sqlData_compra);            
+            ps.setInt(8, f.getAno());
+            ps.setInt(9, f.getGasto());
+            ps.setInt(10, f.getId());
+
+            int status = ps.executeUpdate();
+            con.commit();
+
+            if (status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+            return false;
+        } finally {
+            Conexao.fecharConexao(con);
         }
     }
 }

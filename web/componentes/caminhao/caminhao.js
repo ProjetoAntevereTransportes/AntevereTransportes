@@ -14,8 +14,8 @@
                 marca: "",
                 cor: "",
                 data_compra: "",
-                ano_modelo: "",
-                gasto_kilometros: ""
+                ano: "",
+                gasto: ""
             };
 
             $scope.formularioValido = function () {
@@ -116,10 +116,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Caminhao", this.formatar("INSERIR", data),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        })
+                $http.post(server + "/Caminhao", this.formatar("INSERIR", data))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {

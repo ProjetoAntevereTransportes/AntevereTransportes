@@ -64,6 +64,10 @@
         <servlet-name>Pessoa</servlet-name>
         <servlet-class>servlets.Pessoa</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Caminhao</servlet-name>
+        <servlet-class>servlets.Caminhao</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -151,6 +155,10 @@
     <servlet-mapping>
         <servlet-name>Pessoa</servlet-name>
         <url-pattern>/Pessoa</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Caminhao</servlet-name>
+        <url-pattern>/Caminhao</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
