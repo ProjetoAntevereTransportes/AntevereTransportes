@@ -3,11 +3,12 @@
         <thead>
             <tr>
                 <th class="col-lg-1">Placa</th>
-                <th class="col-lg-3">Nome</th>
-                <th class="col-lg-3">Modelo</th>
-                <th class="col-lg-3">Marca</th>
+                <th style="width:200px" class="col-lg-3">Nome</th>
+                <th style="width:200px" class="col-lg-3">Modelo</th>
+                <th style="width:150px" class="col-lg-3">Marca</th>
+                <th style="width:150px" class="col-lg-3">Cor</th>
                 <th class="col-lg-2">Renavam</th>
-                <th width="100px"></th>
+                <th ></th>
             </tr>
         </thead>
         <tbody>
@@ -118,7 +119,7 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <label>Data Compra</label>
-                                        <input tabindex=7 name="data_compra" required ng-model="modal.item.data_compra" placeholder="Data Compra"  type="text" class="form-control m-input">
+                                        <input tabindex=7 name="data_compra" required ng-model="modal.item.data_compra" placeholder="Data Compra"  type="date" class="form-control m-input">
                                         <erro ng-show="caminhaoform.data_compra.$error.required && caminhaoform.data_compra.$touched">
                                             Insira a Data da Compra
                                         </erro>

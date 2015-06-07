@@ -7,6 +7,7 @@
             $scope.itens = [];
 
             $scope.novo = {
+                id:"",
                 nome: "",
                 placa: "",
                 renavam: "",
@@ -89,7 +90,7 @@
                                 f: function (i) {
                                     caminhaoService.excluir(function () {
                                     }, function () {
-                                    }, null, item.ID);
+                                    }, null, item.id);
                                     i.excluirID = null;
                                 },
                                 parameter: item
@@ -174,7 +175,7 @@
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, caminhaoID) {
+            this.excluir = function (sucesso, erro, sempre, caminhaoid) {
                 var id = notifyService.add({
                     fixed: true,
                     message: "Excluindo caminhao..."
@@ -182,7 +183,7 @@
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Caminhao", this.formatar("REMOVER", caminhaoID),
+                $http.post(server + "/Caminhao", this.formatar("REMOVER", caminhaoid),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 

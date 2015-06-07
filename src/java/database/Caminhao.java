@@ -40,6 +40,7 @@ public class Caminhao {
 
             while (rsF.next()) {
                 contratos.Caminhao f = new contratos.Caminhao();
+                f.setId(rsF.getInt("id"));
                 f.setNome(rsF.getString("nome"));
                 f.setPlaca(rsF.getString("placa"));
                 f.setRenavam(rsF.getString("renavam"));
