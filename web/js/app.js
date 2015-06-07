@@ -5,7 +5,7 @@
         "fornecedor", "fileUploadModule", "cargo",
         "funcionario", "cliente", "ui.utils", "cfp.hotkeys",
         "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks", "vazioElement",
-        "uiGmapgoogle-maps", "rota"]);
+        "uiGmapgoogle-maps", "rota", "viagem"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
@@ -177,6 +177,14 @@
                     $scope.showBack = false;
                     break;
                 }
+                case "/Viagem":
+                {
+                    $scope.title = "Viagens";
+                    $scope.barColor = "green";
+                    $scope.searchColor = "white";
+                    $scope.showBack = true;
+                    break;
+                }
             }
             $scope.alterarSombra();
         };
@@ -227,6 +235,9 @@
         }).when("/Rota", {
             templateUrl: "componentes/rota/rota.html",
             controller: "rotaController"
+        }).when("/Viagem", {
+            templateUrl: "componentes/viagem/viagem.html",
+            controller: "viagemController"
         });
         $routeProvider.otherwise({
             redirectTo: '/inicio'

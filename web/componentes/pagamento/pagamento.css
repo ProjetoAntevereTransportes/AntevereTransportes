@@ -1,3 +1,10 @@
+.value-item{
+    text-align: end;
+    border: none;
+    background: none;
+    width: 82px;
+}
+
 .tags a{
     color: #000;
 }
@@ -603,8 +610,10 @@ button:focus {outline:0;}
 }
 
 .value{
-    margin-right: 20px;
-    margin-top: 3px;
+    margin-top: 1px;
+    position: absolute;
+    right: 92px;
+    width: 107px;
 }
 
 .right-content i {

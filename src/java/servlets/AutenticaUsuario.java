@@ -6,6 +6,7 @@
 package servlets;
 
 import authentication.ValidadeUser;
+import br.com.sascar.integra.ws.Exception_Exception;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Dictionary;
@@ -37,6 +38,8 @@ public class AutenticaUsuario implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
+        
+                
         //chain.doFilter(request, response);
         try {
             ValidadeUser v = new ValidadeUser();
@@ -61,5 +64,4 @@ public class AutenticaUsuario implements Filter {
     public void destroy() {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

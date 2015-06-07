@@ -71,10 +71,33 @@ public class Pagamento extends HttpServlet {
                     resposta = pagamentoFornecedorMensal(receiveJson);
                     break;
                 }
+                case PAGARDEBITO: {
+                    resposta = pagarDebito(receiveJson);
+                    break;
+                }
             }
 
             out.print(resposta);
         }
+    }
+
+    public String pagarDebito(String receiveJson) {
+        database.Pagamento pg = new database.Pagamento();
+
+        JsonResult<Boolean> json = new JsonResult<Boolean>();
+
+        try {
+            JsonReceiver<contratos.Pagamento2> pagamento = new JsonReceiver<>(contratos.Pagamento2.class);
+            pagamento.Desserealizar(receiveJson);
+
+            json.resultado = pg.pagarDebito(pagamento.getData());
+            json.sucesso = true;
+        } catch (Exception ex) {
+            json.sucesso = false;
+            json.mensagem = "Não foi possível obter as informações dos fornecedores. " + ex.toString();
+        }
+
+        return json.Serializar();
     }
 
     public String pagamentoFornecedorMensal(String receiveJson) {
@@ -117,13 +140,12 @@ public class Pagamento extends HttpServlet {
 
     public String salvarDebito(String receiveJson) {
         database.Pagamento pg = new database.Pagamento();
-
-        JsonReceiver<contratos.DebitoAutomatico> pagamentos = new JsonReceiver<>(contratos.DebitoAutomatico.class);
-        pagamentos.Desserealizar(receiveJson);
-
         JsonResult<Boolean> json = new JsonResult<Boolean>();
 
         try {
+            JsonReceiver<contratos.DebitoAutomatico> pagamentos = new JsonReceiver<>(contratos.DebitoAutomatico.class);
+            pagamentos.Desserealizar(receiveJson);
+
             json.resultado = pg.salvarDebito(pagamentos.getData());
             json.sucesso = true;
         } catch (Exception ex) {

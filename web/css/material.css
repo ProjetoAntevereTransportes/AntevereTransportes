@@ -183,3 +183,17 @@ table tbody td:last-child{
 table tbody td:last-child button{
     padding-right: 10px;
 }
+
+.m-ul b{
+    font-size: 12px;
+    font-weight: 600;
+    color: rgb(76, 76, 76);
+    font-family: Roboto;
+}
+
+.m-ul{
+    font-size: 12px;
+    font-weight: 400;
+    color: rgb(76, 76, 76);
+    font-family: Roboto;
+}

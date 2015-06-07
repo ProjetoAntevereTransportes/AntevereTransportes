@@ -11,5 +11,59 @@
     bottom: 10px;
     right: 10px;
     width: 300px;
-    height: 400px;
+    height: 100%;
+    padding-top: 72px;
+}
+
+#addRota{
+/*    position: absolute;
+    bottom: 34px;
+    left: 5px;
+    right: 5px;*/
+    height: 38%;
+}
+
+#addRota input{
+    font-size: 14px;
+    height: 20px;
+    font-weight: 400;
+    padding: 0px;
+}
+
+#lista-rotas{
+    overflow: auto;
+    height: 62%;
+}
+
+.rotas{
+    font-size: 12px;
+    padding: 2px 2px 0px 2px;
+    margin: 2px;
+    background-color: rgb(239, 239, 239);
+    line-height: 13px;
+    position: relative;
+}
+
+.remove-route{
+    background-color: rgb(239, 239, 239);
+    color: red;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.erro{
+    background-color: rgb(255, 194, 194);
+}
+
+.carregando{
+    background-color: rgb(253, 255, 160);
+}
+
+.btn-passos{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding: 7px;
 }

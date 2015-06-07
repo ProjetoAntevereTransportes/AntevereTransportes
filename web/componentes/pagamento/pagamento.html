@@ -180,7 +180,8 @@
                  'expand-info z2': item.c.expandirInfo
                  }" id="{{item.ID}}"
      ng-mouseover="mouseOverItem(item)"
-     ng-mouseleave="mouseLeaveItem(item)">
+     ng-mouseleave="mouseLeaveItem(item)"
+      ondrop="alert(JSON.stringify(event))">
     <div class='head col-lg-12'>
         <div class="day" ng-class="{'debitoLimitado': item.debitoLimitado, 'debitoIlimitado': item.debitoIlimitado, 'unico': item.unico, 'carne': item.carne}">
             {{item.vencimento| date: "d"}}
@@ -239,7 +240,8 @@
         </div>
         <div class='right-content buttons'>
             <span class='value'>
-                {{item.valor| currency : 'R$ ' : 2}} 
+                R$
+                <input ng-model="item.valor" class="value-item" ui-number-mask>
             </span>
 
             <div ng-show="!item.c.mostrarBotoes" class="item-buttons">
@@ -685,7 +687,7 @@
                                         ng-model="debito.contaBancariaID"
                                         required
                                         name="conta">
-                                    <option ng-repeat="f in contasBancarias" required value="{{f.ID}}">
+                                    <option ng-repeat="f in contasBancarias" required value="{{f.id}}">
                                         {{f.nome}}
                                     </option>
                                 </select>

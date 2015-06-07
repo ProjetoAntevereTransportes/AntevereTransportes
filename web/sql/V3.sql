@@ -219,7 +219,7 @@ CREATE TABLE parcela_pagamento (
   conta_bancaria_id int(11) DEFAULT NULL,
   descricao varchar(90) DEFAULT NULL,
   debito_automatico_id int(11) DEFAULT NULL,
-  conta_pagar_id int(11) NOT NULL,
+  conta_pagar_id int(11),
   numero int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY status_pagamento_id (status_pagamento_id),
@@ -238,10 +238,6 @@ CREATE TABLE IF NOT EXISTS viagem(
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	funcionario_id INT NOT NULL,
 	FOREIGN KEY (funcionario_id) REFERENCES funcionario(id),
-	endereco_carga_id INT NOT NULL,
-	FOREIGN KEY (endereco_carga_id) REFERENCES endereco(id),
-	endereco_descarga_id INT NOT NULL,
-	FOREIGN KEY (endereco_descarga_id) REFERENCES endereco(id),
 	valor DECIMAL(10,2) NOT NULL,
 	tipo_carga_id INT NOT NULL,
 	FOREIGN KEY (tipo_carga_id) REFERENCES carga(id),
@@ -253,6 +249,15 @@ CREATE TABLE IF NOT EXISTS viagem(
 	motivo_cancelamento VARCHAR(60),
         caminhao_id INT NOT NULL,
         FOREIGN KEY (caminhao_id) REFERENCES caminhao(id)
+);
+
+CREATE TABLE IF NOT EXISTS endereco_viagem(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    viagem_id INT NOT NULL,
+    FOREIGN KEY (viagem_id) REFERENCES viagem(id),
+    partida varchar(300) NOT NULL,
+    destino varchar(300) NOT NULL,
+    dados LONGTEXT
 );
 
 CREATE TABLE IF NOT EXISTS contas_a_receber(

@@ -1,21 +1,218 @@
+<style>
+    .form-group{
+        margin-bottom: 2px !important;
+    }
+</style>
+
 <div id="maps">
 
 </div>
 
 <div class="controls">
 
-    <div class="card z1" style="height: 100%; overflow: hidden;">
-        <input ng-model="origem" placeholder="Origem">
-        <input ng-model="destino" placeholder="Destino">
-        <button ng-click="carregarDirecao(origem, destino)">Carregar</button>
-        <div id="directions" style="overflow: auto;
-             height: 100%;">
+    <div class="card z1" style="height: 100%; overflow: hidden; 
+         padding: 6px;">
+        <div id='passo-1' ng-show='passo == 1'>
+            <div id="addRota">                
+                <h4>1. Informe as rotas</h4>
+                <div class="form-group">
+                    <label>Partida</label>
+                    <input 
+                        type="text"
+                        class="form-control"
+                        ng-model="rc.prua"
+                        placeholder="Rua"
+                        name="rua">                        
+                </div>
+                <div class="form-group">
+                    <input ng-model="rc.pbairro" type="text" class="form-control" placeholder="Bairro">
+                </div>
 
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="form-group">
+                            <input ng-model="rc.pcidade" type="text" class="form-control" placeholder="Cidade">
+                        </div>        
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <input ng-model="rc.pnumero" type="text" class="form-control" placeholder="Número">
+                        </div>          
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <input ng-model="rc.pestado" type="text" class="form-control" placeholder="Estado">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <input ng-model="rc.ppais" type="text" class="form-control" placeholder="País">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Destino</label>
+                    <input ng-model="rc.drua" type="text" class="form-control" placeholder="Rua">
+                </div>
+                <div class="form-group">
+                    <input ng-model="rc.dbairro" type="text" class="form-control" placeholder="Bairro">
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="form-group">
+                            <input ng-model="rc.dcidade" type="text" class="form-control" placeholder="Cidade">
+                        </div>        
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                        <div class="form-group">
+                            <input ng-model="rc.dnumero" type="text" class="form-control" placeholder="Número">
+                        </div>          
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <input ng-model="rc.destado" type="text" class="form-control" placeholder="Estado">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <div class="form-group">
+                            <input ng-model="rc.dpais" type="text" class="form-control" placeholder="País">
+                        </div>
+                    </div>
+                </div>
+                <div class='row'>
+                    <div class='col-lg-12'>
+                        <button class="pull-right btn-xs btn btn-primary" ng-click="inserir()">
+                            Inserir 
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id='lista-rotas'>
+                <div class="rotas" ng-class="{'erro': rota.sucesso == 0, 
+                    'sucesso': rota.sucesso == 1,
+                'carregando': rota.sucesso == 2}" ng-repeat="rota in rotas" ng-click="carregar(rota)"
+                     style="border-left: 3px solid {{rota.cor}};">
+                    <i ng-click="remover(rota)" class="md md-clear remove-route"></i>
+                    <ul>
+                        <li ng-show='rota.sucesso == 2'>Carregando...</li>
+                        <li ng-show='rota.sucesso == 0'>Rota não encotrada</li>
+                        <li ng-show='rota.sucesso == 1'>{{rota.distancia}} - {{rota.duracao}}</li>
+                        <li><b>Partida: </b>{{rota.partida.string}}</li>
+                        <li><b>Destino: </b>{{rota.destino.string}}</li>
+                    </ul>
+                </div>
+            </div>
         </div>
+        <div id='passo-2' ng-show='passo == 2'>
+            <form name="frota">
+                <h4>2. Informe os dados da viagem</h4>
+                <div class='row'>
+                    <div class='col-lg-12'>
+                        <div class='form-group'>
+                            <label>Funcionário</label>
+                            <select required name="funcionario" ng-model="nRota.funcionarioID" class='form-control'>
+                                <option ng-repeat='f in funcionarios' value='{{f.id}}'>{{f.nome}}</option>
+                            </select>
+                            <erro ng-show="frota.funcionario.$error.required && frota.funcionario.$touched">
+                                Selecione um funcionário
+                            </erro>
+                        </div>
+                    </div>
+                    <div class='col-lg-12'>
+                        <div class='form-group'>
+                            <label>Tipo de Carga</label>
+                            <select required name="carga" ng-model="nRota.cargaID" class='form-control'>
+                                <option value="1">Arrumar INPUT!</option>
+                                <option ng-repeat='f in cargas'></option>
+                            </select>
+                            <erro ng-show="frota.carga.$error.required && frota.carga.$touched">
+                                Selecione o tipo de carga
+                            </erro>
+                        </div>
+                    </div>
+                    <div class='col-lg-12'>
+                        <div class='form-group'>
+                            <label>Cliente</label>
+                            <select required name="cliente" ng-model="nRota.clienteID" class='form-control'>
+                                <option ng-repeat='c in clientes' value='{{c.id}}'>{{c.nome}}</option>
+                            </select>
+                            <erro ng-show="frota.cliente.$error.required && frota.cliente.$touched">
+                                Selecione um cliente
+                            </erro>
+                        </div>
+                    </div>
+                    <div class='col-lg-12'>
+                        <div class='form-group'>
+                            <label>Caminhão</label>
+                            <select required name="caminhao" ng-change="changeCaminhao(nRota.caminhaoID)" ng-model="nRota.caminhaoID" class='form-control'>
+                                <option ng-repeat='c in caminhoes' value='{{c.id}}'>{{c.nome}}</option>
+                            </select>
+                            <erro ng-show="frota.caminhao.$error.required && frota.caminhao.$touched">
+                                Selecione um caminhão
+                            </erro>
+                        </div>
+                    </div>
+                    <div class='col-lg-12'>
+                        <br />
+                        <ul class='m-ul'>
+                            <li><b>Distância Total:</b> {{getTotalKilometros() | currency : "" : 2}} km</li>
+                            <li><b>Consumo Caminhão:</b> {{consumoKmCaminhao}} KM/L - {{consumoEstimado| currency: "" : 2}} litros</li>
+                            <li><b>Valor estimado:</b> {{valorEstimado| currency : "R$ " : 2}}</li>
+                        </ul>
+                    </div>
+                    <div class='col-lg-12'>
+                        <div class='form-group'>
+                            <label>Valor</label>
+                            <input required name="valor" ng-model="nRota.valor" class='form-control' type='text' ui-number-mask>
+                            <erro ng-show="frota.valor.$error.required && frota.valor.$touched">
+                                Insira um valor
+                            </erro>
+                        </div>
+                    </div>
+                    <div class='col-lg-12'>
+                        <div class='form-group'>
+                            <label>Adiantamento</label>
+                            <input required name="adiantamento" ng-model="nRota.adiantamento" class='form-control' type='text' ui-number-mask>
+                            <erro ng-show="frota.adiantamento.$error.required && frota.adiantamento.$touched">
+                                Insira um adiantamento
+                            </erro>
+                        </div>
+                    </div>
+                </div>      
+            </form>
+        </div>
+
+        <div class="btn-passos">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <button ng-show="passo == 1" class='btn btn-xs btn-default pull-left'>
+                        Voltar
+                    </button>
+                    <button ng-click='anteriorPasso()' ng-hide="passo == 1" class='btn btn-xs btn-default pull-left'>
+                        Anterior
+                    </button>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <button ng-click='proximoPasso()' ng-hide="passo == 2" class='btn btn-xs btn-default pull-right'>
+                        Próximo
+                    </button>                    
+                    <button ng-disabled="frota.$invalid" ng-click='salvar(nRota)' ng-show="passo == 2" class='btn btn-xs btn-success pull-right'>
+                        Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!--<ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>-->
+
+
+
     </div>
-
-    <!--<ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>-->
-
-
-
-</div>

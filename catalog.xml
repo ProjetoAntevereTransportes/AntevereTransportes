@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://201.94.137.12/SasIntegra/SasIntegraWSService?wsdl" uri="src/conf/xml-resources/web-service-references/SasIntegraWSService/wsdl/201.94.137.12/SasIntegra/SasIntegraWSService.wsdl"/>
+    <system systemId="http://201.94.137.12:80/SasIntegra/SasIntegraWSService?xsd=1" uri="src/conf/xml-resources/web-service-references/SasIntegraWSService/wsdl/201.94.137.12_80/SasIntegra/SasIntegraWSService.xsd_1.xsd"/>
+</catalog>

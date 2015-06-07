@@ -56,6 +56,26 @@
                 });
             };
 
+            this.pagarDebito = function(sucesso, erro, sempre, data){
+                var resultado = null;
+                
+                delete data["$$hashKey"];
+                delete data["c"];
+                data.vencimento = new Date(data.vencimento);
+                
+                $http.post("/AntevereTransportes/Pagamento", this.formatar("PAGARDEBITO", data))
+                        .success(function (data) {
+                            resultado = data;
+                            if (data.sucesso)
+                                sucesso(data.resultado);
+                            else {
+                                erro(data.mensagem);
+                            }
+                        }).error(function () {
+                    erro(resultado.mensagem);
+                });
+            };
+
             this.listar = function (sucesso, erro, sempre, data) {
                 var resultado;
                 var id = notifyService.add({
@@ -133,6 +153,15 @@
                     fixed: true,
                     message: "Salvando débito automático..."
                 });
+                
+                if(!debito.dataInicio)
+                    delete debito["dataInicio"];
+                
+                if(!debito.dataFim)
+                    delete debito["dataFim"];
+                
+                if(!debito.dia)
+                    delete debito["dia"];
 
                 var resultado;
                 $http.post("/AntevereTransportes/Pagamento", this.formatar("SALVARDEBITO", debito)

@@ -12,7 +12,8 @@
     });
 
     app.controller("PagamentoController", ["$scope", "$http", "$pgService", "notifyService",
-        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService", "hotkeys", "conta_bancariaService",
+        "fornecedorService", "fileUpload", "$window", "$document", "pesquisaService",
+        "hotkeys", "conta_bancariaService",
         function ($scope, $http, $pgService, notifyService, fornecedorService,
                 fileUpload, $window, $document, pesquisaService, hotkeys, conta_bancariaService) {
             $scope.dataLoad = new Date();
@@ -259,7 +260,7 @@
             };
 
             $scope.pagarUnico = function (item) {
-                if (!item.comprovanteID) {
+                if (!item.comprovanteID && (item.unico || item.carne)) {
                     notifyService.add({
                         message: "Insira um comprovante",
                         seconds: 5
@@ -290,6 +291,25 @@
                     });
             };
 
+            $scope.pagarDebito = function(item){
+                $pgService.pagarDebito(function (item) {
+
+                        notifyService.add({
+                            seconds: 5,
+                            message: "Conta paga."
+                        });
+
+                        $scope.carregarPagamentos($scope.dataLoad);
+
+                    }, function () {
+                        notifyService.add({
+                            seconds: 5,
+                            message: "Não foi possível pagar a conta."
+                        });
+                    }, null, item);
+
+            };
+
             $scope.realizarPagamentoUnico = function (item) {
                 item.c.expandir = false;
                 item.c.notificationID = null;
@@ -298,6 +318,11 @@
                     seconds: 3,
                     message: "Realizando pagamento de " + item.nome
                 });
+
+                if(item.debitoLimitado || item.debitoIlimitado){
+                    $scope.pagarDebito(item);
+                    return;
+                }
 
                 fileUpload.upload(function (comprovanteID) {
 

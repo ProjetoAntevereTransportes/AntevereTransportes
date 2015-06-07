@@ -1,0 +1,835 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.5. --><xs:schema xmlns:tns="http://ws.integra.sascar.com.br/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.integra.sascar.com.br/">
+
+<xs:element name="AddressLocation" type="tns:enderecoPosicao"/>
+
+<xs:element name="Exception" type="tns:Exception"/>
+
+<xs:element name="address" type="tns:endereco"/>
+
+<xs:element name="city" type="tns:cidade"/>
+
+<xs:element name="obterClientes" type="tns:obterClientes"/>
+
+<xs:element name="obterClientesResponse" type="tns:obterClientesResponse"/>
+
+<xs:element name="obterEnderecoPosicao" type="tns:obterEnderecoPosicao"/>
+
+<xs:element name="obterEnderecoPosicaoResponse" type="tns:obterEnderecoPosicaoResponse"/>
+
+<xs:element name="obterGrupoAtuadores" type="tns:obterGrupoAtuadores"/>
+
+<xs:element name="obterGrupoAtuadoresResponse" type="tns:obterGrupoAtuadoresResponse"/>
+
+<xs:element name="obterLayout" type="tns:obterLayout"/>
+
+<xs:element name="obterLayoutAcaoEmbarcadaAVD" type="tns:obterLayoutAcaoEmbarcadaAVD"/>
+
+<xs:element name="obterLayoutAcaoEmbarcadaAVDResponse" type="tns:obterLayoutAcaoEmbarcadaAVDResponse"/>
+
+<xs:element name="obterLayoutDetalhado" type="tns:obterLayoutDetalhado"/>
+
+<xs:element name="obterLayoutDetalhadoResponse" type="tns:obterLayoutDetalhadoResponse"/>
+
+<xs:element name="obterLayoutGrupoPontos" type="tns:obterLayoutGrupoPontos"/>
+
+<xs:element name="obterLayoutGrupoPontosResponse" type="tns:obterLayoutGrupoPontosResponse"/>
+
+<xs:element name="obterLayoutResponse" type="tns:obterLayoutResponse"/>
+
+<xs:element name="obterLayoutTecladoVeiculos" type="tns:obterLayoutTecladoVeiculos"/>
+
+<xs:element name="obterLayoutTecladoVeiculosResponse" type="tns:obterLayoutTecladoVeiculosResponse"/>
+
+<xs:element name="obterMacroTd40" type="tns:obterMacroTd40"/>
+
+<xs:element name="obterMacroTd40Response" type="tns:obterMacroTd40Response"/>
+
+<xs:element name="obterMacroTd50Tmcd" type="tns:obterMacroTd50Tmcd"/>
+
+<xs:element name="obterMacroTd50TmcdDetalhado" type="tns:obterMacroTd50TmcdDetalhado"/>
+
+<xs:element name="obterMacroTd50TmcdDetalhadoResponse" type="tns:obterMacroTd50TmcdDetalhadoResponse"/>
+
+<xs:element name="obterMacroTd50TmcdResponse" type="tns:obterMacroTd50TmcdResponse"/>
+
+<xs:element name="obterMacroTms3" type="tns:obterMacroTms3"/>
+
+<xs:element name="obterMacroTms3Response" type="tns:obterMacroTms3Response"/>
+
+<xs:element name="obterMascaraDispositivos" type="tns:obterMascaraDispositivos"/>
+
+<xs:element name="obterMascaraDispositivosResponse" type="tns:obterMascaraDispositivosResponse"/>
+
+<xs:element name="obterMensagemPortal" type="tns:obterMensagemPortal"/>
+
+<xs:element name="obterMensagemPortalResponse" type="tns:obterMensagemPortalResponse"/>
+
+<xs:element name="obterMotoristas" type="tns:obterMotoristas"/>
+
+<xs:element name="obterMotoristasResponse" type="tns:obterMotoristasResponse"/>
+
+<xs:element name="obterMotoristasVeiculos" type="tns:obterMotoristasVeiculos"/>
+
+<xs:element name="obterMotoristasVeiculosResponse" type="tns:obterMotoristasVeiculosResponse"/>
+
+<xs:element name="obterPacoteLocalizacao" type="tns:obterPacoteLocalizacao"/>
+
+<xs:element name="obterPacoteLocalizacaoResponse" type="tns:obterPacoteLocalizacaoResponse"/>
+
+<xs:element name="obterPacotePosicoes" type="tns:obterPacotePosicoes"/>
+
+<xs:element name="obterPacotePosicoesResponse" type="tns:obterPacotePosicoesResponse"/>
+
+<xs:element name="obterPontosReferencia" type="tns:obterPontosReferencia"/>
+
+<xs:element name="obterPontosReferenciaResponse" type="tns:obterPontosReferenciaResponse"/>
+
+<xs:element name="obterSequenciamentoEvento" type="tns:obterSequenciamentoEvento"/>
+
+<xs:element name="obterSequenciamentoEventoResponse" type="tns:obterSequenciamentoEventoResponse"/>
+
+<xs:element name="obterStatusComando" type="tns:obterStatusComando"/>
+
+<xs:element name="obterStatusComandoResponse" type="tns:obterStatusComandoResponse"/>
+
+<xs:element name="obterTelemetriaPortal" type="tns:obterTelemetriaPortal"/>
+
+<xs:element name="obterTelemetriaPortalResponse" type="tns:obterTelemetriaPortalResponse"/>
+
+<xs:element name="obterTipoComando" type="tns:obterTipoComando"/>
+
+<xs:element name="obterTipoComandoResponse" type="tns:obterTipoComandoResponse"/>
+
+<xs:element name="obterVeiculos" type="tns:obterVeiculos"/>
+
+<xs:element name="obterVeiculosResponse" type="tns:obterVeiculosResponse"/>
+
+<xs:element name="validarAcessoMetodoCliente" type="tns:validarAcessoMetodoCliente"/>
+
+<xs:element name="validarAcessoMetodoClienteResponse" type="tns:validarAcessoMetodoClienteResponse"/>
+
+<xs:element name="validarAcessoMetodoSascar" type="tns:validarAcessoMetodoSascar"/>
+
+<xs:element name="validarAcessoMetodoSascarResponse" type="tns:validarAcessoMetodoSascarResponse"/>
+
+<xs:element name="verificarVeiculoIntegrado" type="tns:verificarVeiculoIntegrado"/>
+
+<xs:element name="verificarVeiculoIntegradoResponse" type="tns:verificarVeiculoIntegradoResponse"/>
+
+<xs:complexType name="validarAcessoMetodoSascar">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="validarAcessoMetodoSascarResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterClientes">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="quantidade" type="xs:int" minOccurs="0"/>
+<xs:element name="idCliente" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterClientesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:cliente" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cliente">
+<xs:sequence>
+<xs:element name="cnpj" type="xs:long" minOccurs="0"/>
+<xs:element name="cpf" type="xs:long" minOccurs="0"/>
+<xs:element name="idCliente" type="xs:int" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="Exception">
+<xs:sequence>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutGrupoPontos">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutGrupoPontosResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:layoutGrupoPontos" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="layoutGrupoPontos">
+<xs:sequence>
+<xs:element name="idLayoutGrupoPonto" type="xs:int" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterTipoComando">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterTipoComandoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:tipoComando" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="tipoComando">
+<xs:sequence>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idTipoComando" type="xs:int" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterGrupoAtuadores">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterGrupoAtuadoresResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:grupoAtuador" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="grupoAtuador">
+<xs:sequence>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idAtuador" type="xs:int" minOccurs="0"/>
+<xs:element name="tipoPorta" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="validarAcessoMetodoCliente">
+<xs:sequence>
+<xs:element name="arg0" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="validarAcessoMetodoClienteResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayout">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="layout" type="tns:tipoLayout" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:layout" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="layout">
+<xs:sequence>
+<xs:element name="codigo" type="xs:int" minOccurs="0"/>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idLayout" type="xs:int" minOccurs="0"/>
+<xs:element name="tipoTeclado" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterVeiculos">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="quantidade" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterVeiculosResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:veiculo" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="veiculo">
+<xs:sequence>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idAtuador1" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador2" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador3" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador4" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador5" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador6" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador7" type="xs:int" minOccurs="0"/>
+<xs:element name="idAtuador8" type="xs:int" minOccurs="0"/>
+<xs:element name="idCliente" type="xs:int" minOccurs="0"/>
+<xs:element name="idEquipamento" type="xs:long" minOccurs="0"/>
+<xs:element name="idLayout" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor1" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor2" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor3" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor4" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor5" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor6" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor7" type="xs:int" minOccurs="0"/>
+<xs:element name="idSensor8" type="xs:int" minOccurs="0"/>
+<xs:element name="idSerial0" type="xs:int" minOccurs="0"/>
+<xs:element name="idSerial1" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="placa" type="xs:string" minOccurs="0"/>
+<xs:element name="portaBloqueio" type="xs:int" minOccurs="0"/>
+<xs:element name="portaPanico" type="xs:int" minOccurs="0"/>
+<xs:element name="satelital" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutTecladoVeiculos">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutTecladoVeiculosResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:layoutTecladoVeiculos" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="layoutTecladoVeiculos">
+<xs:sequence>
+<xs:element name="idLayout" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="tipoLayout" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterPacotePosicoes">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="quantidade" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterPacotePosicoesResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:pacotePosicao" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="pacotePosicao">
+<xs:sequence>
+<xs:element name="anguloReferencia" type="xs:int" minOccurs="0"/>
+<xs:element name="bloqueio" type="xs:int" minOccurs="0"/>
+<xs:element name="cidade" type="xs:string" minOccurs="0"/>
+<xs:element name="codigoMacro" type="xs:int" minOccurs="0"/>
+<xs:element name="conteudoMensagem" type="xs:string" minOccurs="0"/>
+<xs:element name="dataPacote" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="dataPosicao" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="direcao" type="xs:int" minOccurs="0"/>
+<xs:element name="distanciaReferencia" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada1" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada2" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada3" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada4" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada5" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada6" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada7" type="xs:int" minOccurs="0"/>
+<xs:element name="entrada8" type="xs:int" minOccurs="0"/>
+<xs:element name="eventoSequenciamento" type="tns:eventoSequenciamento" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="eventos" type="tns:evento" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="gps" type="xs:int" minOccurs="0"/>
+<xs:element name="idReferencia" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="ignicao" type="xs:int" minOccurs="0"/>
+<xs:element name="jamming" type="xs:int" minOccurs="0"/>
+<xs:element name="latitude" type="xs:double" minOccurs="0"/>
+<xs:element name="longitude" type="xs:double" minOccurs="0"/>
+<xs:element name="memoria" type="xs:int" minOccurs="0"/>
+<xs:element name="nomeMensagem" type="xs:string" minOccurs="0"/>
+<xs:element name="odometro" type="xs:int" minOccurs="0"/>
+<xs:element name="pontoEntrada" type="xs:int" minOccurs="0"/>
+<xs:element name="pontoReferencia" type="xs:string" minOccurs="0"/>
+<xs:element name="pontoSaida" type="xs:int" minOccurs="0"/>
+<xs:element name="rpm" type="xs:int" minOccurs="0"/>
+<xs:element name="rua" type="xs:string" minOccurs="0"/>
+<xs:element name="saida1" type="xs:int" minOccurs="0"/>
+<xs:element name="saida2" type="xs:int" minOccurs="0"/>
+<xs:element name="saida3" type="xs:int" minOccurs="0"/>
+<xs:element name="saida4" type="xs:int" minOccurs="0"/>
+<xs:element name="saida5" type="xs:int" minOccurs="0"/>
+<xs:element name="saida6" type="xs:int" minOccurs="0"/>
+<xs:element name="saida7" type="xs:int" minOccurs="0"/>
+<xs:element name="saida8" type="xs:int" minOccurs="0"/>
+<xs:element name="satelite" type="xs:int" minOccurs="0"/>
+<xs:element name="temperatura1" type="xs:int" minOccurs="0"/>
+<xs:element name="temperatura2" type="xs:int" minOccurs="0"/>
+<xs:element name="temperatura3" type="xs:int" minOccurs="0"/>
+<xs:element name="tensao" type="xs:int" minOccurs="0"/>
+<xs:element name="textoMensagem" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoTeclado" type="xs:int" minOccurs="0"/>
+<xs:element name="uf" type="xs:string" minOccurs="0"/>
+<xs:element name="velocidade" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="eventoSequenciamento">
+<xs:sequence>
+<xs:element name="idEvento" type="xs:int" minOccurs="0"/>
+<xs:element name="tempo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="evento">
+<xs:sequence>
+<xs:element name="codigo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMascaraDispositivos">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMascaraDispositivosResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:mascaraDispositivo" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="mascaraDispositivo">
+<xs:sequence>
+<xs:element name="atuadores" type="xs:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMotoristas">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="quantidade" type="xs:int" minOccurs="0"/>
+<xs:element name="idMotorista" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMotoristasResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:motorista" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="motorista">
+<xs:sequence>
+<xs:element name="celular" type="xs:string" minOccurs="0"/>
+<xs:element name="dataContratacao" type="xs:anySimpleType" minOccurs="0"/>
+<xs:element name="generico" type="xs:boolean" minOccurs="0"/>
+<xs:element name="idMotorista" type="xs:int" minOccurs="0"/>
+<xs:element name="login" type="xs:string" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+<xs:element name="numeroDocumento" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="telefone" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoCNH" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoDocumento" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoMotorista" type="xs:string" minOccurs="0"/>
+<xs:element name="vencimentoCNH" type="xs:anySimpleType" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutDetalhado">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="layout" type="tns:tipoLayout" minOccurs="0"/>
+<xs:element name="idLayout" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutDetalhadoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:layoutDetalhado" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="layoutDetalhado">
+<xs:sequence>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idLayout" type="xs:int" minOccurs="0"/>
+<xs:element name="macros" type="tns:macro" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="macro">
+<xs:sequence>
+<xs:element name="desricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idMacro" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterTelemetriaPortal">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterTelemetriaPortalResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:telemetria" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="telemetria">
+<xs:sequence>
+<xs:element name="embreagem" type="xs:int" minOccurs="0"/>
+<xs:element name="estadoLimpadorParabrisa" type="xs:int" minOccurs="0"/>
+<xs:element name="freio" type="xs:int" minOccurs="0"/>
+<xs:element name="motorFuncionando" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTms3">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTms3Response">
+<xs:sequence>
+<xs:element name="return" type="tns:macroTms3" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="macroTms3">
+<xs:sequence>
+<xs:element name="idMacroTms3" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="layout" type="xs:string" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterPontosReferencia">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterPontosReferenciaResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:pontoReferencia" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="pontoReferencia">
+<xs:sequence>
+<xs:element name="codigo" type="xs:int" minOccurs="0"/>
+<xs:element name="data" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="endereco" type="xs:string" minOccurs="0"/>
+<xs:element name="idPontoReferencia" type="xs:int" minOccurs="0"/>
+<xs:element name="latitudeI" type="xs:double" minOccurs="0"/>
+<xs:element name="latitudeS" type="xs:double" minOccurs="0"/>
+<xs:element name="longitudeI" type="xs:double" minOccurs="0"/>
+<xs:element name="longitudeS" type="xs:double" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMotoristasVeiculos">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="quantidade" type="xs:int" minOccurs="0"/>
+<xs:element name="idMotoristaVeiculo" type="xs:long" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMotoristasVeiculosResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:motoristaVeiculo" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="motoristaVeiculo">
+<xs:sequence>
+<xs:element name="idMotorista" type="xs:int" minOccurs="0"/>
+<xs:element name="idMotoristaVeiculo" type="xs:long" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutAcaoEmbarcadaAVD">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterLayoutAcaoEmbarcadaAVDResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:layoutAcaoEmbarcadaAVD" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="layoutAcaoEmbarcadaAVD">
+<xs:sequence>
+<xs:element name="idLayoutAcaoEmbarcadaAVD" type="xs:int" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="verificarVeiculoIntegrado">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="verificarVeiculoIntegradoResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTd50Tmcd">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoTeclado" type="tns:tipoTeclado" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTd50TmcdResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:macroTd50Tmcd" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="macroTd50Tmcd">
+<xs:sequence>
+<xs:element name="idMacroTd50Tmcd" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="layout" type="xs:string" minOccurs="0"/>
+<xs:element name="layoutDetalhado" type="xs:string" minOccurs="0"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMensagemPortal">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMensagemPortalResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:mensagem" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="mensagem">
+<xs:sequence>
+<xs:element name="mensagem" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterEnderecoPosicao">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="latitude" type="xs:string" minOccurs="0"/>
+<xs:element name="longitude" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterEnderecoPosicaoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:enderecoPosicao" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="enderecoPosicao">
+<xs:sequence>
+<xs:element name="address" type="tns:endereco" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="endereco">
+<xs:sequence>
+<xs:element name="city" type="tns:cidade" minOccurs="0"/>
+<xs:element name="street" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cidade">
+<xs:sequence>
+<xs:element name="state" type="xs:string" minOccurs="0"/>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+<xs:element name="country" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterStatusComando">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="ticket" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterStatusComandoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:statusComando" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="statusComando">
+<xs:sequence>
+<xs:element name="dataExec" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="idStatusComando" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterSequenciamentoEvento">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterSequenciamentoEventoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:sequenciamentoEvento" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sequenciamentoEvento">
+<xs:sequence>
+<xs:element name="atuador" type="xs:int" minOccurs="0"/>
+<xs:element name="descricao" type="xs:string" minOccurs="0"/>
+<xs:element name="idSequenciamentoEvento" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTd50TmcdDetalhado">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoTeclado" type="tns:tipoTeclado" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTd50TmcdDetalhadoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:macroTd50TmcdDetalhado" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="macroTd50TmcdDetalhado">
+<xs:sequence>
+<xs:element name="idMacroTd50Tmcd" type="xs:int" minOccurs="0"/>
+<xs:element name="idTmcd" type="xs:int" minOccurs="0"/>
+<xs:element name="listaLayout" type="tns:layoutDetalhado" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="listaVeiculos" type="xs:int" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="nome" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTd40">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="satelital" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterMacroTd40Response">
+<xs:sequence>
+<xs:element name="return" type="tns:macroTd40" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="macroTd40">
+<xs:sequence>
+<xs:element name="idMacroTd40" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="mensagem" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoMensagem" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterPacoteLocalizacao">
+<xs:sequence>
+<xs:element name="usuario" type="xs:string" minOccurs="0"/>
+<xs:element name="senha" type="xs:string" minOccurs="0"/>
+<xs:element name="quantidade" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="obterPacoteLocalizacaoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:pacoteLocalizacao" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="pacoteLocalizacao">
+<xs:sequence>
+<xs:element name="dataPacote" type="xs:dateTime" minOccurs="0"/>
+<xs:element name="direcao" type="xs:int" minOccurs="0"/>
+<xs:element name="gps" type="xs:int" minOccurs="0"/>
+<xs:element name="idVeiculo" type="xs:int" minOccurs="0"/>
+<xs:element name="ignicao" type="xs:int" minOccurs="0"/>
+<xs:element name="latitude" type="xs:double" minOccurs="0"/>
+<xs:element name="longitude" type="xs:double" minOccurs="0"/>
+<xs:element name="velocidade" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:simpleType name="tipoLayout">
+<xs:restriction base="xs:string">
+<xs:enumeration value="LAYOUT_TD40"/>
+<xs:enumeration value="LAYOUT_TD50"/>
+<xs:enumeration value="LAYOUT_TMCD"/>
+<xs:enumeration value="LAYOUT_SEQUENCIAMENTO_TD50"/>
+<xs:enumeration value="LAYOUT_TMS3"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="tipoTeclado">
+<xs:restriction base="xs:string">
+<xs:enumeration value="TECLADO_TMCD"/>
+<xs:enumeration value="TECLADO_TD50"/>
+<xs:enumeration value="TECLADO_TMS3"/>
+</xs:restriction>
+</xs:simpleType>
+</xs:schema>
