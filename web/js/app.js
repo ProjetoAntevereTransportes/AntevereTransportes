@@ -2,7 +2,7 @@
     var app = angular.module("app", ["ngRoute", "inicio", "configuracao", "usuario",
         "pagamento", "ngAnimate", "pagamentoService",
         "login", "authService", "fabElement", "notifyElement",
-        "fornecedor", "fileUploadModule", "cargo",
+        "fornecedor", "fileUploadModule", "cargo","carga",
         "funcionario", "cliente", "ui.utils", "cfp.hotkeys",
         "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks", "vazioElement",
         "uiGmapgoogle-maps", "rota"]);
@@ -129,6 +129,14 @@
                     $scope.showBack = true;
                     break;
                 }
+                case "/Carga":
+                {
+                    $scope.title = "Cargas";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
+                    break;
+                }              
                 case "/Funcionario":
                 {
                     $scope.title = "Funcionários";
@@ -209,6 +217,9 @@
         }).when("/Cargo", {
             templateUrl: "componentes/cargo/cargo.html",
             controller: "cargoController"
+        }).when("/Carga", {
+            templateUrl: "componentes/carga/carga.html",
+            controller: "cargaController"
         }).when("/Funcionario", {
             templateUrl: "componentes/funcionario/funcionario.html",
             controller: "funcionarioController"

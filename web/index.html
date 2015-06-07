@@ -181,7 +181,12 @@
                
               <li class="mm-menu__item" ng-class="{active: selectedItem == '/Caminhao'}">
                     <a class="mm-menu__link" href="#/Caminhao">
-                        <span class="mm-menu__link-text"><i class="md md-person"></i> Caminhãos</span>
+                        <span class="mm-menu__link-text menu-title"><i class="md md-person"></i> Caminhãos</span>
+                    </a>
+                </li>
+                <li class="mm-menu__item" ng-class="{active: selectedItem == '/Carga'}">
+                    <a class="mm-menu__link" href="#/Carga">
+                        <span class="mm-menu__link-text menu-title"><i class=" md md-account-balance-wallet"></i> Carga</span>
                     </a>
                 </li>
                 <li class="mm-menu__item" ng-class="{active: selectedItem == '/Conta'}">
@@ -238,6 +243,7 @@
         <script src="componentes/vazio/vazio.js" type="text/javascript"></script>
         <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
         <script src="js/lodash.js" type="text/javascript"></script>
+        <script src="componentes/carga/carga.js" type="text/javascript"></script>
         <script src="js/angular-google-maps.min.js" type="text/javascript"></script>
         <script src="componentes/rota/rota.js" type="text/javascript"></script>
         <script>

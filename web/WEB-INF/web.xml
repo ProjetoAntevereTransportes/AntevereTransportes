@@ -68,6 +68,10 @@
         <servlet-name>Caminhao</servlet-name>
         <servlet-class>servlets.Caminhao</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Carga</servlet-name>
+        <servlet-class>servlets.Carga</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
         <url-pattern>/CadUsuario</url-pattern>
@@ -159,6 +163,10 @@
     <servlet-mapping>
         <servlet-name>Caminhao</servlet-name>
         <url-pattern>/Caminhao</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Carga</servlet-name>
+        <url-pattern>/Carga</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
