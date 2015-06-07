@@ -1,64 +1,74 @@
-    (function () {
-    var app = angular.module("Caminhao", []);
+(function () {
+    var app = angular.module("carga", []);
 
-    app.controller("caminhaoController", ["caminhaoService", "$scope", "notifyService",
-        function (caminhaoService, $scope, notifyService) {
+    app.controller("cargaController", ["cargaService", "$scope", "notifyService", "pesquisaService",
+        function (cargaService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Título";
             $scope.itens = [];
 
             $scope.novo = {
-                id:"",
+               
                 nome: "",
-                placa: "",
-                renavam: "",
-                modelo: "",
-                marca: "",
-                cor: "",
-                data_compra: "",
-                ano: "",
-                gasto: ""
+                descricao: ""
             };
 
             $scope.formularioValido = function () {
-                var inputs = $("[name='caminhaoform']").find("input");
+                var inputs = $("[name='cargaform']").find("input");
                 return $.grep(inputs, function (i) {
                     return $(i).val() == "";
                 }).length != 0;
             };
+            pesquisaService.setFunction(function (search) {
+                $scope.search = search;
+            });
 
             $scope.inserir = function (novo) {
-                caminhaoService.inserir(function () {
+                cargaService.inserir(function () {
                     $scope.itens.push(novo);
                     $("#add").modal("hide");
-                    $scope.carregarcaminhao();
+                    $scope.carregarCargas();
                 }, function () {
 
                 }, null, novo);
             };
 
-            $scope.carregarCaminhao = function () {
-                caminhaoService.listar(function (resultado) {
+            $scope.carregarCargas = function () {
+                cargaService.listar(function (resultado) {
                     $scope.itens = resultado;
                 }, function () {
 
                 }, null);
             };
 
-            $scope.carregarCaminhao();
+            $scope.carregarCargas();
 
             $scope.fab = {
                 principalClick: function () {
                     $scope.modal = {
                         salvarNome: "Salvar",
-                        titulo: "Novo Caminhão",
+                        titulo: "Nova Carga",
                         salvarFuncao: $scope.inserir,
                         item: $scope.novo
                     };
-                    $("#add").modal().modal("show");
+                    $scope.reset();
+                    $('#cargaform')[0].reset();
+                    $("#add").modal("show");
                 },
                 principalIcon: "md md-add",
                 secondIcon: "md md-add",
                 principalAlt: "Único"
+            };
+
+            $scope.reset = function () {
+                $scope.novo = {
+                  
+                    nome: "",
+                    descricao: ""
+                };
+                if ($scope.cargaform) {
+                    $scope.cargaform.$setPristine();
+                    $scope.cargaform.$setUntouched();
+                }
             };
 
             $scope.editar = function (item) {
@@ -69,13 +79,32 @@
                     salvarFuncao: $scope.editarSalvar
                 };
                 $("#add").modal().modal("show");
-                $scope.novo = item;
+                
             };
 
-            $scope.editarSalvar = function (item) {
-                caminhaoService.editar(function () {
-                    $("#add").modal().modal("hide");
+            $scope.consultar = function (item) {
+                $scope.modal = {
+                    salvarNome: "Consultar",
+                    titulo: "Consultar " + item.nome,
+                    item: item,
+                    salvarFuncao: $scope.fechar
+                };
+                $("#add").modal().modal("show");
+                $(".form-group > *").attr("disabled", true);
+                $("#salvar").hide();
 
+            };
+            $scope.fechar = function (item) {
+                $("#add").modal().modal("hide");
+                $(".form-group > *").attr("disabled", false);
+                $("#salvar").show();
+            }
+
+
+            $scope.editarSalvar = function (item) {
+                cargaService.editar(function () {
+                    $("#add").modal().modal("hide");
+                    $scope.carregarCargas();
                 }, function () {
                 }, null, item);
             };
@@ -88,7 +117,8 @@
                         buttons: [{
                                 text: "Sim",
                                 f: function (i) {
-                                    caminhaoService.excluir(function () {
+                                    cargaService.excluir(function () {
+                                        $scope.carregarCargas();
                                     }, function () {
                                     }, null, item.id);
                                     i.excluirID = null;
@@ -108,23 +138,23 @@
 
         }]);
 
-    app.service("caminhaoService", ["$http", "notifyService", function ($http, notifyService) {
+    app.service("cargaService", ["$http", "notifyService", function ($http, notifyService) {
             this.inserir = function (sucesso, erro, sempre, data) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Adicionando caminhão..."
+                    message: "Adicionando carga..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Caminhao", this.formatar("INSERIR", data))
+                $http.post(server + "/Carga", this.formatar("INSERIR", data))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
                                 notifyService.add({
                                     seconds: 5,
-                                    message: "Caminhão adicionado"
+                                    message: "Carga adicionada"
                                 });
                             }
                             else {
@@ -135,7 +165,7 @@
                             }
                         }).error(function () {
                     notifyService.remove(id);
-                    erro("Não foi possível cadastrar o caminhão.");
+                    erro("Não foi possível cadastrar a carga.");
                 });
 
                 if (sempre)
@@ -145,15 +175,12 @@
             this.listar = function (sucesso, erro, sempre) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Carregando caminhao..."
+                    message: "Carregando cargas..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Caminhao", this.formatar("LERVARIOS", null), {
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-
-                })
+                $http.post(server + "/Carga", this.formatar("LERVARIOS", null))
                         .success(function (resultado) {
                             notifyService.remove(id);
                             if (resultado.sucesso) {
@@ -166,24 +193,24 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível carregar os caminhao."
+                        message: "Não foi possível carregar as cargas."
                     });
-                    erro("Não foi possível carregar os caminhao.");
+                    erro("Não foi possível carregar as cargas.");
                 });
 
                 if (sempre)
                     sempre();
             };
 
-            this.excluir = function (sucesso, erro, sempre, caminhaoid) {
+            this.excluir = function (sucesso, erro, sempre, fornecedorID) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Excluindo caminhao..."
+                    message: "Excluindo carga..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Caminhao", this.formatar("REMOVER", caminhaoid),
+                $http.post(server + "/Carga", this.formatar("REMOVER", fornecedorID),
                         {
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
 
@@ -192,6 +219,7 @@
                             notifyService.remove(id);
                             if (resultado.sucesso) {
                                 sucesso(resultado.resultado);
+                                //$scope.carregarCargos();
                             }
                             else {
                                 erro(resultado.mensagem);
@@ -200,9 +228,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível excluir o caminhao."
+                        message: "Não foi possível excluir a carga."
                     });
-                    erro("Não foi possível excluir o caminhao.");
+                    erro("Não foi possível excluir a carga.");
                 });
 
                 if (sempre)
@@ -216,21 +244,19 @@
             this.editar = function (sucesso, erro, sempre, item) {
                 var id = notifyService.add({
                     fixed: true,
-                    message: "Editar caminhao..."
+                    message: "Editar carga..."
                 });
 
                 var server = "/AntevereTransportes";
 
-                $http.post(server + "/Caminhao", this.formatar("EDITAR", item),
-                        {
-                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                        }).success(function (resultado) {
+                $http.post(server + "/Carga", this.formatar("EDITAR", item))
+                        .success(function (resultado) {
                     notifyService.remove(id);
                     if (resultado.sucesso) {
                         sucesso(resultado.resultado);
                         notifyService.add({
                             seconds: 5,
-                            message: "Caminhão editado."
+                            message: "Carga editada."
                         });
                     }
                     else {
@@ -244,9 +270,9 @@
                     notifyService.remove(id);
                     notifyService.add({
                         seconds: 5,
-                        message: "Não foi possível editar o caminhao."
+                        message: "Não foi possível editar a carga."
                     });
-                    erro("Não foi possível editar o caminhão.");
+                    erro("Não foi possível editar a carga.");
                 });
 
                 if (sempre)

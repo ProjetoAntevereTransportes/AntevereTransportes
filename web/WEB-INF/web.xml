@@ -65,8 +65,12 @@
         <servlet-class>servlets.Pessoa</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Viagem</servlet-name>
-        <servlet-class>servlets.Viagem</servlet-class>
+        <servlet-name>Caminhao</servlet-name>
+        <servlet-class>servlets.Caminhao</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Carga</servlet-name>
+        <servlet-class>servlets.Carga</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CadUsuario</servlet-name>
@@ -159,6 +163,12 @@
     <servlet-mapping>
         <servlet-name>Viagem</servlet-name>
         <url-pattern>/Viagem</url-pattern>
+        <servlet-name>Caminhao</servlet-name>
+        <url-pattern>/Caminhao</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Carga</servlet-name>
+        <url-pattern>/Carga</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
