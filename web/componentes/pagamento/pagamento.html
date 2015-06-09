@@ -402,7 +402,7 @@
 
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Data Inicial {{itemNovoMassa.inicial}}</label>
+                                <label>Data Inicial</label>
                                 <input tabindex="3" class="form-control"
                                        type="date"
                                        ng-change="gerarParcelas()"
@@ -416,7 +416,7 @@
                         </div>            
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label>Data Final {{itemNovoMassa.final}}</label>
+                                <label>Data Final</label>
                                 <input tabindex="4" class="form-control"
                                        type="date"
                                        ng-change="gerarParcelas()"
@@ -459,7 +459,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Descrição</label>
-                                    <input class="form-control" type="text" required ng-model="item.descricao">
+                                    <input class="form-control" type="text" ng-model="item.descricao">
                                 </div>
                             </div>                
                             <div class="col-lg-3">
@@ -471,7 +471,7 @@
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label>Boleto</label>
-                                    <input class="form-control" type="file" required file-model="item.boletoID">
+                                    <input class="form-control" type="file" <!--required file-model="item.boletoID"-->>
                                 </div>
                             </div>
                         </div>

@@ -2,6 +2,15 @@
     .form-group{
         margin-bottom: 2px !important;
     }
+
+    .input-combustivel{
+        border-top: none !important;
+        width: 145px;
+        margin-left: 4px;
+        border-left: none !important;
+        border-bottom: 1px solid rgb(173, 173, 173);
+        border-right: none !important;
+    }
 </style>
 
 <div id="maps">
@@ -14,7 +23,7 @@
          padding: 6px;">
         <div id='passo-1' ng-show='passo == 1'>
             <div id="addRota">                
-                <h4>1. Informe as rotas</h4>
+                <h4>{{passo1Titulo}}</h4>
                 <div class="form-group">
                     <label>Partida</label>
                     <input 
@@ -101,11 +110,13 @@
                     'sucesso': rota.sucesso == 1,
                 'carregando': rota.sucesso == 2}" ng-repeat="rota in rotas" ng-click="carregar(rota)"
                      style="border-left: 3px solid {{rota.cor}};">
-                    <i ng-click="remover(rota)" class="md md-clear remove-route"></i>
+                    <i ng-click="remover(rota)" class="md md-clear remove-route"></i>                    
                     <ul>
                         <li ng-show='rota.sucesso == 2'>Carregando...</li>
                         <li ng-show='rota.sucesso == 0'>Rota não encotrada</li>
-                        <li ng-show='rota.sucesso == 1'>{{rota.distancia}} - {{rota.duracao}}</li>
+                        <li ng-show='rota.sucesso == 1'>
+                            <!--<input type="checkbox" ng-click="showHideRoute(rota)" ng-model="rota.show">-->
+                            {{rota.distancia}} - {{rota.duracao}}</li>
                         <li><b>Partida: </b>{{rota.partida.string}}</li>
                         <li><b>Destino: </b>{{rota.destino.string}}</li>
                     </ul>
@@ -114,7 +125,7 @@
         </div>
         <div id='passo-2' ng-show='passo == 2'>
             <form name="frota">
-                <h4>2. Informe os dados da viagem</h4>
+                <h4>{{passo2Titulo}}</h4>
                 <div class='row'>
                     <div class='col-lg-12'>
                         <div class='form-group'>
@@ -130,9 +141,8 @@
                     <div class='col-lg-12'>
                         <div class='form-group'>
                             <label>Tipo de Carga</label>
-                            <select required name="carga" ng-model="nRota.cargaID" class='form-control'>
-                                <option value="1">Arrumar INPUT!</option>
-                                <option ng-repeat='f in cargas'></option>
+                            <select required name="carga" ng-model="nRota.tipoCargaID" class='form-control'>
+                                <option ng-repeat='c in cargas' value="{{c.id}}">{{c.nome}}</option>
                             </select>
                             <erro ng-show="frota.carga.$error.required && frota.carga.$touched">
                                 Selecione o tipo de carga
@@ -166,7 +176,10 @@
                         <ul class='m-ul'>
                             <li><b>Distância Total:</b> {{getTotalKilometros() | currency : "" : 2}} km</li>
                             <li><b>Consumo Caminhão:</b> {{consumoKmCaminhao}} KM/L - {{consumoEstimado| currency: "" : 2}} litros</li>
+                            <li><b>Valor do combustível: R$ </b> 
+                                <input type="text" class="input-combustivel" ng-change="calcularValores()" ng-model="valorDiesel" ui-number-mask></li>
                             <li><b>Valor estimado:</b> {{valorEstimado| currency : "R$ " : 2}}</li>
+
                         </ul>
                     </div>
                     <div class='col-lg-12'>
@@ -194,7 +207,7 @@
         <div class="btn-passos">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    <button ng-show="passo == 1" class='btn btn-xs btn-default pull-left'>
+                    <button ng-show="passo == 1" ng-click="voltar()" class='btn btn-xs btn-default pull-left'>
                         Voltar
                     </button>
                     <button ng-click='anteriorPasso()' ng-hide="passo == 1" class='btn btn-xs btn-default pull-left'>

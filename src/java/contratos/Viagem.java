@@ -5,6 +5,8 @@
  */
 package contratos;
 
+import java.util.List;
+
 /**
  *
  * @author lucas ID da Viagem - int auto incremento; ID do Caminhão - int; ID do
@@ -32,8 +34,7 @@ public class Viagem {
     private String nomeStatusViagem;
     private String nomeCaminhao;
     private String placarCaminhao;
-    private contratos.Endereco enderecoCarga;
-    private contratos.Endereco enderecoDescarga;
+    private List<contratos.Rota> rotas;
 
     /**
      * @return the ID
@@ -276,29 +277,14 @@ public class Viagem {
     /**
      * @return the enderecoCarga
      */
-    public contratos.Endereco getEnderecoCarga() {
-        return enderecoCarga;
+    public List<contratos.Rota> getRotas() {
+        return rotas;
     }
 
     /**
      * @param enderecoCarga the enderecoCarga to set
      */
-    public void setEnderecoCarga(contratos.Endereco enderecoCarga) {
-        this.enderecoCarga = enderecoCarga;
+    public void setRotas(List<contratos.Rota> rotas) {
+        this.rotas = rotas;
     }
-
-    /**
-     * @return the enderecoDescarga
-     */
-    public contratos.Endereco getEnderecoDescarga() {
-        return enderecoDescarga;
-    }
-
-    /**
-     * @param enderecoDescarga the enderecoDescarga to set
-     */
-    public void setEnderecoDescarga(contratos.Endereco enderecoDescarga) {
-        this.enderecoDescarga = enderecoDescarga;
-    }
-
 }

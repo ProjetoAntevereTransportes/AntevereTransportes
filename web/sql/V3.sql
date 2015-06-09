@@ -257,6 +257,8 @@ CREATE TABLE IF NOT EXISTS endereco_viagem(
     FOREIGN KEY (viagem_id) REFERENCES viagem(id),
     partida varchar(300) NOT NULL,
     destino varchar(300) NOT NULL,
+    metros varchar(20) NOT NULL,
+    segundos varchar(20) NOT NULL,
     dados LONGTEXT
 );
 

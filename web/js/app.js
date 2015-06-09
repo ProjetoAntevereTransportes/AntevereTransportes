@@ -61,6 +61,8 @@
             }
 
             $(".back-top").css("top", (-position * 0.5));
+            
+            //$scope.$apply();
         };
 
         $scope.abrirMenu = function () {
@@ -71,6 +73,9 @@
         $scope.mudarTitulo = function (path) {
             $scope.defaultColor = "rgb(69, 90, 100)";
             $scope.defaultSearchColor = "rgb(114, 138, 150)";
+            
+            if(path.indexOf("/Rota") != -1)
+                path = "/Rota";
 
             switch (path) {
                 case "/inicio":
@@ -180,16 +185,16 @@
                 case "/Rota":
                 {
                     $scope.title = "Rotas";
-                    $scope.barColor = "green";
-                    $scope.searchColor = "white";
+                    $scope.barColor = "#009688";
+                    $scope.searchColor = "#4DB6AC";
                     $scope.showBack = false;
                     break;
                 }
                 case "/Viagem":
                 {
                     $scope.title = "Viagens";
-                    $scope.barColor = "green";
-                    $scope.searchColor = "white";
+                    $scope.barColor = "#009688";
+                    $scope.searchColor = "#4DB6AC";
                     $scope.showBack = true;
                     break;
                 }
@@ -244,6 +249,9 @@
             templateUrl: "componentes/conta_bancaria/conta_bancaria.html",
             controller: "conta_bancariaController"
         }).when("/Rota", {
+            templateUrl: "componentes/rota/rota.html",
+            controller: "rotaController"
+        }).when("/Rota/:viagemID", {
             templateUrl: "componentes/rota/rota.html",
             controller: "rotaController"
         }).when("/Viagem", {

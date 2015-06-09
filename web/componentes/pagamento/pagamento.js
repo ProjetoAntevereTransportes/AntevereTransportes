@@ -138,16 +138,18 @@
             $scope.gerarParcelas = function () {
                 if ($scope.itemNovoMassa.inicial && $scope.itemNovoMassa.final) {
                     $scope.itemNovoMassa.parcelas = [];
-                    var inicial = $scope.itemNovoMassa.inicial;
-                    var final = $scope.itemNovoMassa.final;
+                                       
+                    
+                    var inicial = angular.copy($scope.itemNovoMassa.inicial);
+                    var final = angular.copy($scope.itemNovoMassa.final);
 
                     while (inicial <= final) {
 
                         $scope.itemNovoMassa.parcelas.push({
-                            descricao: "descriocao!",
+                            descricao: null,
                             vencimento: angular.copy(inicial),
                             valor: $scope.itemNovoMassa.valor,
-                            boletoID: "OLA MUNDO"
+                            boletoID: null
                         });
 
                         inicial = new Date(inicial.setMonth(inicial.getMonth() + 1));

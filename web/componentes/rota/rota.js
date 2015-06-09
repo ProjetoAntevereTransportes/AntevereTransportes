@@ -1,8 +1,10 @@
 (function () {
     var app = angular.module("rota", []);
     app.controller("rotaController", ["$scope", "notifyService", "funcionarioService",
-        "clienteService", "caminhaoService",
-        function ($scope, notifyService, funcionarioService, clienteService, caminhaoService) {
+        "clienteService", "caminhaoService", "cargaService", "viagemService", "$location",
+        "$routeParams",
+        function ($scope, notifyService, funcionarioService, clienteService,
+                caminhaoService, cargaService, viagemService, $location, $routeParams) {
             $scope.passo = 1;
             $scope.rotas = [];
             $scope.rc = {
@@ -10,27 +12,40 @@
             $scope.consumoKmCaminhao = 0;
             $scope.consumoEstimado = 0;
             $scope.valorEstimado = 0;
-
+            $scope.valorDiesel = 2;
+            $scope.caminhaoSelecionado = null;
             $scope.nRota = {};
 
             $scope.changeCaminhao = function (caminhaoID) {
-                var caminhao = $.grep($scope.caminhoes, function (e) {
+                $scope.caminhaoSelecionado = $.grep($scope.caminhoes, function (e) {
                     return e.id == caminhaoID;
-                });
+                })[0];
+                $scope.calcularValores();
+            };
 
-                $scope.consumoKmCaminhao = 5;
+            $scope.calcularValores = function () {
+                if (!$scope.caminhaoSelecionado)
+                    return;
+
+                $scope.consumoKmCaminhao = $scope.caminhaoSelecionado.gasto;
                 var totalKilometros = $scope.getTotalKilometros();
                 var totalLitros = totalKilometros / $scope.consumoKmCaminhao;
-                var valorDiesel = 2.56;
+                var valorDiesel = $scope.valorDiesel;
                 var totalCusto = totalLitros * valorDiesel;
 
+                var updateValue = !$scope.nRota.valor || $scope.nRota.valor == $scope.valorEstimado;
 
                 $scope.consumoEstimado = totalLitros;
                 $scope.valorEstimado = totalCusto;
+
+                if (updateValue)
+                    $scope.nRota.valor = $scope.valorEstimado;
             };
 
             $scope.proximoPasso = function () {
                 $scope.passo++;
+                if ($scope.passo == 2)
+                    $scope.carregarSelects();
             };
 
             $scope.anteriorPasso = function () {
@@ -69,16 +84,30 @@
                 return r;
             };
 
-            $scope.salvar = function(rota){
+            $scope.salvar = function (rota) {
                 rota.rotas = [];
-                $($scope.rotas).each(function(i, r){                   
+                $($scope.rotas).each(function (i, r) {
                     rota.rotas.push({
                         partida: r.partida.string,
-                        destino: r.destino.string
+                        destino: r.destino.string,
+                        metros: r.metros,
+                        segundos: r.segundos
                     });
                 });
-                
-                var json = JSON.stringify(rota);
+
+                viagemService.inserir(function () {
+                    notifyService.add({
+                        seconds: 8,
+                        message: "Viagem inserida com sucesso!"
+                    });
+
+                    $scope.voltar();
+                }, function () {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível inserir a viagem. Tente novamente."
+                    });
+                }, null, rota);
             };
 
             $scope.novaRota = function (prua, pnumero, pbairro, pcidade, pestado, ppais,
@@ -107,7 +136,7 @@
 
                 destino.string = $scope.rotaToString(destino);
 
-                var color = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
+                var color = '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6);
 
                 var novaRota = {
                     request: {
@@ -119,7 +148,8 @@
                             {
                                 draggable: true,
                                 polylineOptions: {
-                                    strokeColor: color
+                                    strokeColor: color,
+                                    visible: true
                                 }
                             }
                     ),
@@ -131,7 +161,8 @@
                     duracao: "",
                     distancia: "",
                     sucesso: 2,
-                    cor: color
+                    cor: color,
+                    show: true
                 };
 
                 google.maps.event.addListener(novaRota.directionsDisplay,
@@ -148,6 +179,7 @@
 
                                 var e = JSON.stringify(response);
 
+                                $scope.calcularValores();
                                 $scope.$apply();
                                 novaRota.sucesso = 1;
                             } else {
@@ -162,7 +194,17 @@
             };
 
             $scope.carregar = function (rota) {
+                rota.directionsDisplay.setMap($scope.map);
+            };
 
+            $scope.hoverRoute = function (rota) {
+                rota.directionsDisplay.setOptions({
+                    polylineOptions: {
+                        strokeColor: rota.cor,
+                        visible: rota.show,
+                        strokeWeight: 3
+                    }
+                });
             };
 
             $scope.remover = function (rota) {
@@ -209,7 +251,6 @@
             };
 
             $scope.carregarDirecao = function (novaRota) {
-
                 $scope.directionsService.route(novaRota.request, function (response, status) {
                     if (status == google.maps.DirectionsStatus.OK) {
                         novaRota.directionsDisplay.setMap($scope.map);
@@ -259,7 +300,7 @@
             };
 
             $scope.carregarCaminhoes = function () {
-                clienteService.listar(function (resultado) {
+                caminhaoService.listar(function (resultado) {
                     $scope.caminhoes = resultado;
                 }, function () {
                     notifyService.add({
@@ -270,15 +311,71 @@
                 }, null, null);
             };
 
-            $scope.loadMap();
-            $scope.carregarFuncionarios();
-            $scope.carregarClientes();
-            $scope.carregarCaminhoes();
+            $scope.carregarCargas = function () {
+                cargaService.listar(function (resultado) {
+                    $scope.cargas = resultado;
+                }, function () {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível carregar as cargas.\n\
+                          Verifique sua conexão com a internet."
+                    });
+                }, null);
+            };
+
+            $scope.voltar = function () {
+                $location.url("/Viagem");
+            };
+
+            $scope.init = function () {
+                $scope.loadMap();
+                if ($routeParams.viagemID) {
+                    var id = notifyService.add({
+                        fixed: true,
+                        message: "Carregando informações da viagem..."
+                    });
+
+                    viagemService.carregar(function (resultado) {
+                        notifyService.remove(id);
+
+                        $(resultado.rotas).each(function (i, r) {
+                            $scope.novaRota(r.partida, "", "", "", "", "",
+                                    r.destino, "", "", "", "", "");
+                        });
+
+                        $scope.nRota = resultado;
 
 
-            $scope.novaRota("Av. Maestro Flaminio Mazzone", "213", "Portal do Sol", "Dobrada",
-                    "São Paulo", "Brasil",
-                    "", "", "", "Matão", "São Paulo", "Brasil");
+                        $scope.passo1Titulo = "1. Rotas";
+                        $scope.passo2Titulo = "2. Informações da viagem";
+                    }, function () {
+                        notifyService.add({
+                            seconds: 10,
+                            message: "Não foi possível carregar as informações da viagem."
+                        });
+                    }, null, $routeParams.viagemID);
+                } else {
+                    $scope.passo1Titulo = "1. Informe as rotas";
+                    $scope.passo2Titulo = "2. Informe os dados da viagem";
+                }
+            };
+
+            $scope.carregarSelects = function () {
+                if (!$scope.funcionarios)
+                    $scope.carregarFuncionarios();
+                if (!$scope.clientes)
+                    $scope.carregarClientes();
+                if (!$scope.caminhoes)
+                    $scope.carregarCaminhoes();
+                if (!$scope.cargas)
+                    $scope.carregarCargas();
+            };
+
+            $scope.init();
+
+//            $scope.novaRota("Av. Maestro Flaminio Mazzone", "213", "Portal do Sol", "Dobrada",
+//                    "São Paulo", "Brasil",
+//                    "", "", "", "Matão", "São Paulo", "Brasil");
 
         }]);
 })();

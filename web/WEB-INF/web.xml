@@ -56,6 +56,10 @@
         <servlet-name>Banco</servlet-name>
         <servlet-class>servlets.Banco</servlet-class>
     </servlet>
+     <servlet>
+        <servlet-name>Viagem</servlet-name>
+        <servlet-class>servlets.Viagem</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>FileDownload</servlet-name>
         <servlet-class>servlets.FileDownload</servlet-class>
@@ -163,6 +167,8 @@
     <servlet-mapping>
         <servlet-name>Viagem</servlet-name>
         <url-pattern>/Viagem</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>Caminhao</servlet-name>
         <url-pattern>/Caminhao</url-pattern>
     </servlet-mapping>

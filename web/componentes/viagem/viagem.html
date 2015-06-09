@@ -1,47 +1,71 @@
-<div class="card">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Motorista
-                </th>
-                <th>
-                    Caminhão
-                </th>
-                <th>
-                    Endereço Carga
-                </th>
-                <th>
-                    Endereço Descarga
-                </th>
-                <th>
-                    Valor
-                </th>                
-                <th>
-                    Adiantamento
-                </th>    
-                <th>
-                    Valor
-                </th>                    
-                <th>
-                    Tipo de Carga
-                </th>    
-                <th>
-                    Cliente
-                </th>    
-                <th>
-                    Status
-                </th>    
-            </tr>
-        </thead>
+<style>
+    .table-viagem td{
+        border-right: 1px solid rgb(221, 221, 221);
+    }
 
-        <tbody>
-            <tr ng-repeat="item in viagens">
+    .table-viagem tbody tr:first-child{
+        border-bottom: none !important;
+    }
 
+    .tr-item{
+        height: 8px !important;
+    }
+
+    .tr-item td{
+        padding: 0px !important;
+    }
+
+    .tr-item td:last-child{
+        text-align: left !important;
+    }
+
+    .viagem-item{
+        padding: 10px;
+        margin-bottom: 10px;
+        transition-duration: .5s;        
+        cursor: pointer;
+    }
+
+    .viagem-item:hover{
+        background: #FAFAFA;
+    }
+
+    .viagem-table{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .viagem-table tr:hover{
+        background: none !important;
+    }
+</style>
+
+<div class="viagem-item card z1" ng-repeat="item in viagens| filter:search">
+    <div class="viagem-info">
+        <table class="viagem-table" width="100%" ng-click="cliqueViagem(item.ID)">
+            <tr class="tr-item">
+                <td><b>Data</b><br/>09/06/2015</td>
+                <td><b>Funcionário</b><br/>{{item.nomeFunctionario}}</td>
+                <td><b>Caminhão</b><br/>{{item.nomeCaminhao}} ({{item.placarCaminhao}})</td>
+                <td><b>Carga</b><br/>{{item.nomeCarga}}</td>
+                <td><b>Cliente</b><br/>{{item.nomeCliente}}</td>
+                <td><b>Valor</b><br/>{{item.valor| currency : "R$ " : 2}}</td>
+                <td><b>Total Km</b><br/>{{totalKm(item) | currency : "" : 2}} Km</td>
+                <td><b>Adiantamento</b><br/>{{item.adiantamento| currency: "R$ " : 2}}</td>
+                <td><b>Situação</b><br/>{{item.nomeStatusViagem}}</td>
+                
+                <td><i style="color: red;" class="md md-cancel" ng-click="cancel()"></i></td>
             </tr>
-        </tbody>
-    </table>
+            <tr ng-repeat="r in item.rotas" class="tr-item">
+                <th>Rota</th>
+                <td colspan="4">{{r.partida}} -> {{r.destino}}</td>
+                <th>Distância estimada</th>
+                <td>{{r.metros / 1000| currency : "" : 2}} km</td>
+                <th>Tempo estimado</th>
+                <td>{{r.segundos / 60 / 60| currency : "" : 2}} horas</td>
+            </tr>                
+        </table>
+    </div>        
 </div>
-
 
 <fab></fab>

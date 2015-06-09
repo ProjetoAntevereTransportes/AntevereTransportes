@@ -45,6 +45,7 @@ public class Viagem extends HttpServlet {
 
             switch (json.getData().getOperacao()) {
                 case INSERIR: {
+                    resposta = inserir(receiveJson);
                     break;
                 }
                 case REMOVER: {
@@ -54,7 +55,7 @@ public class Viagem extends HttpServlet {
                     break;
                 }
                 case LER: {
-
+                    resposta = ler(receiveJson);
                     break;
                 }
                 case LERVARIOS: {
@@ -82,7 +83,41 @@ public class Viagem extends HttpServlet {
 
         }
     }
+    
+    public String ler(String receiveJson){
+        contratos.JsonResult<contratos.Viagem> json = new JsonResult<contratos.Viagem>();
 
+        try {
+            JsonReceiver<Integer> viagem = new JsonReceiver<Integer>(Integer.class);
+            viagem.Desserealizar(receiveJson);
+            database.Viagem v = new database.Viagem();
+            json.resultado = v.ler(viagem.getData());
+            json.sucesso = true;
+        } catch (Exception ex) {
+            json.sucesso = false;
+            json.mensagem = "Não foi possível carregar as viagens. Erro: " + ex.toString();
+        }
+        
+        return json.Serializar();
+    }
+
+    public String inserir(String receiveJson) {
+        contratos.JsonResult<Boolean> json = new JsonResult<Boolean>();
+
+        try {
+            JsonReceiver<contratos.Viagem> viagem = new JsonReceiver<contratos.Viagem>(contratos.Viagem.class);
+            viagem.Desserealizar(receiveJson);
+            database.Viagem v = new database.Viagem();
+            json.resultado = v.inserir(viagem.getData());
+            json.sucesso = true;
+        } catch (Exception ex) {
+            json.sucesso = false;
+            json.mensagem = "Não foi possível carregar as viagens. Erro: " + ex.toString();
+        }
+        
+        return json.Serializar();
+    }
+    
     public String lerVarios(String receiveJson) {
         contratos.JsonResult<List<contratos.Viagem>> json = new JsonResult<List<contratos.Viagem>>();
 
