@@ -1,3 +1,4 @@
+
 <style>
     .filtro-tipo{
         color: white;
@@ -173,7 +174,7 @@
 
 <div class="col-lg-12 repeated-item z1 item-color" 
      ng-repeat="item in itens
-                 | filter:search
+                     | filter:search
                          | filter:tipo
      " ng-class="{
                  'expand z2': item.c.expandir == true,
@@ -181,7 +182,7 @@
                  }" id="{{item.ID}}"
      ng-mouseover="mouseOverItem(item)"
      ng-mouseleave="mouseLeaveItem(item)"
-      ondrop="alert(JSON.stringify(event))">
+     ondrop="alert(JSON.stringify(event))">
     <div class='head col-lg-12'>
         <div class="day" ng-class="{'debitoLimitado': item.debitoLimitado, 'debitoIlimitado': item.debitoIlimitado, 'unico': item.unico, 'carne': item.carne}">
             {{item.vencimento| date: "d"}}
@@ -379,7 +380,7 @@
                                     Insira o nome
                                 </erro>
                                 <erro ng-show="(carneForm.nome.$error.maxlength || carneForm.nome.$error.minlength)
-                                                    && carneForm.nome.$touched">
+                                                        && carneForm.nome.$touched">
                                     Campo deve estar entre 4 e 40 caracteres
                                 </erro>
                             </div>
@@ -515,8 +516,8 @@
                                     Insira um nome
                                 </erro>
                                 <erro ng-show="(unicoForm.nome.$error.minlength
-                                                    || unicoForm.nome.$error.maxlength) &&
-                                                    unicoForm.nome.$touched">
+                                                        || unicoForm.nome.$error.maxlength) &&
+                                                        unicoForm.nome.$touched">
                                     Campo entre 4 e 40 caracteres
                                 </erro>
                             </div>
@@ -531,7 +532,7 @@
                                        maxlength="90"
                                        ng-maxlength="90">
                                 <erro ng-show="unicoForm.descricao.$error.maxlength &&
-                                                    unicoForm.descricao.$touched">
+                                                        unicoForm.descricao.$touched">
                                     Máximo 90 caracteres
                                 </erro>
                             </div>
@@ -545,7 +546,7 @@
                                     </option>
                                 </select>
                                 <erro ng-show="unicoForm.fornecedor.$error.required &&
-                                            unicoForm.fornecedor.$touched">
+                                                unicoForm.fornecedor.$touched">
                                     Selecione um fornecedor
                                 </erro>
                             </div>
@@ -559,7 +560,7 @@
                                        name="valor"
                                        ui-number-mask>
                                 <erro ng-show="unicoForm.valor.$error.required &&
-                                                    unicoForm.valor.$touched">
+                                                        unicoForm.valor.$touched">
                                     Informe o valor
                                 </erro>
                             </div>
@@ -573,7 +574,7 @@
                                        name="vencimento"
                                        ng-model="unicoParcela.vencimento">
                                 <erro ng-show="unicoForm.vencimento.$error.required &&
-                                                    unicoForm.vencimento.$touched">
+                                                        unicoForm.vencimento.$touched">
                                     Informe a data de vencimento
                                 </erro>
                             </div>

@@ -111,6 +111,26 @@
     <filter-mapping>
         <filter-name>AutenticaUsuario</filter-name>
         <url-pattern>/Pagamento</url-pattern>
+        <url-pattern>/CadUsuario</url-pattern>
+        <url-pattern>/Funcionario</url-pattern>
+        <url-pattern>/ContaBancaria</url-pattern>
+        <url-pattern>/FileUpload</url-pattern>
+        <url-pattern>/Pergunta</url-pattern>
+        <url-pattern>/TipoUsuario</url-pattern>
+        <url-pattern>/Status</url-pattern>
+        <url-pattern>/StatusUsuario</url-pattern>
+        <url-pattern>/Fornecedor</url-pattern>
+        <url-pattern>/Usuario</url-pattern>
+        <url-pattern>/Cliente</url-pattern>
+        <url-pattern>/StatusCliente</url-pattern>
+        <url-pattern>/Cargo</url-pattern>
+        <!--<url-pattern>/FileDownload</url-pattern>-->
+        <url-pattern>/Banco</url-pattern>
+        <url-pattern>/Pessoa</url-pattern>
+        <url-pattern>/Caminhao</url-pattern>
+        <url-pattern>/Carga</url-pattern>
+        <url-pattern>/Viagem</url-pattern>
+        <url-pattern>/</url-pattern>
     </filter-mapping>
     <servlet-mapping>
         <servlet-name>FileUpload</servlet-name>

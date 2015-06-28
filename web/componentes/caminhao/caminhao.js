@@ -7,7 +7,7 @@
             $scope.itens = [];
 
             $scope.novo = {
-                id:"",
+                id:null,
                 nome: "",
                 placa: "",
                 renavam: "",

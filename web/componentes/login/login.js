@@ -87,10 +87,12 @@
 
             $scope.login = function () {
                 authService.login($scope.loginData).then(function (response) {
-                    if (response.Sucesso)
+                    if (response.sucesso){
                         $window.history.back();
+                    }
                     else
-                        $scope.mensagemErro = response.Mensagem;
+                        $scope.mensagemErro = response.mensagem;
+                        
                 },
                         function (err) {
                             $scope.mensagemErro = err.error_description;

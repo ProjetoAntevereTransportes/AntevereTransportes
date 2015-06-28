@@ -5,7 +5,7 @@
         function (clienteService, $scope, notifyService, pesquisaService) {
             $scope.titulo = "Gerenciamento de Clientes";
             $scope.itens = [];
-            $scope.lstatus = []; // list status
+            $scope.lstatus = [];
             $scope.novo = {
                 nome: "",
                 email: "",

@@ -138,8 +138,8 @@
             $scope.gerarParcelas = function () {
                 if ($scope.itemNovoMassa.inicial && $scope.itemNovoMassa.final) {
                     $scope.itemNovoMassa.parcelas = [];
-                                       
-                    
+
+
                     var inicial = angular.copy($scope.itemNovoMassa.inicial);
                     var final = angular.copy($scope.itemNovoMassa.final);
 
@@ -293,22 +293,22 @@
                     });
             };
 
-            $scope.pagarDebito = function(item){
+            $scope.pagarDebito = function (item) {
                 $pgService.pagarDebito(function (item) {
 
-                        notifyService.add({
-                            seconds: 5,
-                            message: "Conta paga."
-                        });
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Conta paga."
+                    });
 
-                        $scope.carregarPagamentos($scope.dataLoad);
+                    $scope.carregarPagamentos($scope.dataLoad);
 
-                    }, function () {
-                        notifyService.add({
-                            seconds: 5,
-                            message: "Não foi possível pagar a conta."
-                        });
-                    }, null, item);
+                }, function () {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível pagar a conta."
+                    });
+                }, null, item);
 
             };
 
@@ -321,7 +321,7 @@
                     message: "Realizando pagamento de " + item.nome
                 });
 
-                if(item.debitoLimitado || item.debitoIlimitado){
+                if (item.debitoLimitado || item.debitoIlimitado) {
                     $scope.pagarDebito(item);
                     return;
                 }
@@ -533,14 +533,14 @@
                 }
                 else
                     item.c.expandir = true;
-                
+
                 $scope.carregarContaBancaria();
             };
-            
-            $scope.carregarContaBancaria = function(){
-                conta_bancariaService.listar(function(resultado){
+
+            $scope.carregarContaBancaria = function () {
+                conta_bancariaService.listar(function (resultado) {
                     $scope.contasBancarias = resultado;
-                }, function(){
+                }, function () {
                     notifyService.add({
                         message: "Não foi possível carregar as contas bancárias para realizar o pagamento",
                         seconds: 5
@@ -564,8 +564,12 @@
 
             $scope.salvarDebito = function (debito) {
                 $pgService.salvarDebito(function () {
-
+                    $scope.carregarPagamentos($scope.dataLoad);
                 }, function () {
+                    notifyService.add({
+                        seconds: 5,
+                        message: "Não foi possível salvar o débito automático."
+                    });
                 }, null, debito);
             };
 

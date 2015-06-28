@@ -42,7 +42,8 @@ public class Login extends HttpServlet {
             JsonResult<contratos.LoginUsuario> json = new JsonResult<>();
             
             try {
-                if (!new Usuario().ValidaUsuario(user.userName, new authentication.MD5().gerar(user.password))) {
+                if (!new Usuario().ValidaUsuario(user.userName,
+                        new authentication.MD5().gerar(user.password))) {
                     json.mensagem = "Usuário ou senha inválido.";
                     json.sucesso = false;
                 } else {

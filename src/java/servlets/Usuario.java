@@ -10,7 +10,10 @@ import contratos.JsonReceiver2;
 import contratos.JsonResult;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -103,6 +106,11 @@ public class Usuario extends HttpServlet {
         f.Desserealizar(json);
 
         contratos.Usuario usuario = f.getData();
+        try {
+            usuario.setSenha(new authentication.MD5().gerar(usuario.getSenha()));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(Usuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
         Boolean resultado = new database.Usuario().editar(usuario);
 
         JsonResult<Boolean> result = new JsonResult<>();

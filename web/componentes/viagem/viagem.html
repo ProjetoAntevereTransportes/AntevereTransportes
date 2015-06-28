@@ -38,9 +38,28 @@
     .viagem-table tr:hover{
         background: none !important;
     }
+
+    .viagem-item.ng-enter{
+        -webkit-animation: itemAnimation linear 0.1s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-transform-origin: 50% 50%;
+    }
+
+    .viagem-item.ng-leave{
+        -webkit-animation: itemLeaveAnimation linear 0.2s;
+        -webkit-animation-iteration-count: 1;
+        -webkit-transform-origin: 50% 50%;
+    }
+
+    .viagem-item.ng-enter-stagger {
+        transition-delay: 0.06s !important;
+        -webkit-transition-delay: 0.06s !important;
+        -webkit-animation-delay: 0.06s !important;
+        animation-delay: 0.06s !important;
+    }
 </style>
 
-<div class="viagem-item card z1" ng-repeat="item in viagens| filter:search">
+<div class="viagem-item card z1 " ng-repeat="item in viagens| filter:search">
     <div class="viagem-info">
         <table class="viagem-table" width="100%" ng-click="cliqueViagem(item.ID)">
             <tr class="tr-item">
@@ -53,7 +72,7 @@
                 <td><b>Total Km</b><br/>{{totalKm(item) | currency : "" : 2}} Km</td>
                 <td><b>Adiantamento</b><br/>{{item.adiantamento| currency: "R$ " : 2}}</td>
                 <td><b>Situação</b><br/>{{item.nomeStatusViagem}}</td>
-                
+
                 <td><i style="color: red;" class="md md-cancel" ng-click="cancel()"></i></td>
             </tr>
             <tr ng-repeat="r in item.rotas" class="tr-item">
