@@ -336,7 +336,9 @@ public class Pagamento {
     }
     
     public List<contratos.Pagamento2> listarTodosPagamentos(java.util.Date date) {
-        try {
+        
+        //String e = new library.orc().getText(null);
+        try {            
             abrir();
             Statement st = con.createStatement();
             
