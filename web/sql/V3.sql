@@ -299,3 +299,20 @@ insert into status_pagamento(nome, descricao) values("Pago", "Pagamento realizad
 insert into banco(nome, numero)values("Banco da Polônia", "777");
 
 insert into conta_bancaria(nome, numero, agencia, pessoa_id, banco_id) values("Teste Conta", "123", "345", 1, 1);
+
+
+
+
+CREATE TABLE IF NOT EXISTS settings(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome varchar(200) NOT NULL,
+    valor VARCHAR(200) NOT NULL,
+    criptografado BOOLEAN NOT NULL
+);
+
+INSERT INTO settings (nome, valor, criptografado)
+ VALUES ('enterpriseEmail', 'antevere.trasportes.adm@gmail.com', false);
+
+INSERT INTO settings (nome, valor, criptografado)
+ VALUES ('enterpriseEmailPassword', '[B@19ae089b', true);
+

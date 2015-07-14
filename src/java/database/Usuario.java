@@ -25,7 +25,33 @@ public class Usuario {
     public void abrir(){
         con = Conexao.abrirConexao();
     }
- public List<contratos.Usuario> listar() {
+ 
+    public List<String> getEmails() {
+        try {
+            abrir();
+            String sql = "select email from usuario;";
+
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ResultSet rsF = ps.executeQuery();
+
+            List<String> emails = new ArrayList<>();
+
+            while (rsF.next()) {
+                String e = rsF.getString("email");
+                emails.add(e);
+            }
+
+            return emails;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
+    
+    public List<contratos.Usuario> listar() {
         try {
             abrir();
             String sql = "select usuario.id, usuario.nome, usuario.email, usuario.resposta, pergunta.id as perguntaID, pergunta.pergunta as pergunta, tipo_usuario.id as tipoID,"

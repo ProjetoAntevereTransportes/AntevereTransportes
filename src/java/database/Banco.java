@@ -5,7 +5,6 @@
  */
 package database;
 
-import br.com.sascar.integra.ws.Exception_Exception;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

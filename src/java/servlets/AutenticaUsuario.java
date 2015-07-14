@@ -6,14 +6,7 @@
 package servlets;
 
 import authentication.ValidadeUser;
-import br.com.sascar.integra.ws.Exception_Exception;
-import com.google.gson.Gson;
 import java.io.IOException;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
