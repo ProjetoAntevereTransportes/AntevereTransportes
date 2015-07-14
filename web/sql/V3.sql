@@ -302,7 +302,10 @@ insert into conta_bancaria(nome, numero, agencia, pessoa_id, banco_id) values("T
 
 
 
-
+/*
+    13/07/2015
+    Criação da table settings.
+*/
 CREATE TABLE IF NOT EXISTS settings(
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome varchar(200) NOT NULL,
@@ -314,5 +317,5 @@ INSERT INTO settings (nome, valor, criptografado)
  VALUES ('enterpriseEmail', 'antevere.trasportes.adm@gmail.com', false);
 
 INSERT INTO settings (nome, valor, criptografado)
- VALUES ('enterpriseEmailPassword', '[B@19ae089b', true);
+ VALUES ('enterpriseEmailPassword', 'H76FlpjZNbxrVkay2ym+GHa+u6Ei+FqaH1cYJEbGneU=', true);
 

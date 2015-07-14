@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import library.Debug;
 
 /**
  *
@@ -18,12 +19,15 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class PaymentSummaryScheduler implements ServletContextListener {
+
     private ScheduledExecutorService scheduler;
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        //scheduler.scheduleAtFixedRate(new PaymentSummary(), 0, 1, TimeUnit.DAYS);        
+        if (!Debug.isDebug()) {
+            scheduler.scheduleAtFixedRate(new PaymentSummary(), 0, 1, TimeUnit.DAYS);
+        }
     }
 
     @Override
@@ -31,4 +35,3 @@ public class PaymentSummaryScheduler implements ServletContextListener {
         scheduler.shutdownNow();
     }
 }
- 

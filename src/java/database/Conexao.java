@@ -1,35 +1,42 @@
 package database;
+
 import java.sql.*;
+import library.Debug;
+
 /**
  * @author FELIPE
  */
 public class Conexao {
-    //public static String database = "anteveretransportes";
-    public static String database = "anteveretransportesdev";
-    
+
+    public static String databaseProducao = "anteveretransportes";
+    public static String databaseDev = "anteveretransportesdev";
+
     public static Connection abrirConexao() {
         Connection con = null;
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
+            String database = databaseDev;
+            if (!Debug.isDebug()) {
+                database = databaseProducao;
+            }
+
             String url = "jdbc:mysql://127.0.0.1/" + database + "?user=root&password=root";
-            con = DriverManager.getConnection(url);        
+            con = DriverManager.getConnection(url);
             System.out.println("Conexão aberta.");
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        
+
         return con;
     }
-    
+
     public static void fecharConexao(Connection con) {
         try {
             con.close();
             System.out.println("Conexão Encerrada.");
-        }
-        catch (Exception e) {
-             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
-    
+
 }

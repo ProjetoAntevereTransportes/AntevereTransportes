@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import library.Debug;
 
 /**
  *
@@ -26,7 +27,9 @@ public class EmailProccessScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new EmailProccess(), 0, 30, TimeUnit.SECONDS);   
+        if (!Debug.isDebug()) {
+            scheduler.scheduleAtFixedRate(new EmailProccess(), 0, 30, TimeUnit.SECONDS);
+        }
     }
 
     @Override

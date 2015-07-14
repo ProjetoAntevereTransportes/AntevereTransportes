@@ -23,7 +23,7 @@ public class PaymentAlert implements Runnable {
     private static Date date;
 
     @Override
-    public void run() {
+    public void run() { 
         Date d = new Date();
 
         if (date != null && d.getDate() == date.getDate() && d.getMonth() == date.getMonth()

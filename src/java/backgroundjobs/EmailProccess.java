@@ -30,12 +30,7 @@ public class EmailProccess implements Runnable {
     private static boolean isExecuting;
 
     @Override
-    public void run() {
-        
-        InputStream i = 
-                this.getClass().getClassLoader()
-                        .getResourceAsStream("WEB-INF/classes/templates/teste.txt");
-        
+    public void run() {        
         if (isExecuting) {
             return;
         }
