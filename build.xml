@@ -68,13 +68,4 @@
     nbproject/build-impl.xml file. 
 
     -->
-    <target name="-post-compile-single" depends="-post-compile"/>
-
-    <target name="-post-compile">
-        <copy todir="${build.classes.dir}">
-            <fileset dir="src/java/templates">
-                <include name="**/**"/>
-            </fileset>
-        </copy>
-    </target>
 </project>
