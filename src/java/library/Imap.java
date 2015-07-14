@@ -5,6 +5,7 @@
  */
 package library;
 
+import contratos.ModuloEnum;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class Imap {
             store.connect("smtp.gmail.com", email, password);
             return store;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.writeError("Erro ao conectar store para email " + email, e.getMessage(), ModuloEnum.INTERNO);
             return null;
         }
     }
@@ -56,7 +57,7 @@ public class Imap {
             inbox.close(true);
             return messageCount;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.writeError("Erro ao pegar número das mensagens na pasta " + folderName, e.getMessage(), ModuloEnum.INTERNO);
             return -1;
         }
     }
@@ -69,20 +70,20 @@ public class Imap {
             Message[] m = inbox.getMessages();
             for (int i = 0; i < limit; i++) {
                 MailMessage mm = new MailMessage();
-                mm.body = GetStringFromMultipart((Multipart)m[i].getContent());
+                mm.body = GetStringFromMultipart((Multipart) m[i].getContent());
                 mm.subject = m[i].getSubject();
                 mm.addresses = new ArrayList();
-                mm.originalMessage = m[i];  
+                mm.originalMessage = m[i];
 
                 for (Address a : m[i].getFrom()) {
                     mm.addresses.add(a.toString());
-                } 
+                }
                 messages.add(mm);
             }
             inbox.close(true);
             return messages;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.writeError("Erro ao pegar mensagens da pasta " + folderName, e.getMessage(), ModuloEnum.INTERNO);
             return null;
         }
     }
@@ -96,7 +97,7 @@ public class Imap {
             inbox.close(true);
             return a;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.writeError("Erro ao pegar o assunto do e-mail.", e.getMessage(), ModuloEnum.INTERNO);
             return null;
         }
     }
@@ -114,7 +115,7 @@ public class Imap {
                     System.out.println("Mail have some attachment");
 
                     DataHandler handler = bodyPart.getDataHandler();
-                    
+
                     System.out.println("file name : " + handler.getName());
                 } else {
                     System.out.println("Body: " + bodyPart.getContent());
@@ -123,10 +124,27 @@ public class Imap {
             }
         } catch (MessagingException ex) {
             Logger.getLogger(Imap.class.getName()).log(Level.SEVERE, null, ex);
+            Log.writeError("Erro ao pegar o multipart do e-mail.", message, ModuloEnum.INTERNO);
         } catch (IOException ex) {
+            Log.writeError("Erro ao pegar o multipart do e-mail.", message, ModuloEnum.INTERNO);
             Logger.getLogger(Imap.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return message;
+    }
+
+    public boolean createFolder(Store store, String folderName) {
+        boolean isCreated = true;
+
+        try {
+            Folder newFolder = store.getDefaultFolder().getFolder(folderName);
+            isCreated = newFolder.create(Folder.HOLDS_MESSAGES);
+            System.out.println("created: " + isCreated);
+
+        } catch (Exception e) {
+            Log.writeError("Erro ao criar pasta " + folderName, e.getMessage(), ModuloEnum.INTERNO);
+            isCreated = false;
+        }
+        return isCreated;
     }
 }

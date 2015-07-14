@@ -298,7 +298,7 @@
 
             this.formatar = function (operacao, dado) {
                 return "data=" + JSON.stringify({operacao: operacao, json: JSON.stringify(dado)});
-            }
+            };
             this.listarPergunta = function (sucesso, erro, sempre) {
                 var server = "/AntevereTransportes";
                 $http.post(server + "/Pergunta", this.formatar("LERVARIOS", null), {

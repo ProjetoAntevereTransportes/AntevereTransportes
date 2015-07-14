@@ -6,16 +6,14 @@
 package library;
 
 import authentication.AES;
+import contratos.ModuloEnum;
 import database.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -45,6 +43,7 @@ public class Settings {
                 }
             }
         } catch (Exception e) {
+            Log.writeError("Não foi possível descriptografar o parâmetro " + name, e.toString(), ModuloEnum.INTERNO);
             return null;
         }
         return null;
@@ -52,7 +51,7 @@ public class Settings {
 
     private static void LoadSettings() {
         try {
-            Connection con = Conexao.abrirConexao();
+            con = Conexao.abrirConexao();
             String sql = "select * from settings;";
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -67,21 +66,23 @@ public class Settings {
 
                 settings.add(s);
             }
-            con.close();
+
+            Conexao.fecharConexao(con);
         } catch (Exception ex) {
-            try {
-                con.close();
-            } catch (SQLException ex1) {
-                Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+            Log.writeError("Erro ao carregar a lista de Settings.", ex.getMessage(), ModuloEnum.INTERNO);
+            Conexao.fecharConexao(con);
         }
     }
-    
-    public static String getEnterpriseEmail(){
+
+    public static String getEnterpriseEmail() {
         return getSetting("enterpriseEmail");
     }
-    
-    public static String getEnterpriseEmailPassword(){
+
+    public static String getEnterpriseEmailPassword() {
         return getSetting("enterpriseEmailPassword");
+    }
+
+    public static Boolean doBackgroundJobs() {
+        return Boolean.parseBoolean(getSetting("doBackgroundJobs"));
     }
 }

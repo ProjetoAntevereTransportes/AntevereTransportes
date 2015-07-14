@@ -5,19 +5,11 @@
  */
 package library;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import contratos.ModuloEnum;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -80,6 +72,10 @@ public class Mail {
             Transport.send(message);
             return true;
         } catch (MessagingException e) {
+            Log.writeError("Erro ao enviar e-mail", e.getMessage(), ModuloEnum.INTERNO, m);
+            return false;
+        }catch(Exception e){
+            Log.writeError("Erro ao enviar e-mail", e.getMessage(), ModuloEnum.INTERNO, m);
             return false;
         }
     }

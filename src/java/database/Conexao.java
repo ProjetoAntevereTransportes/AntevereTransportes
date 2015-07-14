@@ -1,13 +1,13 @@
 package database;
 
 import java.sql.*;
-import library.Debug;
+import library.Settings;
 
 /**
  * @author FELIPE
  */
 public class Conexao {
-
+    private static boolean isDevelopment = true;
     public static String databaseProducao = "anteveretransportes";
     public static String databaseDev = "anteveretransportesdev";
 
@@ -16,7 +16,7 @@ public class Conexao {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             String database = databaseDev;
-            if (!Debug.isDebug()) {
+            if (!isDevelopment) {
                 database = databaseProducao;
             }
 

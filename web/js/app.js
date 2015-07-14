@@ -5,7 +5,7 @@
         "fornecedor", "fileUploadModule", "cargo","carga",
         "funcionario", "cliente", "ui.utils", "cfp.hotkeys",
         "pesquisaElement", "Banco", "Conta_Bancaria", "Caminhao", "ui.utils.masks", "vazioElement",
-        "uiGmapgoogle-maps", "rota", "viagem"]);
+        "uiGmapgoogle-maps", "rota", "viagem", "log", "modulo"]);
 
     app.config(["$httpProvider", function ($httpProvider) {
             $httpProvider.interceptors.push('authInterceptorService');
@@ -198,6 +198,14 @@
                     $scope.showBack = true;
                     break;
                 }
+                case "/Log":
+                {
+                    $scope.title = "Logs";
+                    $scope.barColor = $scope.defaultColor;
+                    $scope.searchColor = $scope.defaultSearchColor;
+                    $scope.showBack = true;
+                    break;
+                }
             }
             $scope.alterarSombra();
         };
@@ -257,6 +265,9 @@
         }).when("/Viagem", {
             templateUrl: "componentes/viagem/viagem.html",
             controller: "viagemController"
+        }).when("/Log", {
+            templateUrl: "componentes/log/log.html",
+            controller: "logController"
         });
         $routeProvider.otherwise({
             redirectTo: '/inicio'

@@ -5,15 +5,13 @@
  */
 package backgroundjobs;
 
-import static com.sun.org.apache.bcel.internal.util.SecuritySupport.getResourceAsStream;
-import java.io.InputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import library.Debug;
+import library.Settings;
 
 /**
  *
@@ -27,7 +25,7 @@ public class EmailProccessScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        if (!Debug.isDebug()) {
+        if (Settings.doBackgroundJobs()) {
             scheduler.scheduleAtFixedRate(new EmailProccess(), 0, 30, TimeUnit.SECONDS);
         }
     }

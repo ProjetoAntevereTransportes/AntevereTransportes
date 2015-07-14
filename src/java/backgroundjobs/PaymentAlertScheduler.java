@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import library.Debug;
+import library.Settings;
 
 /**
  *
@@ -25,7 +25,7 @@ public class PaymentAlertScheduler implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        if (!Debug.isDebug()) {
+        if (Settings.doBackgroundJobs()) {
             scheduler.scheduleAtFixedRate(new PaymentAlert(), 0, 1, TimeUnit.HOURS);
         }
     }

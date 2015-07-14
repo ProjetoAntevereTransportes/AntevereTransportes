@@ -1,0 +1,88 @@
+<style>
+    .error{
+        border-left: 5px solid rgb(255, 181, 181);
+    }
+
+    .filter-content{
+        margin-bottom: 15px;
+        padding-top: 18px;
+    }
+</style>
+
+<div class="col-lg-12 z2 card filter-content">
+    <div class="col-lg-12">
+        <div class="form-inline">
+            <button class="btn-calendar" ng-click="previousMonth()">
+                <i class="md md-remove-circle"></i>
+            </button>
+
+            <div class="form-group">                
+                <select ng-model="filter.month"
+                        ng-change="carregar(filter)"
+                        class="ng-pristine ng-valid ng-touched">
+                    <option value="1">Janeiro</option>
+                    <option value="2">Fevereiro</option>
+                    <option value="3">Março</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Maio</option>
+                    <option value="6">Junho</option>
+                    <option value="7">Julho</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="text"
+                       ui-mask="9999"
+                       ng-model="filter.year"
+                       ng-change="carregar(filter)"
+                       class="ng-pristine ng-untouched ng-valid ng-valid-mask"
+                       placeholder="____">
+            </div>
+            <button class="btn-calendar" ng-click="nextMonth()">
+                <i class="md md-add-circle"></i>
+            </button>
+
+            <div class="form-group">                
+                <select ng-model="filter.moduloId"
+                        ng-change="carregar(filter)"
+                        class="ng-pristine ng-valid ng-touched">
+                    <option value="0">Todos os módulos</option>
+                    <option ng-repeat="m in modulos" value="{{m.id}}">{{m.nome}}</option>
+                </select>
+            </div>
+
+            <span class="pull-right">
+                {{itens.length}} logs no período
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-12 z1 a-card card"
+     ng-show="itens.length > 0">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Mensagem</th>
+                <th>Exceção</th>                    
+                <th>Objeto</th>    
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in itens| filter:search"
+                ng-class="{error: item.isError}">
+                <td>{{item.data| date: 'dd/MM/yy' }}<br/>
+                    {{item.data| date: 'HH:mm:ss' }}</td>
+                <td>{{item.message}}</td>
+                <td>{{item.exception}}</td>
+                <td>{{item.object}}</td>     
+            </tr>
+        </tbody>
+    </table>
+</div>

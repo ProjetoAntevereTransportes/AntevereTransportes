@@ -319,3 +319,41 @@ INSERT INTO settings (nome, valor, criptografado)
 INSERT INTO settings (nome, valor, criptografado)
  VALUES ('enterpriseEmailPassword', 'H76FlpjZNbxrVkay2ym+GHa+u6Ei+FqaH1cYJEbGneU=', true);
 
+INSERT INTO settings (nome, valor, criptografado)
+ VALUES ('doBackgroundJobs', 'true', false);
+
+/*
+    14/07/2015
+    Criação da tabela LOG
+*/
+
+CREATE TABLE IF NOT EXISTS modulo(
+    id INT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS log(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    data DATETIME NOT NULL,
+    message VARCHAR(200) NOT NULL,
+    exception TEXT,
+    isError BOOLEAN NOT NULL,
+    object TEXT,
+    modulo_id INT NOT NULL,
+    FOREIGN KEY (modulo_id) REFERENCES modulo(id)
+);
+
+INSERT INTO modulo (id, nome) VALUES (1, 'Pagamentos');
+INSERT INTO modulo (id, nome) VALUES (2, 'Usuários');
+INSERT INTO modulo (id, nome) VALUES (3, 'Fornecedores');
+INSERT INTO modulo (id, nome) VALUES (4, 'Clientes');
+INSERT INTO modulo (id, nome) VALUES (5, 'Cargos');
+INSERT INTO modulo (id, nome) VALUES (6, 'Funcionário');
+INSERT INTO modulo (id, nome) VALUES (7, 'Caminhões');
+INSERT INTO modulo (id, nome) VALUES (8, 'Cargas');
+INSERT INTO modulo (id, nome) VALUES (9, 'Contas Bancárias');
+INSERT INTO modulo (id, nome) VALUES (10, 'Bancos');
+INSERT INTO modulo (id, nome) VALUES (11, 'Viagens');
+INSERT INTO modulo (id, nome) VALUES (12, 'Interno');
+INSERT INTO modulo (id, nome) VALUES (13, 'Log');
+INSERT INTO modulo (id, nome) VALUES (14, 'Modulo');
