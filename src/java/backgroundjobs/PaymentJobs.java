@@ -20,7 +20,7 @@ import library.MailMessage;
  */
 public class PaymentJobs {
 
-    public void sendTemplates(List<String> addresses) {
+    public boolean sendTemplates(List<String> addresses) {
         Mail mail = new Mail();
         MailMessage m = new MailMessage();
         m.body = "Envie um e-mail com o comando desejado:\n";
@@ -28,10 +28,10 @@ public class PaymentJobs {
         m.subject = "COMANDOS";
         m.addresses = addresses;
         
-        mail.SendEmail(m);
+        return mail.SendEmail(m);
     }
 
-    public void sendSummary(Date date, List<String> emails) {
+    public boolean sendSummary(Date date, List<String> emails) {
         List<contratos.Pagamento2> payments = new Pagamento().listarTodosPagamentos(date);
 
         MailMessage m = new MailMessage();
@@ -58,10 +58,10 @@ public class PaymentJobs {
         m.subject = date.toLocaleString();
 
         Mail mail = new Mail();
-        mail.SendEmail(m);
+        return mail.SendEmail(m);
     }
 
-    public void alertToday(List<String> addresses) {
+    public boolean alertToday(List<String> addresses) {
         Calendar c = Calendar.getInstance();
         List<contratos.Pagamento2> pagamentos = new database.Pagamento().GetPayments(c.getTime());
         boolean allPaid = true;
@@ -73,7 +73,7 @@ public class PaymentJobs {
         }
 
         if (allPaid) {
-            return;
+            return true;
         }
 
         Mail mail = new Mail();
@@ -105,10 +105,10 @@ public class PaymentJobs {
                     dt.format(c.getTime()), pagamentos.size(), value.toString());
         }
 
-        mail.SendEmail(message);
+        return mail.SendEmail(message);
     }
 
-    public void alertTomorrow(List<String> addresses) {
+    public boolean alertTomorrow(List<String> addresses) {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, 1);
         List<contratos.Pagamento2> pagamentos = new database.Pagamento().GetPayments(c.getTime());
@@ -122,7 +122,7 @@ public class PaymentJobs {
         }
 
         if (allPaid) {
-            return;
+            return true;
         }
 
         Mail mail = new Mail();
@@ -155,6 +155,6 @@ public class PaymentJobs {
                     dt.format(c.getTime()), pagamentos.size(), value.toString());
         }
 
-        mail.SendEmail(message);
+        return mail.SendEmail(message);
     }
 }

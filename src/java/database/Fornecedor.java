@@ -61,7 +61,7 @@ public class Fornecedor {
     public List<contratos.Fornecedor> listar() {
         try {
             abrir();
-            String sql = "SELECT * FROM fornecedor;";
+            String sql = "SELECT * FROM fornecedor order by nome asc;";
 
             PreparedStatement ps = con.prepareStatement(sql);
 

@@ -48,17 +48,31 @@ public class EmailProccess implements Runnable {
 
             if (inbox > 0) {
                 List<MailMessage> messages = imap.GetMessages(store, "inbox", inbox);
+                if (messages == null) {
+                    return;
+                }
+
                 for (MailMessage m : messages) {
-                    if(m.subject == null)
+                    if (m.subject == null) {
                         m.subject = "";
-                    
+                    }
+                    boolean r = false;
                     switch (m.subject.trim().toLowerCase()) {
                         case "resumo": {
-                            new PaymentJobs().sendSummary(new Date(), m.addresses);
+                            r = new PaymentJobs().sendSummary(new Date(), m.addresses);
+                            if (!r) {
+                                Log.writeError("Erro ao processar e-mail de resumo", "", ModuloEnum.INTERNO, m);
+                                return;
+                            }
+                            setDone(m, store, "SentTemplate", "Inbox");
                             continue;
                         }
-                        default:{
-                            new PaymentJobs().sendTemplates(m.addresses);
+                        default: {
+                            r = new PaymentJobs().sendTemplates(m.addresses);
+                            if(!r){
+                                Log.writeError("Erro ao processar e-mail de comandos", "", ModuloEnum.INTERNO, m);
+                                return;
+                            }
                             setDone(m, store, "SentTemplate", "Inbox");
                             continue;
                         }

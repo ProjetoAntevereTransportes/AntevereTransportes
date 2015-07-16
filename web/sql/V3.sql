@@ -322,6 +322,10 @@ INSERT INTO settings (nome, valor, criptografado)
 INSERT INTO settings (nome, valor, criptografado)
  VALUES ('doBackgroundJobs', 'true', false);
 
+INSERT INTO settings (nome, valor, criptografado)
+ VALUES ('DatabaseBackupPath', '/home/lucas/Desktop', false);
+
+
 /*
     14/07/2015
     Criação da tabela LOG
@@ -357,3 +361,9 @@ INSERT INTO modulo (id, nome) VALUES (11, 'Viagens');
 INSERT INTO modulo (id, nome) VALUES (12, 'Interno');
 INSERT INTO modulo (id, nome) VALUES (13, 'Log');
 INSERT INTO modulo (id, nome) VALUES (14, 'Modulo');
+
+/*
+    16/07/2015
+    Inserido status excluido para os pagamentos.
+*/
+insert into status_pagamento(nome, descricao) values("Excluido", "Pagamento excluido.");

@@ -90,12 +90,17 @@
             return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                     s4() + '-' + s4() + s4() + s4();
         }
+        
+        function clearAll(){
+            msgs = [];
+        }
 
         return {
             msgs: msgs,
             add: add,
             get: get,
-            remove: remove
+            remove: remove,
+            clearAll: clearAll
         };
     });
 })();

@@ -5,6 +5,8 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import contratos.*;
+import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -113,6 +115,7 @@ public class Pagamento {
             ResultSet rs = ps.executeQuery();
 
             List<contratos.Pagamento2> list = new ArrayList<>();
+            java.util.Date hoje = getZeroTimeDate(new java.util.Date());
             while (rs.next()) {
                 contratos.Pagamento2 pg = new Pagamento2();
                 pg.setID(rs.getInt("id"));
@@ -139,8 +142,12 @@ public class Pagamento {
                 pg.setNumero(rs.getInt("numero"));
 
                 pg.setPago(pg.getStatusPagamentoID() == 2);
-
-                pg.setVencido(pg.getVencimento().compareTo(new java.util.Date()) < 0);
+                if (!pg.isPago()) {
+                    java.util.Date v = getZeroTimeDate(pg.getVencimento());
+                    pg.setVencido(v.compareTo(hoje) < 0);
+                }else{
+                    pg.setVencido(false);
+                }
 
                 list.add(pg);
             }
@@ -576,6 +583,7 @@ public class Pagamento {
             ResultSet rs = ps.executeQuery();
 
             List<contratos.Pagamento2> list = new ArrayList<>();
+            java.util.Date hoje = getZeroTimeDate(new java.util.Date());
             while (rs.next()) {
                 contratos.Pagamento2 pg = new Pagamento2();
                 pg.setID(rs.getInt("id"));
@@ -603,7 +611,12 @@ public class Pagamento {
 
                 pg.setPago(pg.getStatusPagamentoID() == 2);
 
-                pg.setVencido(pg.getVencimento().compareTo(new java.util.Date()) < 0);
+                if (!pg.isPago()) {
+                    java.util.Date v = getZeroTimeDate(pg.getVencimento());
+                    pg.setVencido(v.compareTo(hoje) < 0);
+                }else{
+                    pg.setVencido(false);
+                }
 
                 list.add(pg);
             }

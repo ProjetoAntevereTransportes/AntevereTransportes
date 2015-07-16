@@ -98,9 +98,18 @@
     </div>
 
     <div class="col-lg-6" ng-hide='showVazio'>
-        <div class="pull-right">            
-            {{itens.length}} contas totalizando {{pegarTotal() | currency : "R$ " : 2}}   
-
+        <div class="pull-right">          
+            <span class="summary">
+                <div class="label label-default">
+                    {{itens.length}} contas   {{pegarTotal() | currency : "R$ " : 2}}
+                </div>
+                <div class="label label-success">
+                    {{quantidadePago}} pagas   {{totalPago| currency : "R$ " : 2 }}  
+                </div>
+                <div class="label label-danger">
+                    {{quantidadeNaoPago}} não pagas   {{totalNaoPago| currency : "R$ " : 2}}    
+                </div>
+            </span>
             <div class="pull-right month-buttons">
                 <button class="btn-calendar" ng-click="mostrarEstatisticasMensais()">
                     <i class="md md-poll" style="color: orange;"></i>
@@ -147,10 +156,12 @@
 
         <tr ng-repeat="semana in semanas">
             <td ng-repeat="dia in semana.dias" class="table-td"
-                ng-class="{'opaco' : dia.OutroMes}">            
+                ng-class="{'opaco' : dia.OutroMes,
+                            'hoje' : hoje(dia.data)}">            
                 <div class="table-day-content">
-                    <div class="table-day">
-                        {{dia.data | date: "dd MMM yy"}}
+                    <div class="table-day">                        
+                        {{dia.data| date: "dd MMM yy"}}
+                        <span ng-show="hoje(dia.data)">hoje</span>
                     </div>
                     <div class="table-description">
 
@@ -159,14 +170,35 @@
                 <div class="table-item"
                      ng-repeat="p in dia.pagamentos| filter:search"
                      ng-click="clicarPagamentoCalendario(p)"
-                     ng-class="{'debitoLimitado': p.debitoLimitado, 'debitoIlimitado': p.debitoIlimitado, 'unico': p.unico, 'carne': p.carne}">
+                     ng-class="{'debitoLimitado': p.debitoLimitado,
+                                 'debitoIlimitado': p.debitoIlimitado,
+                                 'unico': p.unico,
+                                 'carne': p.carne,
+                             'pago-item-table': p.pago,
+                         'vencido-item-table': p.vencido}">
                     <div class="item-title">
+                        <!--
+                        <i ng-show="p.pago"
+                           class="glyphicon glyphicon-ok"
+                           style="color: white;"></i>
+                           <i ng-show="!p.pago && !p.vencido"
+                           class="glyphicon glyphicon-time"
+                           style="color: white;"></i>
+                           <i ng-show="p.vencido"
+                           class="glyphicon glyphicon-remove"
+                           style="color: white;"></i>
+                        -->
                         {{p.nome}}
                     </div> 
                     <div class="item-value">
                         {{p.valor| currency : 'R$ ' : 2}}
                     </div>
                 </div>
+                <table class="table-detail-day" ng-show="dia.pagamentos.length > 1">
+                    <tr>
+                        <td>{{getTotalDay(dia) | currency : "R$ " : 2}}</td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>
@@ -174,7 +206,7 @@
 
 <div class="col-lg-12 repeated-item z1 item-color" 
      ng-repeat="item in itens
-                     | filter:search
+                 | filter:search
                          | filter:tipo
      " ng-class="{
                  'expand z2': item.c.expandir == true,
@@ -380,7 +412,7 @@
                                     Insira o nome
                                 </erro>
                                 <erro ng-show="(carneForm.nome.$error.maxlength || carneForm.nome.$error.minlength)
-                                                        && carneForm.nome.$touched">
+                                                    && carneForm.nome.$touched">
                                     Campo deve estar entre 4 e 40 caracteres
                                 </erro>
                             </div>
@@ -516,8 +548,8 @@
                                     Insira um nome
                                 </erro>
                                 <erro ng-show="(unicoForm.nome.$error.minlength
-                                                        || unicoForm.nome.$error.maxlength) &&
-                                                        unicoForm.nome.$touched">
+                                                    || unicoForm.nome.$error.maxlength) &&
+                                                    unicoForm.nome.$touched">
                                     Campo entre 4 e 40 caracteres
                                 </erro>
                             </div>
@@ -532,7 +564,7 @@
                                        maxlength="90"
                                        ng-maxlength="90">
                                 <erro ng-show="unicoForm.descricao.$error.maxlength &&
-                                                        unicoForm.descricao.$touched">
+                                                    unicoForm.descricao.$touched">
                                     Máximo 90 caracteres
                                 </erro>
                             </div>
@@ -546,7 +578,7 @@
                                     </option>
                                 </select>
                                 <erro ng-show="unicoForm.fornecedor.$error.required &&
-                                                unicoForm.fornecedor.$touched">
+                                            unicoForm.fornecedor.$touched">
                                     Selecione um fornecedor
                                 </erro>
                             </div>
@@ -560,7 +592,7 @@
                                        name="valor"
                                        ui-number-mask>
                                 <erro ng-show="unicoForm.valor.$error.required &&
-                                                        unicoForm.valor.$touched">
+                                                    unicoForm.valor.$touched">
                                     Informe o valor
                                 </erro>
                             </div>
@@ -574,7 +606,7 @@
                                        name="vencimento"
                                        ng-model="unicoParcela.vencimento">
                                 <erro ng-show="unicoForm.vencimento.$error.required &&
-                                                        unicoForm.vencimento.$touched">
+                                                    unicoForm.vencimento.$touched">
                                     Informe a data de vencimento
                                 </erro>
                             </div>

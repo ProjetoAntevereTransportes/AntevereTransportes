@@ -76,8 +76,10 @@
             return authServiceFactory;
         }]);
 
-    app.controller("loginController", ["$scope", "$location", "authService", "$window",
-        function ($scope, $location, authService, $window) {
+    app.controller("loginController", ["$scope", "$location", "authService", "$window", "notifyService",
+        function ($scope, $location, authService, $window, notifyService) {
+            notifyService.clearAll();
+            
             $scope.loginData = {
                 userName: "",
                 password: ""

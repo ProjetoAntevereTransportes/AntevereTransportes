@@ -649,7 +649,14 @@ button:focus {outline:0;}
 }
 
 .table-td.hoje{
-    background-color: red !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border: 2px solid grey !important;
+}
+
+.table-td.hoje:hover{
+    background-color: rgb(250, 250, 250) !important;
 }
 
 .tb th{
@@ -704,7 +711,9 @@ button:focus {outline:0;}
 
 }
 
-
+.item-title i{
+    margin-top: 1px;
+}
 
 .month-buttons button{
     border: none;
@@ -737,4 +746,31 @@ button:focus {outline:0;}
 
 .right-button-hide{
     transition-duration: 0s !important;    
+}
+
+.summary .label{
+    margin-right: 10px;
+}
+
+.table-detail-day, .table-detail-day tr, .table-detail-day td{
+    width: 100%;
+    border: none !important;
+    background: none !important;
+    height: 11px !important;
+    font-weight: bold;
+    font-size: 11px;
+    color: rgb(82, 82, 82);
+}
+
+.table-detail-day td{
+    padding: 0px 6px 0px 0px !important;
+    margin: 0px !important;
+}
+
+.pago-item-table{
+    border-left: 5px solid green;
+}
+
+.vencido-item-table{
+    border-left: 5px solid red;
 }
