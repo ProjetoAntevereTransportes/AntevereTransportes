@@ -114,7 +114,6 @@
                 <button class="btn-calendar" ng-click="mostrarEstatisticasMensais()">
                     <i class="md md-poll" style="color: orange;"></i>
                 </button>
-
                 <button class="btn-calendar" hotkey="{'alt+c': alterarStatusCalendario}"
                         ng-click="alterarStatusCalendario()"
                         ng-class="{'btn-calendar-clicked': mostrarCalendario}">
@@ -195,8 +194,17 @@
                     </div>
                 </div>
                 <table class="table-detail-day" ng-show="dia.pagamentos.length > 1">
+                    <tr class="tr-item-paid">
+                        <td>pago</td>
+                        <td>{{getTotalDay(dia, true) | currency : "R$ " : 2}}</td>
+                    </tr>
+                    <tr class="tr-item-not-paid">
+                        <td>não pago</td>
+                        <td>{{getTotalDay(dia, false) | currency : "R$ " : 2}}</td>
+                    </tr>                    
                     <tr>
-                        <td>{{getTotalDay(dia) | currency : "R$ " : 2}}</td>
+                        <td>total</td>
+                        <td>{{getTotalDay(dia, null) | currency : "R$ " : 2}}</td>
                     </tr>
                 </table>
             </td>
@@ -243,16 +251,16 @@
                         {{item.fornecedorNome}}
                     </div>                    
                 </a>                
-                <a href="{{item.c.boletoUrl}}" ng-show="item.boletoID">
+                <a target="_blank" href="{{item.c.boletoUrl}}" ng-show="item.boletoID">
                     <div class="tag">
                         <i class="md md-description"></i>
-                        Baixar boleto                    
+                        Visualizar boleto                    
                     </div> 
                 </a>
-                <a href="{{item.c.comprovanteUrl}}" ng-show="item.comprovanteID">
+                <a target="_blank" href="{{item.c.comprovanteUrl}}" ng-show="item.comprovanteID">
                     <div class="tag">
                         <i class="md md-attachment"></i>
-                        Baixar comprovante
+                        Visualizar comprovante
                     </div>                 
                 </a>                
                 <div class="tag" style="color: green;" ng-show="item.pago">

@@ -8,6 +8,7 @@ package library;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.mail.Message;
 
 /**
@@ -18,6 +19,7 @@ public class MailMessage {
     public List<String> addresses;
     public String subject;
     public String body;
+    public Boolean isHtml;
     public List<FileMessage> files;
     public Message originalMessage;
     
@@ -31,5 +33,16 @@ public class MailMessage {
         f.file = file;
         f.name = name;
         files.add(f);
+    }
+    
+    public void addTemplate(String template, Map<String,String> tokens){
+        for(Map.Entry<String, String> token : tokens.entrySet()){
+            String key = token.getKey();
+            String value = token.getValue();
+            template = template.replace(key, value);
+        }
+        
+        body = template;
+        isHtml = true;
     }
 }

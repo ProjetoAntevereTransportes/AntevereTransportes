@@ -5,26 +5,39 @@
  */
 package backgroundjobs;
 
+import contratos.ModuloEnum;
+import database.Pagamento;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import library.Log;
+import library.Mail;
+import library.MailMessage;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 /**
  *
  * @author lucas
  */
-public class PaymentSummary implements Runnable {
-    private static Date date;
-    
+public class PaymentSummary implements Job {
+
     @Override
-    public void run() {        
-        Date d = new Date();
-        
-         if (date != null && d.getDay() != 1 &&
-                 d.getDate() == date.getDate() && d.getMonth() == date.getMonth()
-                && d.getYear() == date.getYear()) {
-            return;
-        }        
-        
-        date = d;
-        new PaymentJobs().sendSummary(date, new database.Usuario().getEmails());
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        try {
+            Boolean b = new PaymentJobs().sendSummary(new Date(), new database.Usuario().getEmails());
+            if (!b) {
+                throw new Exception("Retorno FALSE do método de PaymentJobs().sendSummary().");
+            }else{
+                Log.writeInfo("Resumo dos pagamentos enviados com sucesso.", ModuloEnum.INTERNO);
+            }
+        } catch (Exception ex) {
+            Log.writeError("Não foi executar o PaymentSummary para envio do resumo de pagamentos.",
+                    ex.toString(), ModuloEnum.INTERNO);
+        }
     }
 }

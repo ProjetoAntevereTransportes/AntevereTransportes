@@ -7,7 +7,7 @@ import library.Settings;
  * @author FELIPE
  */
 public class Conexao {
-    private static boolean isDevelopment = true;
+    public static boolean isDevelopment = true;
     public static String databaseProducao = "anteveretransportes";
     public static String databaseDev = "anteveretransportesdev";
 

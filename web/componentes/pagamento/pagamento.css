@@ -753,7 +753,7 @@ button:focus {outline:0;}
 }
 
 .table-detail-day, .table-detail-day tr, .table-detail-day td{
-    width: 100%;
+    /*width: 100%;*/
     border: none !important;
     background: none !important;
     height: 11px !important;
@@ -763,7 +763,7 @@ button:focus {outline:0;}
 }
 
 .table-detail-day td{
-    padding: 0px 6px 0px 0px !important;
+    padding: 0px 6px 0px 6px !important;
     margin: 0px !important;
 }
 
@@ -773,4 +773,12 @@ button:focus {outline:0;}
 
 .vencido-item-table{
     border-left: 5px solid red;
+}
+
+.table-detail-day .tr-item-paid td{
+    color: green;
+}
+
+.table-detail-day .tr-item-not-paid td{
+    color: red;
 }

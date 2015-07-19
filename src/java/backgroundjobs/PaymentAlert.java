@@ -5,33 +5,47 @@
  */
 package backgroundjobs;
 
+import contratos.ModuloEnum;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import library.Log;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 /**
  *
  * @author lucas
  */
-
-
-public class PaymentAlert implements Runnable {
-
-    private static Date date;
+public class PaymentAlert implements Job {
 
     @Override
-    public void run() { 
-        Date d = new Date();
-
-        if (date != null && d.getDate() == date.getDate() && d.getMonth() == date.getMonth()
-                && d.getYear() == date.getYear()) {
-            return;
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        List<String> addresses = new ArrayList<>();
+        try {
+            addresses = new database.Usuario().getEmails();
+            PaymentJobs j = new PaymentJobs();
+            
+            Boolean tomorrow = j.alertTomorrow(addresses);
+            if(tomorrow){
+                Log.writeInfo("Envio de alerta dos pagamentos do próximo dia enviado com sucesso.",
+                        ModuloEnum.INTERNO);
+            }else{
+                throw new Exception("Erro ao enviar alerta dos pagamentos do próximo dia. PaymentJobs.alertTomorrow().");
+            }
+            
+            Boolean today = j.alertToday(addresses);
+            if(today){
+                Log.writeInfo("Envio de alerta dos pagamentos do dia enviado com sucesso.",
+                        ModuloEnum.INTERNO);
+            }else{
+                throw new Exception("Erro ao enviar alerta dos pagamentos do dia. PaymentJobs.alertToday().");
+            }
+            
+        } catch (Exception ex) {
+                Log.writeError("Não foi possível enviar os alertas dos pagamentos no e-mails.",
+                        null, ModuloEnum.INTERNO, addresses);
         }
-
-        date = d;
-
-        List<String> addresses = new database.Usuario().getEmails();
-        PaymentJobs j = new PaymentJobs();
-        j.alertTomorrow(addresses);
-        j.alertToday(addresses);
     }
 }

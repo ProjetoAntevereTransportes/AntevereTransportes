@@ -85,4 +85,16 @@ public class Settings {
     public static Boolean doBackgroundJobs() {
         return Boolean.parseBoolean(getSetting("doBackgroundJobs"));
     }
+    
+    public static String getClientSecret(){
+        return getSetting("googleClientSecret");
+    }
+    
+    public static String getGoogleDriveDatabaseBackupFolderName(){
+        return getSetting("googleDriveDatabaseFolderName");
+    }
+    
+    public static String getPaymentAlertTemplate(){
+        return getSetting("paymentAlertTemplate");
+    }
 }

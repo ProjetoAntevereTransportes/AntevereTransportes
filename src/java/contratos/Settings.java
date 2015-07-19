@@ -5,9 +5,6 @@
  */
 package contratos;
 
-import authentication.AES;
-import com.sun.xml.ws.security.policy.Constants;
-
 /**
  *
  * @author lucas

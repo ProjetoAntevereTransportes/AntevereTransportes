@@ -384,15 +384,15 @@
                     $scope.quantidadePago = 0;
                     $scope.totalNaoPago = 0;
                     $scope.quantidadeNaoPago = 0;
-                    
+
                     $(result).each(function (i, w) {
                         $(w.dias).each(function (j, d) {
                             $(d.pagamentos).each(function (k, p) {
                                 p.c = {};
 
-                                p.c.diasVencidos = 
+                                p.c.diasVencidos =
                                         (((new Date(p.vencimento.substring(0, 10)) -
-                                        new Date()) / (1000 * 60 * 60 * 24)) * -1)
+                                                new Date()) / (1000 * 60 * 60 * 24)) * -1)
                                         .toFixed(0) - 1;
 
                                 if (p.debitoIlimitado)
@@ -406,14 +406,14 @@
                                 if (p.comprovanteID)
                                     p.c.comprovanteUrl = fileUpload.getUrlDownload(p.comprovanteID);
 
-                                    if(p.pago){
-                                        $scope.quantidadePago++;
-                                        $scope.totalPago += p.valor;
-                                    }else{
-                                        $scope.quantidadeNaoPago++;
-                                        $scope.totalNaoPago += p.valor;
-                                    }
-                                    
+                                if (p.pago) {
+                                    $scope.quantidadePago++;
+                                    $scope.totalPago += p.valor;
+                                } else {
+                                    $scope.quantidadeNaoPago++;
+                                    $scope.totalNaoPago += p.valor;
+                                }
+
                                 $scope.itens.push(p);
                             });
                         });
@@ -638,16 +638,26 @@
                     $scope.mostrarEstatisticas = true;
             };
 
-            $scope.getTotalDay = function(dia){
+            $scope.getTotalDay = function (dia, paid) {
                 var total = 0;
-                $(dia.pagamentos).each(function(i, p){
-                    total += p.valor;
+                $(dia.pagamentos).each(function (i, p) {
+                    if (paid) {
+                        if (p.pago)
+                            total += p.valor;
+                    }else{
+                        if(paid === null){
+                            total += p.valor;
+                        }else{
+                            if(!p.pago)
+                                total += p.valor;
+                        }
+                    }
                 });
-                
+
                 return total;
             };
-            
-            $scope.hoje = function(date){
+
+            $scope.hoje = function (date) {
                 var d = new Date();
                 date = new Date(date);
                 return date.getDate() == d.getDate() && date.getMonth() == d.getMonth() &&

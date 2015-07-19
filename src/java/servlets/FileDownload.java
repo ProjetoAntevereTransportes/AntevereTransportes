@@ -32,18 +32,19 @@ public class FileDownload extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/octet-stream");
-//        response.setHeader("Content-Disposition",
-//                "attachment;filename=downloadfilename.csv");
+//        response.setContentType("application/octet-stream");
 
         try (ServletOutputStream out = response.getOutputStream()) {
             database.FileUpload f = new database.FileUpload();
 
             contratos.Arquivo a = f.getFile(Integer.parseInt(request.getParameter("id")));
 
-            response.setHeader("Content-Disposition",
-                    "attachment;filename=" + a.getNome());
-
+            response.setContentType("image/jpg");
+            response.setHeader("Content-Type", getServletContext().getMimeType(a.getNome()));
+            response.setHeader("Content-Length", String.valueOf(a.getFile().length()));
+            
+//        response.setHeader("Content-Disposition",
+//                "attachment;filename=" + a.getNome());
             FileInputStream fileIn = new FileInputStream(a.getFile());
 
             byte[] outputByte = new byte[4096];

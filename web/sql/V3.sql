@@ -1,6 +1,5 @@
-drop database anteveretransportes;
-CREATE DATABASE IF NOT EXISTS anteveretransportes;
-USE anteveretransportes;
+CREATE DATABASE IF NOT EXISTS anteveretransportesdev;
+USE anteveretransportesdev;
 
 CREATE TABLE IF NOT EXISTS tipo_usuario(
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -367,3 +366,20 @@ INSERT INTO modulo (id, nome) VALUES (14, 'Modulo');
     Inserido status excluido para os pagamentos.
 */
 insert into status_pagamento(nome, descricao) values("Excluido", "Pagamento excluido.");
+
+/*
+    18/07/2015
+    Inserido client_secret da conta google DEV.
+    Modificado valor da tabela settings para text;
+*/
+
+ALTER TABLE settings MODIFY valor text;
+
+insert into settings(nome, valor, criptografado) values
+('googleClientSecret', 
+'{"installed":{"client_id":"417745952600-3egaafk3e5kisej7l5909e5t29jcbrr9.apps.googleusercontent.com","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://accounts.google.com/o/oauth2/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_email":"","client_x509_cert_url":"","client_secret":"6jLxpNTuNc1qrm94tSZpXP79","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}',
+ 0);
+
+insert into settings (nome, valor, criptografado)
+ values ('googleDriveDatabaseFolderName',
+ 'Backup Database', 0);

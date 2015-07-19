@@ -18,73 +18,18 @@ import javax.mail.Store;
 import library.Imap;
 import library.Log;
 import library.MailMessage;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 /**
  *
  * @author lucas
  */
-public class EmailProccess implements Runnable {
+public class EmailProccess implements Job {
 
     private static Store store;
     private static boolean isExecuting;
-
-    @Override
-    public void run() {
-        if (isExecuting) {
-            return;
-        }
-        isExecuting = true;
-        Imap imap = new Imap();
-
-        if (store == null || !store.isConnected()) {
-            store = imap.connect(library.Settings.getEnterpriseEmail(),
-                    library.Settings.getEnterpriseEmailPassword()
-            );
-        }
-
-        if (store != null) {
-            int inbox = imap.GetMessageCount(store, "inbox");
-            System.out.println("\n\n\nINBOX: " + String.valueOf(inbox) + " mensagens.\n\n\n");
-
-            if (inbox > 0) {
-                List<MailMessage> messages = imap.GetMessages(store, "inbox", inbox);
-                if (messages == null) {
-                    return;
-                }
-
-                for (MailMessage m : messages) {
-                    if (m.subject == null) {
-                        m.subject = "";
-                    }
-                    boolean r = false;
-                    switch (m.subject.trim().toLowerCase()) {
-                        case "resumo": {
-                            r = new PaymentJobs().sendSummary(new Date(), m.addresses);
-                            if (!r) {
-                                Log.writeError("Erro ao processar e-mail de resumo", "", ModuloEnum.INTERNO, m);
-                                return;
-                            }
-                            setDone(m, store, "SentTemplate", "Inbox");
-                            continue;
-                        }
-                        default: {
-                            r = new PaymentJobs().sendTemplates(m.addresses);
-                            if(!r){
-                                Log.writeError("Erro ao processar e-mail de comandos", "", ModuloEnum.INTERNO, m);
-                                return;
-                            }
-                            setDone(m, store, "SentTemplate", "Inbox");
-                            continue;
-                        }
-                    }
-                }
-            }
-        } else {
-            System.out.println("\n\n\nStore é nulo.\n\n\n");
-            Log.writeError("Store é nulo.", "Erro ao processar e-mail pois store é nulo.", ModuloEnum.INTERNO);
-        }
-        isExecuting = false;
-    }
 
     public void setDone(MailMessage m, Store store, String destinationFolderName, String fromFolderName) {
         Folder f;
@@ -120,5 +65,67 @@ public class EmailProccess implements Runnable {
                     ModuloEnum.INTERNO,
                     m);
         }
+    }
+
+    @Override
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        if (isExecuting) {
+            return;
+        }
+        isExecuting = true;
+        Imap imap = new Imap();
+
+        store = imap.connect(library.Settings.getEnterpriseEmail(),
+                library.Settings.getEnterpriseEmailPassword()
+        );
+
+        if (store != null) {
+            int inbox = imap.GetMessageCount(store, "inbox");
+            System.out.println("\n\n\nINBOX: " + String.valueOf(inbox) + " mensagens.\n\n\n");
+
+            if (inbox > 0) {
+                List<MailMessage> messages = imap.GetMessages(store, "inbox", inbox);
+                if (messages == null) {
+                    return;
+                }
+
+                for (MailMessage m : messages) {
+                    if (m.subject == null) {
+                        m.subject = "";
+                    }
+                    boolean r = false;
+                    switch (m.subject.trim().toLowerCase()) {
+                        case "resumo": {
+                            r = new PaymentJobs().sendSummary(new Date(), m.addresses);
+                            if (!r) {
+                                Log.writeError("Erro ao processar e-mail de resumo", "", ModuloEnum.INTERNO, m);
+                                continue;
+                            }
+                            setDone(m, store, "SentTemplate", "Inbox");
+                            continue;
+                        }
+                        default: {
+                            r = new PaymentJobs().sendTemplates(m.addresses);
+                            if (!r) {
+                                Log.writeError("Erro ao processar e-mail de comandos", "", ModuloEnum.INTERNO, m);
+                                continue;
+                            }
+                            setDone(m, store, "SentTemplate", "Inbox");
+                            continue;
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("\n\n\nStore é nulo.\n\n\n");
+            Log.writeError("Store é nulo.", "Erro ao processar e-mail pois store é nulo.", ModuloEnum.INTERNO);
+        }
+        try {
+            store.close();
+        } catch (MessagingException ex) {
+            Logger.getLogger(EmailProccess.class.getName()).log(Level.SEVERE, null, ex);
+            Log.writeError("Não foi possível fechar o store.", ex.toString(), ModuloEnum.INTERNO);
+        }
+        isExecuting = false;
     }
 }

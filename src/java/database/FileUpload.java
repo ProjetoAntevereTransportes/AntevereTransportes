@@ -102,5 +102,47 @@ public class FileUpload {
             Conexao.fecharConexao(con);
         }
     }
+    
+    public contratos.Arquivo getFile(String fileName) {
+        try {
+            abrir();
+            String sql = "select * from arquivo where nome = ?;";
+            PreparedStatement ps = con.prepareStatement(sql);
+            
+            ps.setString(1, fileName);
+            
+            ResultSet resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                contratos.Arquivo arquivo = new contratos.Arquivo();
+                
+                arquivo.setNome(resultSet.getString("nome"));
+                arquivo.setTamanho(resultSet.getString("tamanho_bytes"));
+                arquivo.setCriacao(resultSet.getDate("data_criacao"));
+                
+                File file = File.createTempFile(arquivo.getNome() + " - "
+                        + arquivo.getCriacao().toGMTString() , ".tmp"); 
+                FileOutputStream fos = new FileOutputStream(file);
+
+                byte[] buffer = new byte[1];
+                InputStream is = resultSet.getBinaryStream("arquivo");
+                while (is.read(buffer) > 0) {
+                    fos.write(buffer);
+                }
+                
+                fos.close();                               
+                
+                arquivo.setFile(file);
+                
+                return arquivo;
+            }
+            
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        } finally {
+            Conexao.fecharConexao(con);
+        }
+    }
 
 }

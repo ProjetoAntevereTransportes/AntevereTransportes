@@ -218,4 +218,7 @@
             30
         </session-timeout>
     </session-config>
+    <listener>
+        <listener-class>backgroundjobs.DatabaseBackupProccessScheduler</listener-class>
+    </listener>
 </web-app>

@@ -5,30 +5,34 @@
  */
 package backgroundjobs;
 
-import com.sun.scenario.Settings;
+import com.google.api.services.drive.Drive;
 import contratos.ModuloEnum;
-import java.io.BufferedReader;
+import database.Conexao;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import library.Log;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
 /**
  *
  * @author lucas
  */
-public class DatabaseBackup implements Runnable {
+public class DatabaseBackup implements Job {
 
     @Override
-    public void run() {
-        String databaseName = "anteveretransportesdev";
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+        String databaseName = Conexao.databaseProducao;
+        if (Conexao.isDevelopment) {
+            databaseName = Conexao.databaseDev;
+        }
         String databaseUser = "root";
         String databasePassword = "root";
         String path = library.Settings.getSetting("DatabaseBackupPath");
@@ -67,9 +71,18 @@ public class DatabaseBackup implements Runnable {
             int processComplete = runtimeProcess.waitFor();
 
             if (processComplete == 0) {
-                //SendToDrive();
-                Log.writeInfo(String.format("Backup do banco de dados realizado com sucesso pesando %s Mbs.",
-                        file.length() / 1024), ModuloEnum.INTERNO);
+                Drive service = library.GoogleDrive.getDriveService();
+                Log.writeInfo("Início do upload do backup do banco de dados.", ModuloEnum.INTERNO);
+                Boolean success = library.GoogleDrive.insertFile(service,
+                        name, "", file,
+                        library.Settings.getGoogleDriveDatabaseBackupFolderName(), "application/sql");
+                if (success) {
+                    Log.writeInfo(String.format("Backup do banco de dados realizado com sucesso pesando %s Mbs.",
+                            file.length() / 1024), ModuloEnum.INTERNO);
+                } else {
+                    Log.writeError("Erro ao realizar o upload do backup do banco de dados pesando " + String.valueOf(file.length() / 1024) + " mbs.", "", ModuloEnum.INTERNO);
+                }
+
                 file.delete();
             } else {
                 file.delete();

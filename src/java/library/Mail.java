@@ -44,7 +44,7 @@ public class Mail {
                 });
 
         try {
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(Settings.getEnterpriseEmail()));
 
             for (String email : m.addresses) {
@@ -54,27 +54,31 @@ public class Mail {
 
             message.setSubject(m.subject);
 
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText(m.body);
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(messageBodyPart);
+            if (m.isHtml) {
+                message.setText(m.body, "utf-8", "html");
+            } else {
+                message.setText(m.body);
+            }
 
+            Multipart multipart = new MimeMultipart();
             for (FileMessage file : m.files) {
-                messageBodyPart = new MimeBodyPart();
+                MimeBodyPart messageBodyPart = new MimeBodyPart();
                 DataSource source = new FileDataSource(file.file);
                 messageBodyPart.setDataHandler(new DataHandler(source));
                 messageBodyPart.setFileName(file.name);
                 multipart.addBodyPart(messageBodyPart);
             }
 
-            message.setContent(multipart);
+            if (multipart.getCount() > 0) {
+                message.setContent(multipart);
+            }
 
             Transport.send(message);
             return true;
         } catch (MessagingException e) {
             Log.writeError("Erro ao enviar e-mail", e.getMessage(), ModuloEnum.INTERNO, m);
             return false;
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.writeError("Erro ao enviar e-mail", e.getMessage(), ModuloEnum.INTERNO, m);
             return false;
         }

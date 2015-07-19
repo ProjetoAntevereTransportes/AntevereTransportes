@@ -6,8 +6,6 @@
 package library;
 
 import contratos.ModuloEnum;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +31,11 @@ public class Imap {
     public Store connect(String email, String password) {
         Properties props = new Properties();
         try {
-            props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.port", "465");
+            props.setProperty("mail.store.protocol", "imaps");
 
             Session session = Session.getDefaultInstance(props, null);
             Store store = session.getStore("imaps");
-            store.connect("smtp.gmail.com", email, password);
+            store.connect("imap.gmail.com", email, password);
             return store;
         } catch (Exception e) {
             Log.writeError("Erro ao conectar store para email " + email, e.getMessage(), ModuloEnum.INTERNO);
