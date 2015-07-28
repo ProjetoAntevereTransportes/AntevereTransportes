@@ -418,6 +418,7 @@ button:focus {outline:0;}
 
 .description input{
     background: none;
+    width: 58%;
 }
 
 .body{
@@ -543,10 +544,10 @@ button:focus {outline:0;}
 }
 
 .tag{
-    padding-left: 3px;
+    padding-left: 0px;
     border-radius: 3px;
-    display: inline;
-    padding-right: 3px;
+    display: inline-flex;
+    padding-right: 0px;
     margin-right: 5px !important;
     font-size: 12px;
 }
@@ -781,4 +782,131 @@ button:focus {outline:0;}
 
 .table-detail-day .tr-item-not-paid td{
     color: red;
+}
+
+.content-itens{
+    padding-top: 14px;    
+    padding-bottom: 10px;
+}
+
+.content-itens .itens-title{
+    font-family: Roboto;
+    font-weight: bold;
+    padding-left: 24px;
+}
+
+.first{
+    margin-top: 5px;
+}
+
+.item-date{
+    font-size: 13px;
+    padding-left: 25px;
+    color: rgb(122, 119, 119);
+}
+
+.content-vencido{
+    border-left: 5px solid rgb(217, 83, 79);
+    padding-top: 0px;
+}
+
+.content-vencido .itens-title{
+    color: rgb(217, 83, 79);
+}
+
+.content-aberto{
+    border-left: 5px solid rgb(119, 119, 119);
+    padding-top: 0px;
+}
+
+.content-aberto .itens-title{
+    color: rgb(119, 119, 119);
+}
+
+.content-pago{
+    border-left: 5px solid rgb(92, 184, 92);
+    padding-top: 0px;
+}
+
+.content-pago .itens-title{
+    color: rgb(92, 184, 92);
+}
+
+.day-content{
+    position: absolute;
+    top: 10px;
+    left: -24px;
+    font-size: 13px;
+    color: rgb(116, 116, 116);
+    line-height: 13px;    
+    font-family: Roboto;
+}
+
+.item{
+    margin-left: 15px;
+    z-index: 1;
+}
+
+.day-content .day-item{
+    font-weight: bold;
+    font-size: 21px;
+}
+
+.day-content .month-item{
+    font-weight: 400;
+}
+
+.day-content .year-item{
+    font-weight: 400;
+}
+
+.day-content .week-item{
+    font-weight: 400;
+}
+
+.item-unico{
+    border-left: 5px solid rgb(51, 118, 255);
+}
+
+.item-debito-limitado{
+    border-left: 5px solid rgb(182, 0, 0);    
+}
+
+.item-debito-ilimitado{
+    border-left: 5px solid rgb(255, 83, 83);
+}
+
+.item-carne{
+    border-left: 5px solid rgb(255, 165, 0);
+}
+
+.dia-hoje{
+    color: #3376FF !important;
+}
+
+.fornecedor{
+    width: 120px;
+    min-width: 120px;
+    overflow: hidden;
+    transition-duration: .5s;
+}
+
+.fornecedor:hover{
+    width: auto;
+}
+
+.numero-vezes{
+    width: 47px;
+}
+
+.porcentagem{
+    width: 65px;
+}
+
+.boleto{
+    width: 65px;
+}
+
+.comprovante{
+    width: 101px;
 }

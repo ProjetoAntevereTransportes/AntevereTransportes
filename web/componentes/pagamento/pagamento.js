@@ -1,13 +1,10 @@
 (function () {
     var app = angular.module("pagamento", []);
 
-    app.directive("pagamentoItem", function () {
+    app.directive("pagamentoitem", function () {
         return {
             restrict: 'E',
-            templateUrl: '/componentes/pagamento/pagamento-item.html',
-            scope: {
-                filter: "=filter"
-            }
+            templateUrl: 'componentes/pagamento/pagamento-item.html'
         };
     });
 
@@ -24,6 +21,8 @@
             $scope.fornecedores = [];
             $scope.mes = new Date().getMonth();
             $scope.ano = new Date().getFullYear();
+            $scope.showLinhaDoTempo = true;
+            $scope.showAgrupado = false;
             $scope.itemNovoMassa = {
                 parcelas: [],
                 fornecedorID: "",
@@ -39,13 +38,23 @@
                 descricao: "Clique em + para inserir contas únicas, carnês e débitos automáticos"
             };
 
+            $scope.adicionarMesECarregar = function () {
+
+                $scope.adicionarMes();
+                $scope.carregarPagamentos();
+            };
+
             $scope.adicionarMes = function () {
                 if ($scope.mes == 11) {
                     $scope.mes = 0;
                     $scope.ano++;
                 } else
                     $scope.mes++;
+            };
 
+            $scope.removerMesECarregar = function () {
+
+                $scope.removerMes();
                 $scope.carregarPagamentos();
             };
 
@@ -55,8 +64,6 @@
                     $scope.ano--;
                 } else
                     $scope.mes--;
-
-                $scope.carregarPagamentos();
             };
 
             hotkeys.bindTo($scope)
@@ -64,7 +71,7 @@
                         combo: 'right',
                         description: 'Adiciona um mês.',
                         callback: function () {
-                            $scope.adicionarMes();
+                            $scope.adicionarMesECarregar()();
                         }
                     });
 
@@ -73,7 +80,7 @@
                         combo: 'left',
                         description: 'Remove um mês.',
                         callback: function () {
-                            $scope.removerMes();
+                            $scope.removerMesECarregar()();
                         }
                     });
 
@@ -366,29 +373,47 @@
                 $scope.mais(item);
             };
 
-            $scope.carregarPagamentos = function () {
-//                if (data == null) {
-//                    notifyService.add({
-//                        seconds: 5,
-//                        message: "O mês e ano não podem ser nulos."
-//                    });
-//                    return;
-//                }
+            $scope.loadNextMonth = function () {
+                $scope.adicionarMes();
+                $scope.carregarPagamentos(true);
+            };
 
+            $scope.carregarPagamentos = function (depois) {
                 var date = new Date($scope.ano, $scope.mes, 01);
 
                 $pgService.listar(function (result) {
                     $scope.semanas = result;
-                    $scope.itens = [];
+
+                    if (depois === null)
+                        $scope.itens = [];
                     $scope.totalPago = 0;
                     $scope.quantidadePago = 0;
                     $scope.totalNaoPago = 0;
                     $scope.quantidadeNaoPago = 0;
 
+                    $scope.showVencidos = false;
+                    $scope.showPagos = false;
+                    $scope.showAbertos = false;
+
+                    var h = new Date();
+
                     $(result).each(function (i, w) {
                         $(w.dias).each(function (j, d) {
                             $(d.pagamentos).each(function (k, p) {
+                                if (p.pago)
+                                    $scope.showPagos = true;
+                                else
+                                    $scope.showAbertos = true;
+
+                                if (p.vencido)
+                                    $scope.showVencidos = true;
+
                                 p.c = {};
+
+                                if (k == 0)
+                                    p.c.primeiroDoDia = true;
+                                else
+                                    p.c.primeiroDoDia = false;
 
                                 p.c.diasVencidos =
                                         (((new Date(p.vencimento.substring(0, 10)) -
@@ -414,7 +439,17 @@
                                     $scope.totalNaoPago += p.valor;
                                 }
 
+                                var d = new Date(p.vencimento);
+                                if (h.getDate() == d.getDate() && h.getMonth() == d.getMonth() &&
+                                        h.getFullYear() == d.getFullYear())
+                                    p.c.hoje = true;
+                                else
+                                    p.c.hoje = false;
+
+                                //if (depois)
                                 $scope.itens.push(p);
+                                //else
+                                //  $scope.itens.unshift(p);
                             });
                         });
                     });
@@ -644,11 +679,11 @@
                     if (paid) {
                         if (p.pago)
                             total += p.valor;
-                    }else{
-                        if(paid === null){
+                    } else {
+                        if (paid === null) {
                             total += p.valor;
-                        }else{
-                            if(!p.pago)
+                        } else {
+                            if (!p.pago)
                                 total += p.valor;
                         }
                     }
@@ -662,6 +697,16 @@
                 date = new Date(date);
                 return date.getDate() == d.getDate() && date.getMonth() == d.getMonth() &&
                         date.getFullYear() == d.getFullYear();
+            };
+
+            $scope.btnAgrupadoClick = function () {
+                $scope.showAgrupado = true;
+                $scope.showLinhaDoTempo = false;
+            };
+
+            $scope.btnLinhaDoTempoClick = function () {
+                $scope.showLinhaDoTempo = true;
+                $scope.showAgrupado = false;
             };
 
             $scope.carregarFornecedores();

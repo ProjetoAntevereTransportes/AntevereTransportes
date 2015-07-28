@@ -67,7 +67,7 @@
 <div class="col-lg-12 month">
     <div class="col-lg-6">
         <div class="form-inline">
-            <button class="btn-calendar" ng-click="removerMes()">
+            <button class="btn-calendar" ng-click="removerMesECarregar()">
                 <i class="md md-remove-circle"></i>
             </button>
 
@@ -91,7 +91,7 @@
             <div class="form-group">
                 <input type="text" ui-mask="9999" ng-model="ano" ng-change="carregarPagamentos()">
             </div>
-            <button class="btn-calendar" ng-click="adicionarMes()">
+            <button class="btn-calendar" ng-click="adicionarMesECarregar()">
                 <i class="md md-add-circle"></i>
             </button>
         </div>
@@ -212,6 +212,67 @@
     </table>
 </div>
 
+
+<div class="btn-group">
+    <button class="btn btn-default" ng-class="{'active' : showLinhaDoTempo}" ng-click="btnLinhaDoTempoClick()">
+        Linha do tempo
+    </button>
+    <button class="btn btn-default" ng-class="{'active' : showAgrupado}" ng-click="btnAgrupadoClick()">
+        Agrupados
+    </button>
+</div>
+
+<div ng-show="showLinhaDoTempo && itens.length">
+    <div class="row">
+        <div class="content-itens col-lg-12 content-aberto">
+            <pagamentoitem class="repeated-item" ng-repeat="item in itens"></pagamentoitem>
+        </div>
+    </div>
+</div>
+
+<div ng-show="showAgrupado">
+    <div class="row" ng-show="showVencidos">
+        <div class="content-itens col-lg-12 content-vencido">
+            <div class="itens-title">
+                Vencidos
+            </div>
+            <pagamentoitem class="repeated-item" ng-repeat="item in itens
+                                | filter: { 'vencido' : true, 'pago' : false }
+                           "></pagamentoitem>
+        </div>
+    </div>
+
+    <div class="row" ng-show="showAbertos">
+        <div class="content-itens col-lg-12 content-aberto">
+            <div class="itens-title">
+                Em aberto
+            </div>
+            <pagamentoitem  class="repeated-item" ng-repeat="item in itens
+                                | filter:search
+                         | filter:tipo | filter: {'vencido' : false, 'pago' : false}
+                            "></pagamentoitem>
+        </div>
+    </div>
+    <div class="row" ng-show="showPagos">
+        <div class="content-pago content-itens col-lg-12">
+            <div class="itens-title">
+                Pagos
+            </div>
+            <pagamentoitem class="repeated-item" ng-repeat="item in itens
+                                | filter:search
+                         | filter:tipo | filter: {'vencido' : false, 'pago' : true}
+                           "></pagamentoitem>
+        </div>
+    </div>
+</div>
+
+<center>
+    <button ng-click="loadNextMonth()">
+        Carregar próximo mês
+    </button>
+</center>
+
+<!--
 <div class="col-lg-12 repeated-item z1 item-color" 
      ng-repeat="item in itens
                  | filter:search
@@ -223,6 +284,7 @@
      ng-mouseover="mouseOverItem(item)"
      ng-mouseleave="mouseLeaveItem(item)"
      ondrop="alert(JSON.stringify(event))">
+    
     <div class='head col-lg-12'>
         <div class="day" ng-class="{'debitoLimitado': item.debitoLimitado, 'debitoIlimitado': item.debitoIlimitado, 'unico': item.unico, 'carne': item.carne}">
             {{item.vencimento| date: "d"}}
@@ -308,88 +370,92 @@
                    data-toggle="tooltip" title="Confirmar"
                    ng-show="!item.c.expandir"></i>
             </div>
-            <!--
-            <i class="glyphicon glyphicon-menu-left show-more-buttons"
-               ng-click="mostrarAcaoBotao(item)"
-               ng-show="!item.expandir"
-               ng-class="{'right-button': item.mostrarBotoes,
-                          'right-button-hide': item.expandir}"></i>            -->
-        </div>
-    </div>
-    <div class='more-info col-lg-12' ng-show='item.c.expandirInfo'>
-        <div class="col-lg-6">
-            <h4>Parcelas</h4>
-        </div>
-        <div class="col-lg-6">
-            <h4>Valores mensais de {{item.fornecedorNome}}</h4>
-            <div id="{{item.ID}}-fornecedor-chart" style="height: 270px;"></div>
-        </div>
-    </div>
-    <div class='more-info col-lg-12' ng-show='item.c.expandir'>
-        <form novalidate name="formPagar">
-            <div class='col-lg-3'>
-                <div class='form-group'>
-                    <label>Comprovante</label>
-                    <input tabindex="1" class='form-control  m-input'
-                           name="comprovanteID"
-                           type='file'
-                           required
-                           file-model="item.comprovanteID"
-                           validFile>
-                    <erro ng-show="formPagar.comprovanteID.$valid && formPagar.comprovante.$touched">                                    
-                        Insira um comprovante
-                    </erro>
-                </div>
-            </div>
-            <div class='col-lg-3'>
-                <div class='form-group'>
-                    <label>Banco</label>
-                    <select tabindex="2" class='form-control m-input'
-                            name="contaBancariaID"
-                            required placeholder="Conta bancária"
-                            ng-model="item.contaBancariaID">
-                        <option ng-repeat="f in contasBancarias" value="{{f.id}}">
-                            {{f.nome}}
-                        </option>
-                    </select>
-                    <erro ng-show="formPagar.contaBancariaID.$error.required && formPagar.banco.$touched">                                    
-                        Insira uma conta bancária
-                    </erro>
-                </div>
-            </div>
-            <div class='col-lg-3'>
-                <div class='form-group'>
-                    <label>Descontos</label>
-                    <input tabindex="3" class="form-control m-input" 
-                           required 
-                           type="text"
-                           placeholder="Descontos" 
-                           ng-model="item.descontos"
-                           name="descontos"
-                           ui-number-mask>
-                    <erro ng-show="formPagar.descontos.$error.required && formPagar.descontos.$touched">                                    
-                        campo obrigatório
-                    </erro>
-                </div>
-            </div>
-            <div class='col-lg-3'>
-                <div class='form-group'>
-                    <label>Juros {{formPagar.$invalid}} </label>
-                    <input tabindex="4" class="form-control m-input" 
-                           placeholder="Juros" 
-                           required 
-                           type="text" 
-                           ng-model="item.juros"
-                           name="juros"
-                           ui-number-mask>
-                    <erro ng-show="formPagar.juros.$error.required && formPagar.juros.$touched">                                    
-                        campo obrigatório
-                    </erro>
-                </div>
-            </div>
-        </form>
+<!--
+<i class="glyphicon glyphicon-menu-left show-more-buttons"
+   ng-click="mostrarAcaoBotao(item)"
+   ng-show="!item.expandir"
+   ng-class="{'right-button': item.mostrarBotoes,
+              'right-button-hide': item.expandir}"></i>            
+</div>
+</div>
+
+
+<div class='more-info col-lg-12' ng-show='item.c.expandirInfo'>
+<div class="col-lg-6">
+<h4>Parcelas</h4>
+</div>
+<div class="col-lg-6">
+<h4>Valores mensais de {{item.fornecedorNome}}</h4>
+<div id="{{item.ID}}-fornecedor-chart" style="height: 270px;"></div>
+</div>
+</div>
+<div class='more-info col-lg-12' ng-show='item.c.expandir'>
+<form novalidate name="formPagar">
+<div class='col-lg-3'>
+    <div class='form-group'>
+        <label>Comprovante</label>
+        <input tabindex="1" class='form-control  m-input'
+               name="comprovanteID"
+               type='file'
+               required
+               file-model="item.comprovanteID"
+               validFile>
+        <erro ng-show="formPagar.comprovanteID.$valid && formPagar.comprovante.$touched">                                    
+            Insira um comprovante
+        </erro>
     </div>
 </div>
+<div class='col-lg-3'>
+    <div class='form-group'>
+        <label>Banco</label>
+        <select tabindex="2" class='form-control m-input'
+                name="contaBancariaID"
+                required placeholder="Conta bancária"
+                ng-model="item.contaBancariaID">
+            <option ng-repeat="f in contasBancarias" value="{{f.id}}">
+                {{f.nome}}
+            </option>
+        </select>
+        <erro ng-show="formPagar.contaBancariaID.$error.required && formPagar.banco.$touched">                                    
+            Insira uma conta bancária
+        </erro>
+    </div>
+</div>
+<div class='col-lg-3'>
+    <div class='form-group'>
+        <label>Descontos</label>
+        <input tabindex="3" class="form-control m-input" 
+               required 
+               type="text"
+               placeholder="Descontos" 
+               ng-model="item.descontos"
+               name="descontos"
+               ui-number-mask>
+        <erro ng-show="formPagar.descontos.$error.required && formPagar.descontos.$touched">                                    
+            campo obrigatório
+        </erro>
+    </div>
+</div>
+<div class='col-lg-3'>
+    <div class='form-group'>
+        <label>Juros {{formPagar.$invalid}} </label>
+        <input tabindex="4" class="form-control m-input" 
+               placeholder="Juros" 
+               required 
+               type="text" 
+               ng-model="item.juros"
+               name="juros"
+               ui-number-mask>
+        <erro ng-show="formPagar.juros.$error.required && formPagar.juros.$touched">                                    
+            campo obrigatório
+        </erro>
+    </div>
+</div>
+</form>
+</div>
+</div>
+-->
+
 
 <vazio dados="vazio" ng-show='showVazio'></vazio>
 
